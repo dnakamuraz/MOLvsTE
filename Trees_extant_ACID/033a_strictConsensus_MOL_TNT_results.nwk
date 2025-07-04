@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Xyloc ,(Centr ,(Apmel ,((Bompe ,Melip ),(Eufri ,Euglo ))),(Melis ,(Antho ,Habro ))));
+end ;

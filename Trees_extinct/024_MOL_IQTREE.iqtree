@@ -1,0 +1,205 @@
+IQ-TREE 2.3.5 built Jul  4 2024
+
+Partition file name: 024_MOL_CharacterSets.txt
+Type of analysis: ModelFinder + tree reconstruction
+Random seed number: 36417
+
+REFERENCES
+----------
+
+To cite IQ-TREE please use:
+
+Bui Quang Minh, Heiko A. Schmidt, Olga Chernomor, Dominik Schrempf,
+Michael D. Woodhams, Arndt von Haeseler, and Robert Lanfear (2020)
+IQ-TREE 2: New models and efficient methods for phylogenetic inference
+in the genomic era. Mol. Biol. Evol., in press.
+https://doi.org/10.1093/molbev/msaa015
+
+To cite ModelFinder please use: 
+
+Subha Kalyaanamoorthy, Bui Quang Minh, Thomas KF Wong, Arndt von Haeseler,
+and Lars S Jermiin (2017) ModelFinder: Fast model selection for
+accurate phylogenetic estimates. Nature Methods, 14:587–589.
+https://doi.org/10.1038/nmeth.4285
+
+Since you used partition models please also cite:
+
+Olga Chernomor, Arndt von Haeseler, and Bui Quang Minh (2016)
+Terrace aware data structure for phylogenomic inference from
+supermatrices. Syst. Biol., 65:997-1008.
+https://doi.org/10.1093/sysbio/syw037
+
+SEQUENCE ALIGNMENT
+------------------
+
+Input data: 39 taxa with 5 partitions and 3885 total sites (15.4605% missing data)
+
+  ID	Type	Seq	Site	Unique	Infor	Invar	Const	Name
+   1	DNA	39	1644	322	217	1327	1327	18s
+   2	DNA	39	1090	286	169	832	832	28s
+   3	DNA	18	229	146	99	67	67	16s
+   4	DNA	23	600	419	334	211	211	coi
+   5	DNA	11	322	119	95	204	204	h3
+
+Column meanings:
+  Unique: Number of unique site patterns
+  Infor:  Number of parsimony-informative sites
+  Invar:  Number of invariant sites
+  Const:  Number of constant sites (can be subset of invariant sites)
+
+ModelFinder
+-----------
+
+Best-fit model according to BIC: TNe+I+R2:18s,TIM2+F+R2:28s,TVM+F+R2:16s,TIM+F+I+G4:coi,TPM2u+F+I+G4:h3
+
+List of best-fit models per partition:
+
+  ID  Model                  LogL         AIC      w-AIC        AICc     w-AICc         BIC      w-BIC
+   1  TNe+I+R2          -6371.958   12755.915 + 4.67e-310   12755.967 + 6.92e-310   12788.345 +        0
+   2  TIM2+F+R2         -4366.526    8751.051 + 4.67e-310    8751.218 + 6.92e-310    8795.997 +        0
+   3  TVM+F+R2          -2089.800    4199.600 + 4.67e-310    4200.609 + 6.92e-310    4233.937 +        0
+   4  TIM+F+I+G4        -8135.709   16289.418 + 4.67e-310   16289.723 + 6.92e-310   16328.990 +        0
+   5  TPM2u+F+I+G4      -1793.296    3602.591 + 4.67e-310    3603.051 + 6.92e-310    3632.788 +        0
+
+AIC, w-AIC   : Akaike information criterion scores and weights.
+AICc, w-AICc : Corrected AIC scores and weights.
+BIC, w-BIC   : Bayesian information criterion scores and weights.
+
+Plus signs denote the 95% confidence sets.
+Minus signs denote significant exclusion.
+
+SUBSTITUTION PROCESS
+--------------------
+
+Edge-linked-proportional partition model with separate substitution models and separate rates across sites
+
+  ID  Model           Speed  Parameters
+   1  TNe+I+R2       0.1083  TNe{2.61222,4.3326}+FQ+I{0.7033}+R2{0.25925,2.03732,0.0374498,12.5989}
+   2  TIM2+F+R2      0.1659  TIM2{1.66055,2.97982,6.10849}+F{0.244126,0.239098,0.324725,0.19205}+R2{0.859967,0.258205,0.140033,5.55551}
+   3  TVM+F+R2       1.2179  TVM{1.47797,10.1118,6.0841,0.756745}+F{0.323893,0.13257,0.215296,0.328242}+R2{0.697681,0.296199,0.302319,2.6242}
+   4  TIM+F+I+G4     4.6902  TIM{5.49313,2.7886,15.8879}+F{0.258791,0.198139,0.155814,0.387257}+I{0.266343}+G4{0.56533}
+   5  TPM2u+F+I+G4   1.3449  TPM2u{6.14482,14.7234}+F{0.253624,0.29817,0.257842,0.190364}+I{0.569375}+G4{1.02343}
+
+TREE USED FOR ModelFinder
+-------------------------
+
+Log-likelihood of the tree: -22757.4332 (s.e. 456.9625)
+Unconstrained log-likelihood (without tree): -14633.9334
+Number of free parameters (#branches + #model parameters): 116
+Akaike information criterion (AIC) score: 45746.8664
+Corrected Akaike information criterion (AICc) score: 45754.0703
+Bayesian information criterion (BIC) score: 46473.5923
+
+Total tree length (sum of branch lengths): 4.2904
+Sum of internal branch lengths: 1.4342 (33.4292% of tree length)
+
+WARNING: 1 near-zero internal branches (<0.0003) should be treated with caution
+         Such branches are denoted by '**' in the figure below
+
+NOTE: Tree is UNROOTED although outgroup taxon 'Limulus_polyphemus' is drawn at root
+
++--Limulus_polyphemus
+|
++----Carcinoscorpius_rotundicauda
+|
+|                      +------------------------------------Androctonus_australis
+|           +----------|
+|           |          +---------Belisarius_xambeui
+|        +--|
+|        |  |               +----Siro_rubens
+|        |  |            +--|
+|        |  |            |  +-------Parasiro_coiffaiti
+|        |  |     +------|
+|        |  |     |      |     +**Stylocellus
+|        |  |     |      +-----|
+|        |  |     |            +--StylocellusJP
+|        |  |  +--|
+|        |  |  |  |         +---Dalquestia_formosa
+|        |  |  |  |     +---|
+|        |  |  |  |     |   |        +--Odiellus_troguloides
+|        |  |  |  |     |   |     +**|
+|        |  |  |  |     |   |     |  +--Opilio_parietinus
+|        |  |  |  |     |   |  +--|
+|        |  |  |  |     |   |  |  +--Phalangium_opilio
+|        |  |  |  |     |   +--|
+|        |  |  |  |     |      |     +**Astrobunus_grallator
+|        |  |  |  |     |      |  +--|
+|        |  |  |  |     |      |  |  +--Nelima_silvatica
+|        |  |  |  |     |      +--|
+|        |  |  |  |     |         |  +--Leiobunum_sp
+|        |  |  |  |     |         +--|
+|        |  |  |  |     |            +**Hadrobunus_maculosus
+|        |  |  |  |  +--|
+|        |  |  |  |  |  +-----------Caddo_agilis
+|        |  |  |  +--|
+|        |  |  |     |             +-----Ischyropsalis_luteipes
+|        |  |  |     |          +--|
+|        |  |  |     |          |  +---Ceratolasma_tricantha
+|        |  |  |     |       +--|
+|        |  |  |     |       |  |      +------Hesperonemastoma_modestum
+|        |  |  |     |       |  |  +---|
+|        |  |  |     |       |  |  |   +--Taracus_sp
+|        |  |  |     |       |  +--|
+|        |  |  |     |       |     +---Sabacon_cavicolens
+|        |  |  |     +-------|
+|        |  |  |             |        +--Dicranolasma_soerenseni
+|        |  |  |             |     +--|
+|        |  |  |             |     |  +----Trogulus_nepaeformis
+|        |  |  |             +-----|
+|        |  |  |                   |        +--Centetostoma_dubium
+|        |  |  |                   |     +--|
+|        |  |  |                   |     |  +--Nemastoma_bimaculatum
+|        |  |  |                   |  +--|
+|        |  |  |                   |  |  +--Ortholasma_sp
+|        |  |  |                   +--|
+|        |  |  |                      +--Nipponopsalis_abei
+|        |  +--|
+|        |     |                 +------Equitius_doriae
+|        |     |           +-----|
+|        |     |           |     +---Triaenobunus_sp
+|        |     |        +--|
+|        |     |        |  +----------------Zuma_acuta
+|        |     +--------|
+|        |              |        +-----Gnomulus_sp
+|        |              |     +--|
+|        |              |     |  |  +---Maiorerus_randoi
+|        |              |     |  +--|
+|        |              |     |     |     +----Gnidia_holmbergi
+|        |              |     |     +-----|
+|        |              |     |           +**Pachyloides_thorellii
+|        |              |  +--|
+|        |              |  |  +---------Hoplobunus_sp
+|        |              +--|
+|        |                 |      +-----------Scotolemon_lespesi
+|        |                 +------|
+|        |                        +-----Bishopella_laciniosa
++--------|
+         +----------------------------------------Solifugae
+
+Tree in newick format:
+
+(Limulus_polyphemus:0.0187105139,Carcinoscorpius_rotundicauda:0.0611318962,(((Androctonus_australis:0.4117418454,Belisarius_xambeui:0.1160700596):0.1269665575,((((Siro_rubens:0.0629417055,Parasiro_coiffaiti:0.0906425858):0.0080103332,(Stylocellus:0.0000027463,StylocellusJP:0.0045813241):0.0719901733):0.0796922712,(((Dalquestia_formosa:0.0504390139,(((Odiellus_troguloides:0.0138161560,Opilio_parietinus:0.0393384218):0.0000019238,Phalangium_opilio:0.0374541538):0.0099568095,((Astrobunus_grallator:0.0000019237,Nelima_silvatica:0.0045829439):0.0277433844,(Leiobunum_sp:0.0086795727,Hadrobunus_maculosus:0.0000019237):0.0269406724):0.0414374463):0.0051642608):0.0459967457,Caddo_agilis:0.1418345881):0.0279077200,(((Ischyropsalis_luteipes:0.0711020310,Ceratolasma_tricantha:0.0490811358):0.0109677792,((Hesperonemastoma_modestum:0.0829291465,Taracus_sp:0.0415559864):0.0444989671,Sabacon_cavicolens:0.0491963642):0.0066487756):0.0280875170,((Dicranolasma_soerenseni:0.0234578213,Trogulus_nepaeformis:0.0590424986):0.0208718955,(((Centetostoma_dubium:0.0214217686,Nemastoma_bimaculatum:0.0188375071):0.0385905251,Ortholasma_sp:0.0393045338):0.0213459622,Nipponopsalis_abei:0.0349496020):0.0081152352):0.0774221845):0.0908579962):0.0355253299):0.0114472800,(((Equitius_doriae:0.0883673136,Triaenobunus_sp:0.0508595924):0.0668128692,Zuma_acuta:0.1953284379):0.0108497977,(((Gnomulus_sp:0.0774217646,(Maiorerus_randoi:0.0491973402,(Gnidia_holmbergi:0.0593212604,Pachyloides_thorellii:0.0000026350):0.0748847295):0.0230215712):0.0074216880,Hoplobunus_sp:0.1115269598):0.0233690405,(Scotolemon_lespesi:0.1406799070,Bishopella_laciniosa:0.0715902571):0.0849741527):0.0250791651):0.1055587868):0.0184451544):0.0224194772,Solifugae:0.4590203904):0.1052250947);
+
+ALISIM COMMAND
+--------------
+To simulate an alignment of the same length as the original alignment, using the tree and model parameters estimated from this analysis, you can use the following command:
+
+--alisim simulated_MSA -t 024_MOL_CharacterSets.txt.treefile -p 024_MOL_CharacterSets.txt.best_model.nex
+
+To mimic the alignment used to produce this analysis, i.e. simulate an alignment of the same length as the original alignment, using the tree and model parameters estimated from this analysis *and* copying the same gap positions as the original alignment, you can use the following command:
+
+iqtree -s <alignment.phy> --alisim mimicked_MSA
+
+To simulate any number of alignments in either of the two commandlines above, use the --num-alignments options, for example mimic 100 alignments you would use the command line:
+
+iqtree -s <alignment.phy> --alisim mimicked_MSA --num-alignments 100
+
+For more information on using AliSim, please visit: www.iqtree.org/doc/AliSim
+
+TIME STAMP
+----------
+
+Date and time: Tue Jul  1 17:25:14 2025
+Total CPU time used: 288.082 seconds (0h:4m:48s)
+Total wall-clock time used: 364.978 seconds (0h:6m:4s)
+

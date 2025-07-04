@@ -1,0 +1,9 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Physeter_catodon ,(Caperea_marginata ,((Balaena_mysticetus ,Eubalaena_spp. ),((Balaenoptera_acutorostrata ,Balaenoptera_bonaerensis ),(Eschrichtius_robustus ,((Balaenoptera_musculus ,(Balaenoptera_borealis ,Balaenoptera_omurai )),(Balaenoptera_physalus ,Megaptera_novaeangliae )))))));
+tree tnt_2 = [&U] 
+(Physeter_catodon ,(Caperea_marginata ,((Balaena_mysticetus ,Eubalaena_spp. ),((Balaenoptera_acutorostrata ,Balaenoptera_bonaerensis ),(Eschrichtius_robustus ,((Balaenoptera_musculus ,(Balaenoptera_borealis ,Balaenoptera_omurai )),(Balaenoptera_physalus ,Megaptera_novaeangliae )))))));
+
+end ; 

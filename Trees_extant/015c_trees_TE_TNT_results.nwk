@@ -1,0 +1,13 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Aptenodytes_forsteri1 ,(Aptenodytes_patagonicus1 ,((Pygoscelis_adeliae1 ,(Pygoscelis_antarctica1 ,Pygoscelis_papua1 )),((Megadyptes_antipodes1 ,((Eudyptes_moseleyi1 ,(Eudyptes_chrysocome1 ,Eudyptes_filholi1 )),((Eudyptes_chrysolophus1 ,Eudyptes_schlegeli1 ),(Eudyptes_sclateri1 ,(Eudyptes_pachyrhynchus1 ,Eudyptes_robustus1 ))))),(Eudyptula_minor1 ,((Spheniscus_demersus1 ,Spheniscus_magellanicus1 ),(Spheniscus_humboldti1 ,Spheniscus_mendiculus1 )))))));
+tree tnt_2 = [&U] 
+(Aptenodytes_forsteri1 ,(Aptenodytes_patagonicus1 ,((Pygoscelis_adeliae1 ,(Pygoscelis_antarctica1 ,Pygoscelis_papua1 )),((Megadyptes_antipodes1 ,((Eudyptes_filholi1 ,(Eudyptes_chrysocome1 ,Eudyptes_moseleyi1 )),((Eudyptes_chrysolophus1 ,Eudyptes_schlegeli1 ),(Eudyptes_sclateri1 ,(Eudyptes_pachyrhynchus1 ,Eudyptes_robustus1 ))))),(Eudyptula_minor1 ,((Spheniscus_demersus1 ,Spheniscus_magellanicus1 ),(Spheniscus_humboldti1 ,Spheniscus_mendiculus1 )))))));
+tree tnt_3 = [&U] 
+(Aptenodytes_forsteri1 ,(Aptenodytes_patagonicus1 ,((Pygoscelis_adeliae1 ,(Pygoscelis_antarctica1 ,Pygoscelis_papua1 )),((Megadyptes_antipodes1 ,(Eudyptes_sclateri1 ,(((Eudyptes_moseleyi1 ,(Eudyptes_chrysocome1 ,Eudyptes_filholi1 )),(Eudyptes_pachyrhynchus1 ,Eudyptes_robustus1 )),(Eudyptes_chrysolophus1 ,Eudyptes_schlegeli1 )))),(Eudyptula_minor1 ,((Spheniscus_demersus1 ,Spheniscus_magellanicus1 ),(Spheniscus_humboldti1 ,Spheniscus_mendiculus1 )))))));
+tree tnt_4 = [&U] 
+(Aptenodytes_forsteri1 ,(Aptenodytes_patagonicus1 ,((Pygoscelis_adeliae1 ,(Pygoscelis_antarctica1 ,Pygoscelis_papua1 )),((Megadyptes_antipodes1 ,(Eudyptes_sclateri1 ,(Eudyptes_chrysocome1 ,Eudyptes_filholi1 ,Eudyptes_moseleyi1 ),(Eudyptes_chrysolophus1 ,Eudyptes_schlegeli1 ),(Eudyptes_pachyrhynchus1 ,Eudyptes_robustus1 ))),(Eudyptula_minor1 ,((Spheniscus_demersus1 ,Spheniscus_magellanicus1 ),(Spheniscus_humboldti1 ,Spheniscus_mendiculus1 )))))));
+
+end ; 

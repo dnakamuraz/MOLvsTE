@@ -1,0 +1,9 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Equus_caballus ,(Tapirus_terrestris ,(Sus_barbatus ,(Camelus_dromedarius ,((Hippopotamus_amphibius ,(Balaenoptera_edeni ,Tursiops_truncatus )),(Ovis_aries ,Tragulus_javanicus ))))));
+tree tnt_2 = [&U] 
+(Equus_caballus ,(Tapirus_terrestris ,(Sus_barbatus ,(Camelus_dromedarius ,((Hippopotamus_amphibius ,(Balaenoptera_edeni ,Tursiops_truncatus )),(Ovis_aries ,Tragulus_javanicus ))))));
+
+end ; 

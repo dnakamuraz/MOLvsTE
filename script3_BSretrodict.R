@@ -1,0 +1,258 @@
+# Question 5. Can we retrodict the occurrence of TE clades based on bootstrap values of MOL clades?
+
+
+#################
+# LOAD PACKAGES #
+#################
+
+library(ape)
+library(dplyr)
+library(ggridges)
+library(gridExtra)
+library(phytools)
+library(RNODE)
+library(tidyverse)
+library(TreeDist)
+library(viridis)
+
+setwd("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Trees_extant/")
+
+##############
+# READ TREES #
+##############
+
+# List all files in the directory
+files <- list.files()
+# Extract unique prefixes (assumes filenames start with numbers)
+prefixes <- unique(sub("^(\\d+).*", "\\1", files))
+
+# MP MOL BOOTSTRAP
+mp_mol_bs <- list()
+# Iterate over each prefix
+for (prefix in prefixes) {
+  # Filter files belonging to the current prefix
+  prefix_files <- files[grep(paste0("^", prefix), files)]
+  # Apply the appropriate function based on the filename pattern
+  if (any(grepl("b_MOL_BS_TNT.nwk", prefix_files))) {
+    mp_mol_bs[[paste0("mp_mol_bs", prefix)]] <- read.tree(prefix_files[grepl("b_MOL_BS_TNT.nwk", prefix_files)])
+  }
+}
+
+# MP TE BOOTSTRAP
+mp_te_bs <- list()
+# Iterate over each prefix
+for (prefix in prefixes) {
+  # Filter files belonging to the current prefix
+  prefix_files <- files[grep(paste0("^", prefix), files)]
+  # Apply the appropriate function based on the filename pattern
+  if (any(grepl("d_TE_BS_TNT.nwk", prefix_files))) {
+    mp_te_bs[[paste0("mp_te_bs", prefix)]] <- read.tree(prefix_files[grepl("d_TE_BS_TNT.nwk", prefix_files)])
+  }
+}
+
+# ML MOL
+ml_mol = list()
+# Iterate over each prefix
+for (prefix in prefixes) {
+  # Filter files belonging to the current prefix
+  prefix_files <- files[grep(paste0("^", prefix), files)]
+  # Apply the appropriate function based on the filename pattern
+  if (any(grepl("_MOL_IQTREE.contree", prefix_files))) {
+    ml_mol[[paste0("ml_mol_cons_", prefix)]] <- read.tree(prefix_files[grepl("_MOL_IQTREE.contree", prefix_files)])
+  }
+}
+
+# ML TE ASC
+ml_te_asc = list()
+# Iterate over each prefix
+for (prefix in prefixes) {
+  # Filter files belonging to the current prefix
+  prefix_files <- files[grep(paste0("^", prefix), files)]
+  # Apply the appropriate function based on the filename pattern
+  if (any(grepl("_TE_ASC_IQTREE.contree", prefix_files))) {
+    ml_te_asc[[paste0("ml_te_asc", prefix)]] <- read.tree(prefix_files[grepl("_TE_ASC_IQTREE.contree", prefix_files)])
+  }
+}
+
+# ML TE noASC
+ml_te_noasc = list()
+# Iterate over each prefix
+for (prefix in prefixes) {
+  # Filter files belonging to the current prefix
+  prefix_files <- files[grep(paste0("^", prefix), files)]
+  # Apply the appropriate function based on the filename pattern
+  if (any(grepl("_TE_noASC_IQTREE.contree", prefix_files))) {
+    ml_te_noasc[[paste0("ml_te_noasc", prefix)]] <- read.tree(prefix_files[grepl("_TE_noASC_IQTREE.contree", prefix_files)])
+  }
+}
+
+####################
+# DATASET LOGISTIC #
+####################
+
+# Only clades in MOL are considered. BS values from MOL clades are assigned; their presence and absence in TE are assigned; unique clades in TE are not assigned, because they are not necessary to answer the question
+
+# A) MP MOL vs MP TE
+MPlogistic = vector("list", length(mp_mol_bs))
+for (i in seq_along(mp_mol_bs)){
+  MPlogistic[[i]] = RNODE::retrodictNodes(mp_mol_bs[[i]], mp_te_bs[[i]])
+}
+# Add the Dataset column
+MPlogistic <- lapply(seq_along(MPlogistic), function(i) {
+  df <- MPlogistic[[i]]
+  df$Dataset <- i # Add a new column with the dataset number
+  df
+})
+# Combine the list into a single dataframe using base R
+MPlogistic <- do.call(rbind, MPlogistic)
+
+# B) ML MOL vs ML TE ASC
+MLASClogistic = vector("list", length(ml_mol))
+for (i in seq_along(mp_mol_bs)){
+  MLASClogistic[[i]] = retrodictNodes(ml_mol[[i]], ml_te_asc[[i]])
+}
+# Add the Dataset column
+MLASClogistic <- lapply(seq_along(MLASClogistic), function(i) {
+  df <- MLASClogistic[[i]]
+  df$Dataset <- i # Add a new column with the dataset number
+  df
+})
+# Combine the list into a single dataframe using base R
+MLASClogistic <- do.call(rbind, MLASClogistic)
+
+# C) ML MOL vs ML TE noASC
+MLnoASClogistic = vector("list", length(ml_mol))
+for (i in seq_along(mp_mol_bs)){
+  MLnoASClogistic[[i]] = retrodictNodes(ml_mol[[i]], ml_te_noasc[[i]])
+}
+# Add the Dataset column
+MLnoASClogistic <- lapply(seq_along(MLnoASClogistic), function(i) {
+  df <- MLnoASClogistic[[i]]
+  df$Dataset <- i # Add a new column with the dataset number
+  df
+})
+# Combine the list into a single dataframe using base R
+MLnoASClogistic <- do.call(rbind, MLnoASClogistic)
+
+# COMBINE ALL IN ONE DATASET
+# Add the optimality column to each dataframe
+MPlogistic <- MPlogistic %>%
+  mutate(optimality = "MP")
+MLASClogistic <- MLASClogistic %>%
+  mutate(optimality = "MLASC")
+MLnoASClogistic <- MLnoASClogistic %>%
+  mutate(optimality = "MLnoASC")
+# Merge all three dataframes
+combined_df <- bind_rows(MPlogistic, MLASClogistic, MLnoASClogistic)
+#write.csv(combined_df, file="../Dataset_R_q5_02-06-25.csv")
+
+#############################
+# EXPLORATORY DATA ANALYSES #
+#############################
+
+# A) MP
+# Total number of MOL clades
+nrow(MPlogistic)
+# Shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion shared/total
+mean(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion uniqueMOL/total
+mean(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion of MOL lades with BS >90 absent in TE
+# MOL clades with BS = 100 absent in TE
+nrow(subset(MPlogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+
+# B) ML ASC
+# Total number of MOL clades
+nrow(MLASClogistic)
+# Shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion shared/total
+mean(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+# MOL clades with BS = 100 absent in TE
+nrow(subset(MLASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+
+# C) ML noASC
+# Total number of MOL clades
+nrow(MLnoASClogistic)
+# Shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion shared/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+# MOL clades with BS = 100 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+
+#######################
+# LOGISTIC REGRESSION #
+#######################
+
+# A) MP
+# Perform logistic regression
+mp_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MPlogistic, family = binomial)
+# Print a summary of the model
+summary(mp_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mp_logistic_result)
+# Interpretation
+exp(mp_logistic_result$coefficients[[2]]) # If coefficient is 0.09 and exp(0.09) is 1.1, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 10%
+
+# B) ML ASC
+# Perform logistic regression
+mlasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlasc_logistic_result)
+# Interpretation
+exp(mlasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+
+# C) ML noASC
+# Perform logistic regression
+mlnoasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLnoASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlnoasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlnoasc_logistic_result)
+# Interpretation
+exp(mlnoasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%

@@ -1,0 +1,4 @@
+tread 'tree(s) from TNT, for data in 002_TE_data.tnt'
+(Polychrus_acutirostris (((Basiliscus_galeritus (Basiliscus_plumifrons Basiliscus_vittatus ))(Laemanctus_longipes (Corytophanes_cristatus Corytophanes_percarinatus )))(Sauromalus_obesus (Elgaria_panamintina Tropidurus_etheridgei ))))*
+(Polychrus_acutirostris (Elgaria_panamintina (Tropidurus_etheridgei (Sauromalus_obesus ((Basiliscus_galeritus (Basiliscus_plumifrons Basiliscus_vittatus ))(Laemanctus_longipes (Corytophanes_cristatus Corytophanes_percarinatus )))))));
+proc-;

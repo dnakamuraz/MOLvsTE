@@ -1,0 +1,9 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Xyloc ,(Centr ,((Apmel ,((Bompe ,Melip ),(Eufri ,Euglo ))),(Melis ,(Antho ,Habro )))));
+tree tnt_2 = [&U] 
+(Xyloc ,((Apmel ,((Bompe ,Melip ),(Eufri ,Euglo ))),(Centr ,(Melis ,(Antho ,Habro )))));
+
+end ; 

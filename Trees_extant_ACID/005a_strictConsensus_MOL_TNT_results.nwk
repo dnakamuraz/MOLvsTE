@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Stathmonotus_culebrae ,(Stathmonotus_lugubris ,(Stathmonotus_stahli ,(((((Acanthemblemaria_aspera ,Acanthemblemaria_greenfieldi ,(Acanthemblemaria_betinensis ,Acanthemblemaria_exilispinus ),((Acanthemblemaria_spinosa ,(Acanthemblemaria_chaplini ,(Acanthemblemaria_castroi ,Acanthemblemaria_rivasi ))),((Acanthemblemaria_cf_crockeri ,Acanthemblemaria_crockeri ),(Acanthemblemaria_hancocki ,(Acanthemblemaria_hastingsi ,Acanthemblemaria_macrospilus ))))),((((Chaenopsis_alepidota ,Lucayablennius_zingaro ),(Chaenopsis_limbaughi ,Chaenopsis_schmitti )),(Emblemaria_nivipes ,((Emblemaria_diphyodontis ,Emblemaria_pandionis ),(Emblemaria_hypacanthus ,Emblemaria_piratica )))),(Hemiemblemaria_simulus ,(Ekemblemaria_myersi ,Ekemblemaria_nigra )))),((Cirriemblemaria_lucasana ,Protemblemaria_bicirris ),(Emblemariopsis_randalli ,Emblemariopsis_signifera ))),((Coralliozetus_angelicus ,Coralliozetus_micropes ),((Coralliozetus_boehlkei ,Coralliozetus_rosenblatti ),(Coralliozetus_cardonae ,Coralliozetus_springeri )))),(Mccoskerichthys_sandae ,Neoclinus_blanchardi )))));
+end ;

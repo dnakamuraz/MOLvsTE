@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Equus_caballus ,(Tapirus_terrestris ,(Sus_barbatus ,(Camelus_dromedarius ,((Hippopotamus_amphibius ,(Balaenoptera_edeni ,Tursiops_truncatus )),(Ovis_aries ,Tragulus_javanicus ))))));
+end ;

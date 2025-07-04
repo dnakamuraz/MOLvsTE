@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Osmundastrum_cinnamomeum ,(((Christensenia_aesculifolia ,(Angiopteris_evecta ,(Angiopteris_itoi ,Angiopteris_lygodiifolia ,Angiopteris_smithii )),(Eupodium_laeve ,(Ptisana_fraxinea ,Ptisana_purpurascens ,(Ptisana_oreades ,(Ptisana_attenuata ,Ptisana_melanesica ,Ptisana_mertensiana ,Ptisana_pellucida ,Ptisana_squamosa ,Ptisana_sylvatica )))),(Marattia_douglasii ,(Marattia_alata ,Marattia_laxa ))),((Danaea_elliptica ,Danaea_leprieurii ),(Danaea_grandifolia ,Danaea_nodosa ))),(Hymenophyllum_holochilum ,((Diplopterygium_glaucum ,(Schizaea_elegans ,(Cyathea_multiflora ,Saccoloma_inaequale ))),(Dipteris_conjugata ,Matonia_pectinata )))));
+end ;
