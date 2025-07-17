@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Brookesia ,(Agama_agama ,Anolis_carolinensis ,Anolis_cristatellus ,Anolis_olssoni_ricordi ,Anolis_sagrei ,Basiliscus_basiliscus ,Brachylophus_fasciatus ,Calotes_emma ,Chalarodon_madagascariensis ,Chameleo_calyptratus ,Corytophanes_cristatus ,Crotaphytus_collaris ,Dipsosaurus_dorsalis ,Draco_sp ,Enyalioides ,Gambelia_wislizenii ,Geiseltaliellus_maarius ,Hydrosaurus ,Iguana_iguana ,Laemanctus ,Leiocephalus_barahonensis ,Leiocephalus_carinatus ,Leiocephalus_personatus ,Leiolepis_belliana ,Leiosaurus_catamarcensis ,Liolaemus_bellii_pictus ,Liolaemus_magellanicus ,Microlophus ,Morunasaurus_annularis ,Oplurus ,Petrosaurus ,Phrynosoma_platyrhinos ,Phymaturus_palluma ,Phymaturus_somuncurensis ,Physignathus_cocincinus ,Plica ,Polychrus_acutirostris ,Polychrus_marmoratus ,Pristidactylus_torquatus ,Sauromalus_ater ,Sceloporus ,Stenocercus ,Suzanniwanna_patriciana ,Trapelus ,Tropidurus_torquatus ,Uma_scoparia ,Uranoscodon_superciliosus ,Urostrophus_vautieri ,Uta_stansburiana ));
+end;

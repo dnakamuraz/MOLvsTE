@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Proteopithecus ,(Catopithecus ,(Aotus ,Callicebus ,Cebus ,Saguinus ,Saimiri ,Xenothrix ,Lagonimico ,Neosaimiri ,Nuciruptor ,Proteropithecia ,Mazzonicebus ,Aegyptopithecus ,Dolichocebus ,Branisella ,Tremacebus ,Acrecebus ,Cebupithecia ,Chilecebus ,Antillothrix ,Paralouatta ,Perupithecus ,Panamacebus ,Parvimico ,(Alouatta ,Stirtonia ,(Brachyteles ,(Ateles ,Lagothrix )63)58)61,(Pithecia ,(Cacajao ,Chiropotes )99)92,(Leontopithecus ,(Callimico ,(Callithrix ,Cebuella )99)75)63,(Hylobates ,(Miopithecus ,Presbytis )99)88,(Aotus_dindensis ,Mohanamico )82,(Apidium ,Simonsius )94,(Soriacebus ,Canaanimico )59,(Homunculus ,Carlocebus )93)53)100);
+
+end ; 

@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Adelges_tsugae ,(Pineus_strobi ,((Acyrthosiphon_pisum ,Rhopalosiphum_padi ),(Matsucoccus_matsumurae ,(Eumargarodes_laingi ,((((((Aclerda_arundinariae ,Eulecanium_tiliae ,(Ceroplastes_japonicus ,Coccus_hesperidum )),((((Chionaspis_salicis ,(Phoenicococcus_martelli ,(Aonidiella_aurantii ,Parlatoria_oleae ))),(Eriococcus_buxi ,((Beesonia_dipterocarpi ,Gallacoccus_secundus ),(Stictococcus_vayssievei ,Tanyscelis_verrucula )))),(Dactylopius_confusus ,(Eriococcus_coccineus ,Ovaticoccus_agavium ))),(Kermes_quercus ,(Conchaspis_lata ,(Bambusaspis_miliaris ,Lecanodiaspis_baculifera ))))),(Antonina_graminis_crawi ,(Ferrisia_virgata ,Planococcus_citri ,(Pseudococcus_longispinus ,(Dysmicoccus_alazon ,Pseudococcus_maritimus ))))),(Puto_superbus ,Puto_yuccae )),(Newsteadia_floccosa ,(Insignorthezia_insignis ,Orthezia_urticae ))),(((Coelostomidia_pilosa ,Coelostomidia_wairoensis ),((Gigantococcus_maximus ,(Crypticerya_genistae ,(Icerya_purchasi ,Icerya_seychellarum ))),(Drosicha_corpulenta ,Drosicha_pinicola ))),(Marchalina_hellenica ,(Kuwania_quercus ,Neosteingelia_texana )))))))));
+end ;

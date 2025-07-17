@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Rhoiptelia_chiliantha ,(((((((Alfaroa_costaricensis ,Alfaroa_williamsii ),(Alfaroa_guanacastensis ,Alfaroa_manningii )),(Oreomunnea_mexicana_A ,(Oreomunnea_mexicana_B ,Oreomunnea_mexicana_C ))),(Oreomunnea_pterocarpa_A ,Oreomunnea_pterocarpa_B )),(Engelhardia_roxburghiana_C ,(Engelhardia_roxburghiana_D ,(Engelhardia_roxburghiana_A ,Engelhardia_roxburghiana_B )))),(Engelhardia_serrata ,Engelhardia_spicata_A )),(Platycarya_strobilacea ,(((Annamocarya_sinensis ,(Carya_cathayensis ,Carya_tonkinensis )),(Carya_glabra ,Carya_myristiciformis ,Carya_ovata ,Carya_tomentosa ,(Carya_cordiformis ,Carya_illinoinensis ))),(Cyclocarya_paliurus ,((Juglans_cinerea ,Juglans_mandschurica ),(Juglans_microcarpa ,Juglans_nigra ),(Juglans_regia ,Juglans_regia_uc151 )),(Pterocarya_macroptera ,Pterocarya_stenopteraA ))))));
+end ;

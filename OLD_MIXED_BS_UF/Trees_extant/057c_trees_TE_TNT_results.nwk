@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(gonorynchus_sp2 ,(((((((hyostomus_panamensis ,(ameirus_natalis2 ,((pangasius_cfpangasius2 ,(arius_felis ,plotosus_lineatus )),(auchenoglanis_occidentalis ,(malapterurus_stiassnyae ,synodontis_filamentosus ))))),(hoplias_microlepis ,((astynax_aeneus ,ctenolucius_beani ),(hepsetus_odoe2 ,(brycinus_macrolepidotus ,bryconaethiops_yseuxi ))))),(citharinus_gibbosus ,(xenocharax_crassus ,(nannaethiops_unitaeniatus ,(distichodus_hypostomatus ,distichodus_maculatus ))))),(apteronotus_albifrons ,(sternopygus_macrurus ,(brachyhypopomus_occidentalis3 ,(gymnotus_carapo ,gymnotus_cylindricus ))))),(moxostoma_poecilurum ,(danRer7 ,(cyrpinella_venusta ,puntiopiles_falcifer2 )))),(thryssa_hamiltonii2 ,(chirocentrus_dorab2 ,dorosoma_pentense ))),(chanos_chanos2 ,(parakneria_abbreviata ,phraectolaemus_ansorgii2 ))));
+
+end ; 

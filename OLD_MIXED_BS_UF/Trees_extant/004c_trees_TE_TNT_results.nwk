@@ -1,0 +1,19 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,((Liquidambar ,(Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella ))))),((Mytilaria ,(Disanthus ,((Matudaea ,(Maingaya ,(Corylopsis ,Loropetalum ))),(((Dicoryphe ,(Trichocladus ,(Noahdendron ,Ostrearia ))),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia ))))),(Tetracentron ,Trochodendron )))));
+tree tnt_2 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,((Liquidambar ,(Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella ))))),((Mytilaria ,(Disanthus ,((Corylopsis ,(Matudaea ,(Loropetalum ,Maingaya ))),(((Trichocladus ,(Dicoryphe ,(Noahdendron ,Ostrearia ))),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia ))))),(Tetracentron ,Trochodendron )))));
+tree tnt_3 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,(Liquidambar ,((Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella )))),((Mytilaria ,(Disanthus ,((Corylopsis ,(Loropetalum ,(Maingaya ,Matudaea ))),(((Dicoryphe ,(Trichocladus ,(Noahdendron ,Ostrearia ))),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia )))))),(Tetracentron ,Trochodendron )))));
+tree tnt_4 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,((Liquidambar ,(Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella ))))),((Mytilaria ,(Disanthus ,((Corylopsis ,(Loropetalum ,(Maingaya ,Matudaea ))),((((Dicoryphe ,Trichocladus ),(Noahdendron ,Ostrearia )),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia ))))),(Tetracentron ,Trochodendron )))));
+tree tnt_5 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,(Liquidambar ,((Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella )))),((Mytilaria ,(Disanthus ,((Matudaea ,(Maingaya ,(Corylopsis ,Loropetalum ))),((((Dicoryphe ,Trichocladus ),(Noahdendron ,Ostrearia )),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia )))))),(Tetracentron ,Trochodendron )))));
+tree tnt_6 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,(Liquidambar ,((Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella )))),((Mytilaria ,(Disanthus ,((Corylopsis ,(Matudaea ,(Loropetalum ,Maingaya ))),((((Dicoryphe ,Trichocladus ),(Noahdendron ,Ostrearia )),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia )))))),(Tetracentron ,Trochodendron )))));
+tree tnt_7 = [&U] 
+(Buxus ,(Pachysandra ,(Sabia ,((Daphniphyllum ,(Cercidiphyllum ,(Liquidambar ,(Itea ,(Bergenia ,(Boykinia ,(Heuchera ,Tiarella )))),((Mytilaria ,(Disanthus ,((Corylopsis ,Loropetalum ,Maingaya ,Matudaea ),(((Dicoryphe ,Trichocladus ,(Noahdendron ,Ostrearia )),((Eustigma ,Fortunearia ),(Molinadendron ,Sinowilsonia ))),(Hamamelis ,(Fothergilla ,(Parrotia ,(Distylium ,Sycopsis )))))))),(Exbucklandia ,Rhodoleia ))))),(Tetracentron ,Trochodendron )))));
+
+end ; 

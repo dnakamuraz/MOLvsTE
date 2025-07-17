@@ -1,0 +1,9 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(NW109_5_Batesia_hypochlora ,(NW109_8_Panacea_regina ,(NW114_3_Ectima_thecla ,((ADW24_H_atlantis ,(((IGPV74_H_guatemalena ,(ADW02_H_guatemalena ,PURSALVA45_H_guatemalena )),((DC029_H_feronia ,MH026_H_feronia ),(UFL01662_H_feronia ,UFL01663_H_feronia ))),(((((ADW04_H_glauconome ,((ADW25_H_julitta ,ADW26_H_julitta ),(IGPV73_H_glauconome ,IGPV82_H_glauconome ))),((BPAMPHC01_H_amphichloe ,(DC028_H_amphichloe ,DC027_H_amphichloe )),(NW62_3_H_februa ,MVH60_H_februa ))),(UJ88_H_alicia ,(UJ015_H_velutina ,(IGMET003_H_laodamia ,(PD0913_H_laodamia ,IGMET005_H_laodamia ))))),((IGMET008_H_fornax ,(IGBUC30_H_fornax ,IGMET004_H_fornax )),(UJ90_H_iphthime ,MVHI_H_epinome ))),(((IGLS66_H_arinome ,(PURPER55_H_arinome ,PD0917_H_arinome )),(UJAMZ011_H_arinome ,UJAMZ012_H_belladonna )),(JLBMEX01_H_amphinome ,(UFL01669_H_amphinome ,(PD0914_H_amphinome ,(UJCUN017_H_amphinome ,PD0915_H_amphinome )))))))),(IGMET001_H_chloe ,IGMET002_H_chloe )))));
+tree tnt_2 = [&U] 
+(NW109_5_Batesia_hypochlora ,(NW109_8_Panacea_regina ,(NW114_3_Ectima_thecla ,((ADW24_H_atlantis ,(((IGPV74_H_guatemalena ,(ADW02_H_guatemalena ,PURSALVA45_H_guatemalena )),((DC029_H_feronia ,MH026_H_feronia ),(UFL01662_H_feronia ,UFL01663_H_feronia ))),(((((ADW04_H_glauconome ,((ADW25_H_julitta ,ADW26_H_julitta ),(IGPV73_H_glauconome ,IGPV82_H_glauconome ))),((BPAMPHC01_H_amphichloe ,(DC028_H_amphichloe ,DC027_H_amphichloe )),(NW62_3_H_februa ,MVH60_H_februa ))),(UJ88_H_alicia ,(UJ015_H_velutina ,(IGMET003_H_laodamia ,(PD0913_H_laodamia ,IGMET005_H_laodamia ))))),((IGBUC30_H_fornax ,(IGMET004_H_fornax ,IGMET008_H_fornax )),(UJ90_H_iphthime ,MVHI_H_epinome ))),(((IGLS66_H_arinome ,(PURPER55_H_arinome ,PD0917_H_arinome )),(UJAMZ011_H_arinome ,UJAMZ012_H_belladonna )),(JLBMEX01_H_amphinome ,(UFL01669_H_amphinome ,(UJCUN017_H_amphinome ,(PD0914_H_amphinome ,PD0915_H_amphinome )))))))),(IGMET001_H_chloe ,IGMET002_H_chloe )))));
+
+end ; 

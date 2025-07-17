@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Limulus_polyphemus ,(Carcinoscorpius_rotundicauda ,(Solifugae ,(Androctonus_australis ,Belisarius_xambeui ),((((Siro_rubens ,Parasiro_coiffaiti ),(Stylocellus ,StylocellusJP )),((Caddo_agilis ,((Dalquestia_formosa ,((Astrobunus_grallator ,Nelima_silvatica ),(Leiobunum_sp ,Hadrobunus_maculosus ))),(Phalangium_opilio ,(Odiellus_troguloides ,Opilio_parietinus )))),(((Ischyropsalis_luteipes ,Ceratolasma_tricantha ),(Sabacon_cavicolens ,(Hesperonemastoma_modestum ,Taracus_sp ))),(Nipponopsalis_abei ,((Dicranolasma_soerenseni ,Trogulus_nepaeformis ),(Ortholasma_sp ,(Centetostoma_dubium ,Nemastoma_bimaculatum ))))))),(Zuma_acuta ,Gnomulus_sp ,Maiorerus_randoi ,Gnidia_holmbergi ,Pachyloides_thorellii ,Hoplobunus_sp ,(Equitius_doriae ,Triaenobunus_sp ),(Scotolemon_lespesi ,Bishopella_laciniosa ))))));
+end ;

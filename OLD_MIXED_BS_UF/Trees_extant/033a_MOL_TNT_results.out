@@ -1,0 +1,4 @@
+tread 'tree(s) from TNT, for data in 033_MOL_data.tnt'
+(Xyloc (Centr ((Apmel ((Bompe Melip )(Eufri Euglo )))(Melis (Antho Habro )))))*
+(Xyloc ((Apmel ((Bompe Melip )(Eufri Euglo )))(Centr (Melis (Antho Habro )))));
+proc-;

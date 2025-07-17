@@ -1,4 +1,5 @@
 #NEXUS
 begin trees ;
 tree tagged_tree = [&U]
-(((Basiliscus_galeritus:0.0807955995,(Basiliscus_plumifrons:0.0839667175,Basiliscus_vittatus:0.0879366143)94:0.0289306179)98:0.0279855665,((Corytophanes_cristatus:0.0617623517,Corytophanes_percarinatus:0.0432971592)100:0.0853744878,Laemanctus_longipes:0.1069914657)100:0.0393798622)100:0.0930672900,((Elgaria_panamintina:0.5404783429,Tropidurus_etheridgei:0.2682244601)52:0.0256597606,Sauromalus_obesus:0.1495331170)73:0.0344789771,Polychrus_acutirostris:0.3019034922);end ;
+(((Basiliscus_galeritus:0.0807724751,(Basiliscus_plumifrons:0.0839470245,Basiliscus_vittatus:0.0879161592)95:0.0289299638)98:0.0279773118,((Corytophanes_cristatus:0.0617529736,Corytophanes_percarinatus:0.0432952052)100:0.0853381064,Laemanctus_longipes:0.1069612829)99:0.0393510866)100:0.0930001428,((Elgaria_panamintina:0.5399555389,Tropidurus_etheridgei:0.2680911320)56:0.0254515333,Sauromalus_obesus:0.1494333489)78:0.0344209429,Polychrus_acutirostris:0.3016379028);
+end ;

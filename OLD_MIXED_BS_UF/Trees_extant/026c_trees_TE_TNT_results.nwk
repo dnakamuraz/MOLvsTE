@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Leptostraca ,(Bathynellacea ,(((Lophogastrida ,Mysida ),(Anaspidacea ,(Reptantia ,(Euphausiacea ,Stomatopoda )))),(Isopoda ,((Tanaidacea ,(Cumacea ,(Amphipoda ,Spelaeogriphacea ))),(Thermosbaenacea ,Mictacea ))))));
+
+end ; 
