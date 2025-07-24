@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Novocrania ,(Neoancistrocrania ,((Terebratulina ,(Terebratalia ,(Acanthobasiliola ,Basiliola_beecheri ,Basiliola_lucida ,Basiliolella ,Cryptopora ,Manithyris ,Notosaria ,Parasphenarina ,Tethyrhynchia ,(Neorhynchia ,(Frieleia ,Hemithiris ))))),(Discina ,Pelagodiscus ))));
-end ;

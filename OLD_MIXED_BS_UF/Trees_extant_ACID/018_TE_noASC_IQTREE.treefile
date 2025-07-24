@@ -1,4 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Physeter_catodon:0.1708142488,(Balaena_mysticetus:0.0126350891,Eubalaena_spp.:0.0126501378)100:0.0233484333,((((Balaenoptera_acutorostrata:0.0137209945,Balaenoptera_bonaerensis:0.0088384277)100:0.0228103781,(((Balaenoptera_borealis:0.0168527856,Balaenoptera_omurai:0.0281783699)98:0.0030194425,Balaenoptera_musculus:0.0212545482)100:0.0043070456,(Balaenoptera_physalus:0.0223454649,Megaptera_novaeangliae:0.0172415660)100:0.0091387685)86:0.0020000728)65:0.0046408963,Eschrichtius_robustus:0.0275693176)100:0.0179614912,Caperea_marginata:0.0590597438)99:0.0090799741);end ;

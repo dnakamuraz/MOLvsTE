@@ -1,9 +1,0 @@
-#NEXUS
-
-begin trees ; 
-tree tnt_1 = [&U] 
-(Amphiporus ,(Cerebratulus ,(((((Anadara ,Nucula ),((Genitoconia ,(((Aplysia ,(Biomphalaria ,Coryphella )),((Buccinum ,Neptunea ),(Strombus ,(Crepidula ,Littorina )))),(Haliotis ,Lottia ))),((Crassostrea ,(Gukensia ,(Modiolus ,(Mcaliforianus ,Medulis )))),(Macrocallista ,Mercenaria )))),(Antalis ,(Chaetoderma ,(Leptochiton ,(Chaetopleura ,(Bruber ,Tlineata )))))),((Glottidia ,Lingula ),(Terebratalia ,terebratulina ))),(Chaetopterus ,((Capitella ,Nereis ),(Leech ,Lumbricus ))))));
-tree tnt_2 = [&U] 
-(Amphiporus ,(Cerebratulus ,(((((Anadara ,Nucula ),((Genitoconia ,(((Aplysia ,(Biomphalaria ,Coryphella )),((Buccinum ,Neptunea ),(Strombus ,(Crepidula ,Littorina )))),(Haliotis ,Lottia ))),((Crassostrea ,(Gukensia ,(Modiolus ,(Mcaliforianus ,Medulis )))),(Macrocallista ,Mercenaria )))),(Antalis ,(Chaetoderma ,(Leptochiton ,(Chaetopleura ,(Bruber ,Tlineata )))))),((Glottidia ,Lingula ),(Terebratalia ,terebratulina ))),(Chaetopterus ,((Capitella ,Nereis ),(Leech ,Lumbricus ))))));
-
-end ; 

@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Ornithorhynchus_anatinus ,(Tachyglossus_aculeatus ,(((((Amblysomus_hottentotus ,Echinops_telfairi ),((Procavia_capensis ,(Loxodonta_africana ,Trichechus_manatus )),(Orycteropus_afer ,Rhynchocyon_cirnei ))),(((((Equus_caballus ,(Lama_glama ,(Sus_scrofa ,(Bos_taurus ,(Hippopotamus_amphibius ,(Caperea_marginata ,Tursiops_truncatus )))))),(Pteropus_giganteus ,(Rhinopoma_hardwickii ,((Myotis_lucifugus ,Pteronotus_parnellii ),(Nycteris_thebaica ,Saccopteryx_bilineata ))))),(Manis_pentadactyla ,(Canis_lupus ,Felis_silvestris ))),(Talpa_europaea ,(Solenodon_paradoxus ,(Erinaceus_europaeus ,Sorex_araneus )))),((Oryctolagus_cuniculus ,(Ictidomys_tridecemlineatus ,(Castor_canadensis ,(Cavia_porcellus ,Rattus_norvegicus )))),(((Cynocephalus_volans ,Galeopterus_variegatus ),(Ptilocercus_lowii ,Tupaia_glis )),(Lemur_catta ,Tarsius_syrichta ,(Homo_sapiens ,Saimiri_sciureus )))))),(Dasypus_novemcinctus ,Tamandua_tetradactyla )),(Didelphis_virginiana ,Dromiciops_gliroides ))));
-end ;

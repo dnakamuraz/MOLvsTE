@@ -1,9 +1,0 @@
-#NEXUS
-
-begin trees ; 
-tree tnt_1 = [&U] 
-(Hylobates ,(((Ateles ,(Lagothrix ,(Alouatta ,Brachyteles ))),((Aotus ,((Saguinus ,(Leontopithecus ,(Callimico ,(Callithrix ,Cebuella )))),(Cebus ,Saimiri ))),((Pithecia ,(Cacajao ,Chiropotes )),(Callicebus ,Xenothrix )))),(Miopithecus ,Presbytis )));
-tree tnt_2 = [&U] 
-(Hylobates ,((((Alouatta ,Brachyteles ),(Ateles ,Lagothrix )),(((Aotus ,(Cebus ,Saimiri )),(Saguinus ,(Leontopithecus ,(Callimico ,(Callithrix ,Cebuella ))))),((Pithecia ,(Cacajao ,Chiropotes )),(Callicebus ,Xenothrix )))),(Miopithecus ,Presbytis )));
-
-end ; 

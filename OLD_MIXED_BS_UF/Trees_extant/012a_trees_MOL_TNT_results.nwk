@@ -1,9 +1,0 @@
-#NEXUS
-
-begin trees ; 
-tree tnt_1 = [&U] 
-(Gonorynchus_greyiA ,(Gonorynchus_abA ,((Opsariichthys_uncirostrisA ,Tribolodon_brandtiA ),(Chanos_chanosB ,(Phractolaemus_ansA ,(Kneria_ruahaA ,(Parakneria_slekiiA ,(Cromeria_niloticaA ,Grasseichthys_gabonensisA ))))))));
-tree tnt_2 = [&U] 
-(Gonorynchus_greyiA ,(Gonorynchus_abA ,((Opsariichthys_uncirostrisA ,Tribolodon_brandtiA ),(Chanos_chanosB ,(Phractolaemus_ansA ,(Kneria_ruahaA ,(Parakneria_slekiiA ,(Cromeria_niloticaA ,Grasseichthys_gabonensisA ))))))));
-
-end ; 

@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(((Opsariichthys_uncirostrisA:0.0245808678,Tribolodon_brandtiA:0.0243956330)100:0.1750599340,(Chanos_chanosB:0.0989281793,(((Cromeria_niloticaA:0.0251867480,Grasseichthys_gabonensisA:0.0301586325)100:0.0076176271,(Kneria_ruahaA:0.0405114461,Parakneria_slekiiA:0.0245071305)72:0.0027351970)100:0.0767994241,Phractolaemus_ansA:0.1267435672)100:0.0619053842)100:0.0437977667)100:0.1333634768,Gonorynchus_abA:0.0137005362,Gonorynchus_greyiA:0.0119563727);
+end ;

@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Metabetaeus_sp. ,(Al_yaldwyni ,At_nitescens ,Betaeus_jucundus ,Nennalpheus_sp. ,(Betaeus_australis ,(((Betaeus_cf_gracilis ,Betaeus_gelasinifer ,Betaeus_setosus ),(Betaeus_harfordi ,Betaeus_macginitae )),(Betaeus_truncatus ,((Betaeus_ensenadensis ,Betaeus_laevifrons ),(Betaeus_harrimani ,Betaeus_longidactylus )))),(Betaeus_emarginatus ,(Betaeus_granulimanus ,Betaeus_lilianae ))),(Bp_acanthops ,Betaeopsis_aequimanus ,Bp_indicus )));
+end ;

@@ -1,4 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-((((((Balaenoptera_edeni:0.0422204283,Tursiops_truncatus:0.0794878565)100:0.0543134807,Hippopotamus_amphibius:0.1171230547)97:0.0245107560,(Ovis_aries:0.1018103229,Tragulus_javanicus:0.1380722346)100:0.0706715063)99:0.0292461350,Sus_barbatus:0.1610681883)37:0.0074724136,Camelus_dromedarius:0.1839347289)100:0.1312076043,Equus_caballus:0.1144824733,Tapirus_terrestris:0.0933986475);end ;

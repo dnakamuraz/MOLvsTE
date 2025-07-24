@@ -1,7 +1,0 @@
-#NEXUS
-
-begin trees ; 
-tree tnt_1 = [&U] 
-(Proechimys ,(Dasyprocta ,(Cuniculus ,(((C_aperea ,M_australis ),((D_patagonum ,D_salinicola ),(H_hydrochoeris ,K_rupestris ))),(G_musteloides ,G_spixii )))));
-
-end ; 

@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Xyloc ,((Apmel ,((Bompe ,Melip ),(Eufri ,Euglo ))),(Centr ,(Melis ,(Antho ,Habro )))));
-end ;

@@ -1,7 +1,0 @@
-#NEXUS
-
-begin trees ; 
-tree tnt_1 = [&U] 
-(Deinopis ,(Nephila_pilipes ,(((((Argiope_argentata ,(Acusilas ,(Araneus ,Nephila_inaurata ))),(((((Azilia ,(Argiope_aurantia ,Caerostris )),(Nephila_clavata ,Nephila_clavipes )),(Meta ,((Herennia_etruscilla ,(Leucauge ,(Epeirotypus ,Herennia_agnarssoni ))),(((Glenognatha ,Herennia_multipuncta ),(Nephila_ardentipes ,(Herennia_papuana ,Nephila_antipodiana ))),(Herennia_gagamba ,Linyphia ))))),(Chrysometa ,(Herennia_deelemanae ,Herennia_tone ))),((Clitaetra_perroti ,Clitaetra_simoni ),(Nephila_constricta ,Nephila_edulis )))),(Clitaetra_clathrata ,Nephila_komaci )),((Dolichognatha ,(Clitaetra_irenae ,Clitaetra_thisbe )),(Metellina ,Nephila_senegalensis ))),((Araniella ,Nephila_plumipes ),((Clitaetra_episinoides ,Deliochus ),(Cyclosa ,Nephila_fenestrata ))))));
-
-end ; 

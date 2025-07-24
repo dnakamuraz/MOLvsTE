@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Amphiporus ,(Cerebratulus ,(Anadara ,Crassostrea ,Macrocallista ,Mercenaria ,Nucula ,Antalis ,((Aplysia ,(Biomphalaria ,Coryphella )),((Buccinum ,Neptunea ),(Strombus ,(Crepidula ,Littorina )))),(Leptochiton ,(Chaetopleura ,(Bruber ,Tlineata ))),(Capitella ,Chaetopterus ,Nereis ,(Leech ,Lumbricus )),(Chaetoderma ,Genitoconia ),((Glottidia ,Lingula ),(Terebratalia ,terebratulina )),(Gukensia ,Modiolus ,(Mcaliforianus ,Medulis )),(Haliotis ,Lottia ))));
-end ;
