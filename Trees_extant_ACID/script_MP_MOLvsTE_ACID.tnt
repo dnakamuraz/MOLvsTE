@@ -225,9 +225,19 @@ proc 045a_strictConsensus_MOL_TNT_results.nwk;
 proc 045c_strictConsensus_TE_TNT_results.nwk;
 tcomp@!;
 
+proc ../../Other/ALL_DATA/046/tnt/046_MOL_data.tnt ;
+proc 046a_strictConsensus_MOL_TNT_results.nwk;
+proc 046c_strictConsensus_TE_TNT_results.nwk;
+tcomp@!;
+
 proc ../../Other/ALL_DATA/047/tnt/047_MOL_data.tnt ;
 proc 047a_strictConsensus_MOL_TNT_results.nwk;
 proc 047c_strictConsensus_TE_TNT_results.nwk;
+tcomp@!;
+
+proc ../../Other/ALL_DATA/048/tnt/048_MOL_data.tnt ;
+proc 048a_strictConsensus_MOL_TNT_results.nwk;
+proc 048c_strictConsensus_TE_TNT_results.nwk;
 tcomp@!;
 
 proc ../../Other/ALL_DATA/049/tnt/049_MOL_data.tnt ;
@@ -263,4 +273,14 @@ tcomp@!;
 proc ../../Other/ALL_DATA/055/tnt/055_MOL_data.tnt ;
 proc 055a_strictConsensus_MOL_TNT_results.nwk;
 proc 055c_strictConsensus_TE_TNT_results.nwk;
+tcomp@!;
+
+proc ../../Other/ALL_DATA/057/tnt/057_MOL_data.tnt ;
+proc 057a_strictConsensus_MOL_TNT_results.nwk;
+proc 057c_strictConsensus_TE_TNT_results.nwk;
+tcomp@!;
+
+proc ../../Other/ALL_DATA/058/tnt/058_MOL_data.tnt ;
+proc 058a_strictConsensus_MOL_TNT_results.nwk;
+proc 058c_strictConsensus_TE_TNT_results.nwk;
 tcomp@!;

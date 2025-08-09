@@ -1,76 +1,4 @@
-Reading from ../../Other/ALL_DATA/001/tnt/001_MOL_data.tnt 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (937x73, 8 states). Memory required for data: 0.67 Mbytes 
- 
-WARNING: 
-Symbol '-' in taxon names will be changed to '_' (=underscore). 
- 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 001_MOL_IQTREE.treefile 
-Reading file 001_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 001_TE_ASC_IQTREE.treefile 
-Reading file 001_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.04907 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.04907     --   
- 
- 
-Reading from ../../Other/ALL_DATA/002/tnt/002_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (1838x10, 8 states). Memory required for data: 0.91 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 002_MOL_IQTREE.treefile 
-Reading file 002_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 002_TE_ASC_IQTREE.treefile 
-Reading file 002_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.00000 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.00000     --   
- 
- 
 Reading from ../../Other/ALL_DATA/003/tnt/003_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
 Matrix (2657x9, 8 states). Memory required for data: 1.30 Mbytes 
@@ -80,8 +8,8 @@ Reading file 003_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 003_TE_ASC_IQTREE.treefile 
-Reading file 003_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_1.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_1.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -97,112 +25,6 @@ Cluster Info Dist's to tree 1:
              0        1   
                           
       0  0.13829     --   
- 
- 
-Reading from 004_MOL_data_DONT_DELETE.tnt 
- 
-WARNING: 
-Data from:
-
-       ../../Other/ALL_DATA/003/tnt/003_MOL_data.tnt 
-
-will be replaced with data from:
-
-       004_MOL_data_DONT_DELETE.tnt 
- 
- 
-Matrix (5415x34, 8 states). Memory required for data: 2.84 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 004_MOL_IQTREE.treefile 
-Reading file 004_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 004_TE_ASC_IQTREE.treefile 
-Reading file 004_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.02038 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.02038     --   
- 
- 
-Reading from ../../Other/ALL_DATA/005/tnt/005_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (3544x40, 8 states). Memory required for data: 1.92 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 005_MOL_IQTREE.treefile 
-Reading file 005_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 005_TE_ASC_IQTREE.treefile 
-Reading file 005_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.11569 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.11569     --   
- 
- 
-Reading from ../../Other/ALL_DATA/006/tnt/006_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (2146x77, 8 states). Memory required for data: 1.37 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 006_MOL_IQTREE.treefile 
-Reading file 006_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 006_TE_ASC_IQTREE.treefile 
-Reading file 006_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.02668 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.02668     --   
  
  
 Reading from ../../Other/ALL_DATA/007/tnt/007_MOL_data.tnt 
@@ -221,8 +43,8 @@ Reading file 007_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 007_TE_ASC_IQTREE.treefile 
-Reading file 007_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_2.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_2.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -255,8 +77,8 @@ Reading file 008_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 008_TE_ASC_IQTREE.treefile 
-Reading file 008_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_3.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_3.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -264,14 +86,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.07482 
+      0     --    0.09133 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.07482     --   
+      0  0.09133     --   
  
  
 Reading from ../../Other/ALL_DATA/009/tnt/009_MOL_data.tnt 
@@ -293,8 +115,8 @@ Reading file 009_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 009_TE_ASC_IQTREE.treefile 
-Reading file 009_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_4.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_4.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -327,8 +149,8 @@ Reading file 010_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 010_TE_ASC_IQTREE.treefile 
-Reading file 010_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_5.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_5.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -361,8 +183,8 @@ Reading file 011_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 011_TE_ASC_IQTREE.treefile 
-Reading file 011_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_6.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_6.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -370,48 +192,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.02476 
+      0     --    0.00177 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.02476     --   
- 
- 
-Reading from ../../Other/ALL_DATA/012/tnt/012_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (7173x10, 8 states). Memory required for data: 3.48 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 012_MOL_IQTREE.treefile 
-Reading file 012_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 012_TE_ASC_IQTREE.treefile 
-Reading file 012_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.12513 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.12513     --   
+      0  0.00177     --   
  
  
 Reading from ../../Other/ALL_DATA/013/tnt/013_MOL_data.tnt 
@@ -429,8 +217,8 @@ Reading file 013_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 013_TE_ASC_IQTREE.treefile 
-Reading file 013_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_7.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_7.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -448,108 +236,6 @@ Cluster Info Dist's to tree 1:
       0  0.01541     --   
  
  
-Reading from ../../Other/ALL_DATA/014/tnt/014_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (36860x46, 8 states). Memory required for data: 19.53 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 014_MOL_IQTREE.treefile 
-Reading file 014_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 014_TE_ASC_IQTREE.treefile 
-Reading file 014_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.08143 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.08143     --   
- 
- 
-Reading from ../../Other/ALL_DATA/015/tnt/015_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (6642x19, 8 states). Memory required for data: 3.32 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 015_MOL_IQTREE.treefile 
-Reading file 015_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 015_TE_ASC_IQTREE.treefile 
-Reading file 015_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.00000 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.00000     --   
- 
- 
-Reading from ../../Other/ALL_DATA/016/tnt/016_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (3731x48, 8 states). Memory required for data: 2.07 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 016_MOL_IQTREE.treefile 
-Reading file 016_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 016_TE_ASC_IQTREE.treefile 
-Reading file 016_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.17332 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.17332     --   
- 
- 
 Reading from ../../Other/ALL_DATA/017/tnt/017_MOL_data.tnt 
  
 WARNING: 
@@ -565,8 +251,8 @@ Reading file 017_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 017_TE_ASC_IQTREE.treefile 
-Reading file 017_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_8.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_8.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -574,116 +260,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.06364 
+      0     --    0.07572 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.06364     --   
- 
- 
-Reading from ../../Other/ALL_DATA/018/tnt/018_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (37013x12, 8 states). Memory required for data: 17.98 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 018_MOL_IQTREE.treefile 
-Reading file 018_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 018_TE_ASC_IQTREE.treefile 
-Reading file 018_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.10289 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.10289     --   
- 
- 
-Reading from ../../Other/ALL_DATA/019/tnt/019_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (22131x53, 8 states). Memory required for data: 11.97 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 019_MOL_IQTREE.treefile 
-Reading file 019_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 019_TE_ASC_IQTREE.treefile 
-Reading file 019_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.01168 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.01168     --   
- 
- 
-Reading from ../../Other/ALL_DATA/020/tnt/020_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (15794x45, 8 states). Memory required for data: 8.40 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 020_MOL_IQTREE.treefile 
-Reading file 020_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 020_TE_ASC_IQTREE.treefile 
-Reading file 020_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.05024 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.05024     --   
+      0  0.07572     --   
  
  
 Reading from ../../Other/ALL_DATA/021/tnt/021_MOL_data.tnt 
@@ -701,8 +285,8 @@ Reading file 021_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 021_TE_ASC_IQTREE.treefile 
-Reading file 021_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_9.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_9.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -710,82 +294,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.04133 
+      0     --    0.04909 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.04133     --   
- 
- 
-Reading from ../../Other/ALL_DATA/022/tnt/022_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (6168x30, 8 states). Memory required for data: 3.19 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 022_MOL_IQTREE.treefile 
-Reading file 022_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 022_TE_ASC_IQTREE.treefile 
-Reading file 022_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.09720 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.09720     --   
- 
- 
-Reading from ../../Other/ALL_DATA/023/tnt/023_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (3875x59, 8 states). Memory required for data: 2.22 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 023_MOL_IQTREE.treefile 
-Reading file 023_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 023_TE_ASC_IQTREE.treefile 
-Reading file 023_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.08129 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.08129     --   
+      0  0.04909     --   
  
  
 Reading from ../../Other/ALL_DATA/024/tnt/024_MOL_data.tnt 
@@ -796,15 +312,15 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (3885x40, 8 states). Memory required for data: 2.10 Mbytes 
+Matrix (3885x39, 8 states). Memory required for data: 2.09 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Reading from 024_MOL_IQTREE.treefile 
 Reading file 024_MOL_IQTREE.treefile as NEXUS 
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 024_TE_ASC_IQTREE.treefile 
-Reading file 024_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_10.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_10.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -812,116 +328,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.06978 
+      0     --    0.07700 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.06978     --   
- 
- 
-Reading from ../../Other/ALL_DATA/025/tnt/025_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (59811x29, 8 states). Memory required for data: 30.34 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 025_MOL_IQTREE.treefile 
-Reading file 025_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 025_TE_ASC_IQTREE.treefile 
-Reading file 025_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.01379 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.01379     --   
- 
- 
-Reading from ../../Other/ALL_DATA/026/tnt/026_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (8316x15, 8 states). Memory required for data: 4.10 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 026_MOL_IQTREE.treefile 
-Reading file 026_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 026_TE_ASC_IQTREE.treefile 
-Reading file 026_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.53457 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.53457     --   
- 
- 
-Reading from ../../Other/ALL_DATA/027/tnt/027_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (3435x18, 8 states). Memory required for data: 1.73 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 027_MOL_IQTREE.treefile 
-Reading file 027_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 027_TE_ASC_IQTREE.treefile 
-Reading file 027_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.06987 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.06987     --   
+      0  0.07700     --   
  
  
 Reading from ../../Other/ALL_DATA/028/tnt/028_MOL_data.tnt 
@@ -939,8 +353,8 @@ Reading file 028_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 028_TE_ASC_IQTREE.treefile 
-Reading file 028_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_11.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_11.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -948,14 +362,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.09240 
+      0     --    0.00000 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.09240     --   
+      0  0.00000     --   
  
  
 Reading from ../../Other/ALL_DATA/029/tnt/029_MOL_data.tnt 
@@ -977,8 +391,8 @@ Reading file 029_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 029_TE_ASC_IQTREE.treefile 
-Reading file 029_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_12.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_12.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -986,48 +400,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.14724 
+      0     --    0.16116 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.14724     --   
- 
- 
-Reading from ../../Other/ALL_DATA/030/tnt/030_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (9584x85, 8 states). Memory required for data: 5.69 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 030_MOL_IQTREE.treefile 
-Reading file 030_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 030_TE_ASC_IQTREE.treefile 
-Reading file 030_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.03735 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.03735     --   
+      0  0.16116     --   
  
  
 Reading from ../../Other/ALL_DATA/031/tnt/031_MOL_data.tnt 
@@ -1038,7 +418,7 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (4294x19, 8 states). Memory required for data: 2.16 Mbytes 
+Matrix (4294x39, 8 states). Memory required for data: 2.31 Mbytes 
  
 WARNING: 
 Taxon names over 32 letters will be truncated 
@@ -1049,8 +429,8 @@ Reading file 031_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 031_TE_ASC_IQTREE.treefile 
-Reading file 031_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_13.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_13.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1058,227 +438,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.08529 
+      0     --    0.03864 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.08529     --   
- 
- 
-Reading from ../../Other/ALL_DATA/032/tnt/032_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (4055x56, 8 states). Memory required for data: 2.30 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 032_MOL_IQTREE.treefile 
-Reading file 032_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 032_TE_ASC_IQTREE.treefile 
-Reading file 032_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.06052 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.06052     --   
- 
- 
-Reading from ../../Other/ALL_DATA/033/tnt/033_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (2442x10, 8 states). Memory required for data: 1.20 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 033_MOL_IQTREE.treefile 
-Reading file 033_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 033_TE_ASC_IQTREE.treefile 
-Reading file 033_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.19748 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.19748     --   
- 
- 
-Reading from ../../Other/ALL_DATA/034/tnt/034_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (4576x43, 8 states). Memory required for data: 2.48 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 034_MOL_IQTREE.treefile 
-Reading file 034_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 034_TE_ASC_IQTREE.treefile 
-Reading file 034_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.10004 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.10004     --   
- 
- 
-Reading from ../../Other/ALL_DATA/035/tnt/035_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (4014x40, 8 states). Memory required for data: 2.17 Mbytes 
- 
-WARNING: 
-Number of taxa set to 40, but only 11 taxon names defined.
-Number of taxa will be re-set to 11 
- 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 035_MOL_IQTREE.treefile 
-Reading file 035_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 035_TE_ASC_IQTREE.treefile 
-Reading file 035_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.08555 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.08555     --   
- 
- 
-Reading from ../../Other/ALL_DATA/036/tnt/036_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (4441x24, 8 states). Memory required for data: 2.27 Mbytes 
- 
-WARNING: 
-Taxon names over 32 letters will be truncated 
- 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 036_MOL_IQTREE.treefile 
-Reading file 036_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 036_TE_ASC_IQTREE.treefile 
-Reading file 036_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.05053 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.05053     --   
- 
- 
-Reading from ../../Other/ALL_DATA/037/tnt/037_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (2353318x12, 8 states). Memory required for data: 1141 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 037_MOL_IQTREE.treefile 
-Reading file 037_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 037_TE_ASC_IQTREE.treefile 
-Reading file 037_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.00000 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.00000     --   
+      0  0.03864     --   
  
  
 Reading from ../../Other/ALL_DATA/038/tnt/038_MOL_data.tnt 
@@ -1296,8 +463,8 @@ Reading file 038_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 038_TE_ASC_IQTREE.treefile 
-Reading file 038_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_14.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_14.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1305,14 +472,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.09132 
+      0     --    0.11804 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.09132     --   
+      0  0.11804     --   
  
  
 Reading from ../../Other/ALL_DATA/039/tnt/039_MOL_data.tnt 
@@ -1330,8 +497,8 @@ Reading file 039_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 039_TE_ASC_IQTREE.treefile 
-Reading file 039_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_15.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_15.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1339,14 +506,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.16800 
+      0     --    0.18291 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.16800     --   
+      0  0.18291     --   
  
  
 Reading from ../../Other/ALL_DATA/040/tnt/040_MOL_data.tnt 
@@ -1364,8 +531,8 @@ Reading file 040_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 040_TE_ASC_IQTREE.treefile 
-Reading file 040_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_16.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_16.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1383,46 +550,12 @@ Cluster Info Dist's to tree 1:
       0  0.00000     --   
  
  
-Reading from ../../Other/ALL_DATA/041/tnt/041_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (5023x59, 8 states). Memory required for data: 2.85 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 041_MOL_IQTREE.treefile 
-Reading file 041_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 041_TE_ASC_IQTREE.treefile 
-Reading file 041_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.05000 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.05000     --   
- 
- 
 Reading from ../../Other/ALL_DATA/042/tnt/042_MOL_data.tnt 
  
 WARNING: 
 Data from:
 
-       ../../Other/ALL_DATA/041/tnt/041_MOL_data.tnt 
+       ../../Other/ALL_DATA/040/tnt/040_MOL_data.tnt 
 
 will be replaced with data from:
 
@@ -1436,8 +569,8 @@ Reading file 042_MOL_IQTREE.treefile as NEXUS
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 042_TE_ASC_IQTREE.treefile 
-Reading file 042_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_17.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_17.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1445,17 +578,17 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.06511 
+      0     --    0.09909 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.06511     --   
+      0  0.09909     --   
  
  
-Reading from ../../Other/ALL_DATA/043/tnt/043_MOL_data.tnt 
+Reading from ../../Other/ALL_DATA/046/tnt/046_MOL_data.tnt 
  
 WARNING: 
 Re-setting data type will cause
@@ -1463,19 +596,15 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (926x112, 8 states). Memory required for data: 0.78 Mbytes 
- 
-WARNING: 
-Taxon names over 32 letters will be truncated 
- 
+Matrix (333766x92, 8 states). Memory required for data: 195.43 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 043_MOL_IQTREE.treefile 
-Reading file 043_MOL_IQTREE.treefile as NEXUS 
+Reading from 046_MOL_IQTREE.treefile 
+Reading file 046_MOL_IQTREE.treefile as NEXUS 
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 043_TE_ASC_IQTREE.treefile 
-Reading file 043_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_18.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_18.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1483,37 +612,71 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.12000 
+      0     --    0.02223 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.12000     --   
+      0  0.02223     --   
  
  
-Reading from 044_MOL_data_DONT_DELETE.tnt 
+Reading from ../../Other/ALL_DATA/048/tnt/048_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (5833x53, 8 states). Memory required for data: 3.23 Mbytes 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Reading from 048_MOL_IQTREE.treefile 
+Reading file 048_MOL_IQTREE.treefile as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Reading from pruned_trees_ML_ASC/list2_pruned_19.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_19.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00453 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00453     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/052/tnt/052_MOL_data.tnt 
  
 WARNING: 
 Data from:
 
-       ../../Other/ALL_DATA/043/tnt/043_MOL_data.tnt 
+       ../../Other/ALL_DATA/048/tnt/048_MOL_data.tnt 
 
 will be replaced with data from:
 
-       044_MOL_data_DONT_DELETE.tnt 
+       ../../Other/ALL_DATA/052/tnt/052_MOL_data.tnt 
  
  
-Matrix (4240x41, 8 states). Memory required for data: 2.29 Mbytes 
+Matrix (8710x94, 8 states). Memory required for data: 5.30 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 044_MOL_IQTREE.treefile 
-Reading file 044_MOL_IQTREE.treefile as NEXUS 
+Reading from 052_MOL_IQTREE.treefile 
+Reading file 052_MOL_IQTREE.treefile as NEXUS 
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 044_TE_ASC_IQTREE.treefile 
-Reading file 044_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_20.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_20.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1521,56 +684,17 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.05085 
+      0     --    0.10392 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.05085     --   
+      0  0.10392     --   
  
  
-Reading from ../../Other/ALL_DATA/045/tnt/045_MOL_data.tnt 
- 
-WARNING: 
-Data from:
-
-       044_MOL_data_DONT_DELETE.tnt 
-
-will be replaced with data from:
-
-       ../../Other/ALL_DATA/045/tnt/045_MOL_data.tnt 
- 
- 
-'DNA only, without Bothrops sanctaecrucis'
-Matrix (4724x128, 8 states). Memory required for data: 3.22 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 045_MOL_IQTREE.treefile 
-Reading file 045_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 045_TE_ASC_IQTREE.treefile 
-Reading file 045_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.04844 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.04844     --   
- 
- 
-Reading from ../../Other/ALL_DATA/047/tnt/047_MOL_data.tnt 
+Reading from ../../Other/ALL_DATA/054/tnt/054_MOL_data.tnt 
  
 WARNING: 
 Re-setting data type will cause
@@ -1578,15 +702,15 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (1838x70, 8 states). Memory required for data: 1.16 Mbytes 
+Matrix (10244x20, 8 states). Memory required for data: 5.11 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 047_MOL_IQTREE.treefile 
-Reading file 047_MOL_IQTREE.treefile as NEXUS 
+Reading from 054_MOL_IQTREE.treefile 
+Reading file 054_MOL_IQTREE.treefile as NEXUS 
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 047_TE_ASC_IQTREE.treefile 
-Reading file 047_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_21.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_21.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1594,17 +718,17 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.08073 
+      0     --    0.03881 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.08073     --   
+      0  0.03881     --   
  
  
-Reading from ../../Other/ALL_DATA/049/tnt/049_MOL_data.tnt 
+Reading from ../../Other/ALL_DATA/058/tnt/058_MOL_data.tnt 
  
 WARNING: 
 Re-setting data type will cause
@@ -1612,15 +736,15 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (5898x37, 8 states). Memory required for data: 3.12 Mbytes 
+Matrix (1053473x44, 8 states). Memory required for data: 553.16 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 049_MOL_IQTREE.treefile 
-Reading file 049_MOL_IQTREE.treefile as NEXUS 
+Reading from 058_MOL_IQTREE.treefile 
+Reading file 058_MOL_IQTREE.treefile as NEXUS 
 Read 1 trees (0-0) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
-Reading from 049_TE_ASC_IQTREE.treefile 
-Reading file 049_TE_ASC_IQTREE.treefile as NEXUS 
+Reading from pruned_trees_ML_ASC/list2_pruned_22.nwk 
+Reading file pruned_trees_ML_ASC/list2_pruned_22.nwk as NEXUS 
 Read 1 trees (1-1) from NEXUS file 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Closing NEXUS file 
@@ -1636,219 +760,5 @@ Cluster Info Dist's to tree 1:
              0        1   
                           
       0  0.00000     --   
- 
- 
-Reading from 050_MOL_data_DONT_DELETE.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (8269x320, 8 states). Memory required for data: 7.81 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 050_MOL_IQTREE.treefile 
-Reading file 050_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 050_TE_ASC_IQTREE.treefile 
-Reading file 050_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.00886 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.00886     --   
- 
- 
-Reading from ../../Other/ALL_DATA/051/tnt/051_MOL_data.tnt 
- 
-WARNING: 
-Re-setting RAM will discard current data (and trees) 
- 
-TNT - max. ram = 2048 Mbytes 
-No ram used yet 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Gaps will be read as missing 
-Matrix (661266x243, 8 states). Memory required for data: 512.71 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 051_MOL_IQTREE.treefile 
-Reading file 051_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 051_TE_ASC_IQTREE.treefile 
-Reading file 051_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.00053 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.00053     --   
- 
- 
-Reading from ../../Other/ALL_DATA/052/tnt/052_MOL_data.tnt 
- 
-WARNING: 
-Data from:
-
-       ../../Other/ALL_DATA/051/tnt/051_MOL_data.tnt 
-
-will be replaced with data from:
-
-       ../../Other/ALL_DATA/052/tnt/052_MOL_data.tnt 
- 
- 
-Matrix (8710x94, 8 states). Memory required for data: 5.53 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 052_MOL_IQTREE.treefile 
-Reading file 052_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 052_TE_ASC_IQTREE.treefile 
-Reading file 052_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.09890 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.09890     --   
- 
- 
-Reading from ../../Other/ALL_DATA/053/tnt/053_MOL_data.tnt 
- 
-WARNING: 
-Data from:
-
-       ../../Other/ALL_DATA/052/tnt/052_MOL_data.tnt 
-
-will be replaced with data from:
-
-       ../../Other/ALL_DATA/053/tnt/053_MOL_data.tnt 
- 
- 
-Matrix (35106x156, 8 states). Memory required for data: 24.02 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 053_MOL_IQTREE.treefile 
-Reading file 053_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 053_TE_ASC_IQTREE.treefile 
-Reading file 053_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.04697 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.04697     --   
- 
- 
-Reading from ../../Other/ALL_DATA/054/tnt/054_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (10244x20, 8 states). Memory required for data: 5.17 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 054_MOL_IQTREE.treefile 
-Reading file 054_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 054_TE_ASC_IQTREE.treefile 
-Reading file 054_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.04229 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.04229     --   
- 
- 
-Reading from ../../Other/ALL_DATA/055/tnt/055_MOL_data.tnt 
- 
-WARNING: 
-Re-setting data type will cause
-current data to be lost 
- 
-Matrices will be read as DNA data 
-Matrix space: allocate for up to 8 states 
-Matrix (72263x98, 8 states). Memory required for data: 43.25 Mbytes 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Reading from 055_MOL_IQTREE.treefile 
-Reading file 055_MOL_IQTREE.treefile as NEXUS 
-Read 1 trees (0-0) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Reading from 055_TE_ASC_IQTREE.treefile 
-Reading file 055_TE_ASC_IQTREE.treefile as NEXUS 
-Read 1 trees (1-1) from NEXUS file 
-Again reading from script_ML_MOLvsTEASC_ACID.tnt 
-Closing NEXUS file 
-Cluster Info Dist's to tree 0: 
- 
-             0        1   
-                          
-      0     --    0.03083 
- 
- 
-Cluster Info Dist's to tree 1: 
- 
-             0        1   
-                          
-      0  0.03083     --   
  
  

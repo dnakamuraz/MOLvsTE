@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Callorhinchus_milii,(Leucoraja_erinacea,((Acipenser_fulvescens,((Amia_calva,Lepisosteus_osseus),(Elops_saurus,Hiodon_alosoides)),(Erpetoichthys_calabaricus,Polypterus_senegalus)),Latimeria_chalumnae)));
+end ;

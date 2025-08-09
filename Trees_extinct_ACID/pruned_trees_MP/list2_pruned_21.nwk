@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Saguinus,Xenothrix,(Alouatta,(Brachyteles,(Ateles,Lagothrix))),(Aotus,(Cebus,Saimiri)),(Pithecia,(Cacajao,Chiropotes)),Callicebus,(Leontopithecus,(Callimico,(Callithrix,Cebuella))),(Hylobates,(Miopithecus,Presbytis)));
+end ;

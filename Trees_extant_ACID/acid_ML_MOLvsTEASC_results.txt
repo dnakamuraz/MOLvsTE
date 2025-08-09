@@ -2,10 +2,6 @@ Reading from ../../Other/ALL_DATA/001/tnt/001_MOL_data.tnt
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
 Matrix (937x73, 8 states). Memory required for data: 0.67 Mbytes 
- 
-WARNING: 
-Symbol '-' in taxon names will be changed to '_' (=underscore). 
- 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Reading from 001_MOL_IQTREE.treefile 
 Reading file 001_MOL_IQTREE.treefile as NEXUS 
@@ -21,14 +17,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.04907 
+      0     --    0.06996 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.04907     --   
+      0  0.06996     --   
  
  
 Reading from ../../Other/ALL_DATA/002/tnt/002_MOL_data.tnt 
@@ -540,14 +536,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.17332 
+      0     --    0.15877 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.17332     --   
+      0  0.15877     --   
  
  
 Reading from ../../Other/ALL_DATA/017/tnt/017_MOL_data.tnt 
@@ -778,14 +774,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.08129 
+      0     --    0.07846 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.08129     --   
+      0  0.07846     --   
  
  
 Reading from ../../Other/ALL_DATA/024/tnt/024_MOL_data.tnt 
@@ -796,7 +792,7 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (3885x40, 8 states). Memory required for data: 2.10 Mbytes 
+Matrix (3885x39, 8 states). Memory required for data: 2.09 Mbytes 
 Again reading from script_ML_MOLvsTEASC_ACID.tnt 
 Reading from 024_MOL_IQTREE.treefile 
 Reading file 024_MOL_IQTREE.treefile as NEXUS 
@@ -812,14 +808,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.06978 
+      0     --    0.07704 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.06978     --   
+      0  0.07704     --   
  
  
 Reading from ../../Other/ALL_DATA/025/tnt/025_MOL_data.tnt 
@@ -1038,7 +1034,7 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (4294x19, 8 states). Memory required for data: 2.16 Mbytes 
+Matrix (4294x39, 8 states). Memory required for data: 2.31 Mbytes 
  
 WARNING: 
 Taxon names over 32 letters will be truncated 
@@ -1058,14 +1054,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.08529 
+      0     --    0.03864 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.08529     --   
+      0  0.03864     --   
  
  
 Reading from ../../Other/ALL_DATA/032/tnt/032_MOL_data.tnt 
@@ -1092,14 +1088,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.06052 
+      0     --    0.06677 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.06052     --   
+      0  0.06677     --   
  
  
 Reading from ../../Other/ALL_DATA/033/tnt/033_MOL_data.tnt 
@@ -1237,14 +1233,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.05053 
+      0     --    0.07357 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.05053     --   
+      0  0.07357     --   
  
  
 Reading from ../../Other/ALL_DATA/037/tnt/037_MOL_data.tnt 
@@ -1305,14 +1301,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.09132 
+      0     --    0.09222 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.09132     --   
+      0  0.09222     --   
  
  
 Reading from ../../Other/ALL_DATA/039/tnt/039_MOL_data.tnt 
@@ -1483,14 +1479,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.12000 
+      0     --    0.11882 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.12000     --   
+      0  0.11882     --   
  
  
 Reading from 044_MOL_data_DONT_DELETE.tnt 
@@ -1560,14 +1556,48 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.04844 
+      0     --    0.04449 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.04844     --   
+      0  0.04449     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/046/tnt/046_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (333766x92, 8 states). Memory required for data: 195.43 Mbytes 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Reading from 046_MOL_IQTREE.treefile 
+Reading file 046_MOL_IQTREE.treefile as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Reading from 046_TE_ASC_IQTREE.treefile 
+Reading file 046_TE_ASC_IQTREE.treefile as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.02195 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.02195     --   
  
  
 Reading from ../../Other/ALL_DATA/047/tnt/047_MOL_data.tnt 
@@ -1594,14 +1624,48 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.08073 
+      0     --    0.06776 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.08073     --   
+      0  0.06776     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/048/tnt/048_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (5833x53, 8 states). Memory required for data: 3.23 Mbytes 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Reading from 048_MOL_IQTREE.treefile 
+Reading file 048_MOL_IQTREE.treefile as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Reading from 048_TE_ASC_IQTREE.treefile 
+Reading file 048_TE_ASC_IQTREE.treefile as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00453 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00453     --   
  
  
 Reading from ../../Other/ALL_DATA/049/tnt/049_MOL_data.tnt 
@@ -1662,14 +1726,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.00886 
+      0     --    0.00502 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.00886     --   
+      0  0.00502     --   
  
  
 Reading from ../../Other/ALL_DATA/051/tnt/051_MOL_data.tnt 
@@ -1736,14 +1800,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.09890 
+      0     --    0.10509 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.09890     --   
+      0  0.10509     --   
  
  
 Reading from ../../Other/ALL_DATA/053/tnt/053_MOL_data.tnt 
@@ -1850,5 +1914,73 @@ Cluster Info Dist's to tree 1:
              0        1   
                           
       0  0.03083     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/057/tnt/057_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (95274x35, 8 states). Memory required for data: 49.11 Mbytes 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Reading from 057_MOL_IQTREE.treefile 
+Reading file 057_MOL_IQTREE.treefile as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Reading from 057_TE_ASC_IQTREE.treefile 
+Reading file 057_TE_ASC_IQTREE.treefile as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00000 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00000     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/058/tnt/058_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (1053473x44, 8 states). Memory required for data: 553.27 Mbytes 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Reading from 058_MOL_IQTREE.treefile 
+Reading file 058_MOL_IQTREE.treefile as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Reading from 058_TE_ASC_IQTREE.treefile 
+Reading file 058_TE_ASC_IQTREE.treefile as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_ML_MOLvsTEASC_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00000 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00000     --   
  
  

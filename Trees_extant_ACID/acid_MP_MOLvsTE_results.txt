@@ -796,7 +796,7 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (3885x40, 8 states). Memory required for data: 2.10 Mbytes 
+Matrix (3885x39, 8 states). Memory required for data: 2.09 Mbytes 
 Again reading from script_MP_MOLvsTE_ACID.tnt 
 Reading from 024a_strictConsensus_MOL_TNT_results.nwk 
 Reading file 024a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
@@ -812,14 +812,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.10051 
+      0     --    0.09881 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.10051     --   
+      0  0.09881     --   
  
  
 Reading from ../../Other/ALL_DATA/025/tnt/025_MOL_data.tnt 
@@ -1038,7 +1038,7 @@ current data to be lost
  
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
-Matrix (4294x19, 8 states). Memory required for data: 2.16 Mbytes 
+Matrix (4294x39, 8 states). Memory required for data: 2.31 Mbytes 
  
 WARNING: 
 Taxon names over 32 letters will be truncated 
@@ -1058,14 +1058,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.14759 
+      0     --    0.02854 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.14759     --   
+      0  0.02854     --   
  
  
 Reading from ../../Other/ALL_DATA/032/tnt/032_MOL_data.tnt 
@@ -1570,6 +1570,40 @@ Cluster Info Dist's to tree 1:
       0  0.03589     --   
  
  
+Reading from ../../Other/ALL_DATA/046/tnt/046_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (333766x92, 8 states). Memory required for data: 195.43 Mbytes 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Reading from 046a_strictConsensus_MOL_TNT_results.nwk 
+Reading file 046a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Reading from 046c_strictConsensus_TE_TNT_results.nwk 
+Reading file 046c_strictConsensus_TE_TNT_results.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.02356 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.02356     --   
+ 
+ 
 Reading from ../../Other/ALL_DATA/047/tnt/047_MOL_data.tnt 
  
 WARNING: 
@@ -1602,6 +1636,40 @@ Cluster Info Dist's to tree 1:
              0        1   
                           
       0  0.03390     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/048/tnt/048_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (5833x53, 8 states). Memory required for data: 3.23 Mbytes 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Reading from 048a_strictConsensus_MOL_TNT_results.nwk 
+Reading file 048a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Reading from 048c_strictConsensus_TE_TNT_results.nwk 
+Reading file 048c_strictConsensus_TE_TNT_results.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00306 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00306     --   
  
  
 Reading from ../../Other/ALL_DATA/049/tnt/049_MOL_data.tnt 
@@ -1647,10 +1715,6 @@ current data to be lost
 Matrices will be read as DNA data 
 Matrix space: allocate for up to 8 states 
 Matrix (8269x320, 8 states). Memory required for data: 7.81 Mbytes 
- 
-WARNING: 
-Symbol '-' in taxon names will be changed to '_' (=underscore). 
- 
 Again reading from script_MP_MOLvsTE_ACID.tnt 
 Reading from 050a_strictConsensus_MOL_TNT_results.nwk 
 Reading file 050a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
@@ -1854,5 +1918,107 @@ Cluster Info Dist's to tree 1:
              0        1   
                           
       0  0.00000     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/056/tnt/056_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (15100x168, 8 states). Memory required for data: 11.00 Mbytes 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Reading from 056a_strictConsensus_MOL_TNT_results.nwk 
+Reading file 056a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Reading from 056c_strictConsensus_TE_TNT_results.nwk 
+Reading file 056c_strictConsensus_TE_TNT_results.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.14418 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.14418     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/057/tnt/057_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (95274x35, 8 states). Memory required for data: 49.11 Mbytes 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Reading from 057a_strictConsensus_MOL_TNT_results.nwk 
+Reading file 057a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Reading from 057c_strictConsensus_TE_TNT_results.nwk 
+Reading file 057c_strictConsensus_TE_TNT_results.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.00000 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.00000     --   
+ 
+ 
+Reading from ../../Other/ALL_DATA/058/tnt/058_MOL_data.tnt 
+ 
+WARNING: 
+Re-setting data type will cause
+current data to be lost 
+ 
+Matrices will be read as DNA data 
+Matrix space: allocate for up to 8 states 
+Matrix (1053473x50, 8 states). Memory required for data: 561.20 Mbytes 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Reading from 058a_strictConsensus_MOL_TNT_results.nwk 
+Reading file 058a_strictConsensus_MOL_TNT_results.nwk as NEXUS 
+Read 1 trees (0-0) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Reading from 058c_strictConsensus_TE_TNT_results.nwk 
+Reading file 058c_strictConsensus_TE_TNT_results.nwk as NEXUS 
+Read 1 trees (1-1) from NEXUS file 
+Again reading from script_MP_MOLvsTE_ACID.tnt 
+Closing NEXUS file 
+Cluster Info Dist's to tree 0: 
+ 
+             0        1   
+                          
+      0     --    0.24262 
+ 
+ 
+Cluster Info Dist's to tree 1: 
+ 
+             0        1   
+                          
+      0  0.24262     --   
  
  

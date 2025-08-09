@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(((((((Tursiops_truncatus:0.1410940851,Balaenoptera_edeni:0.0695986143)94:0.1199387758,Hippopotamus_amphibius:0.2053833243)46:0.0492164386,(Ovis_aries:0.1726187123,Tragulus_javanicus:0.2236373997)99:0.1177088156)42:0.0390542158,Camelus_dromedarius:0.316803593)31:0.0168729215,Sus_barbatus:0.2762955138)51:0.305934083,Tapirus_terrestris:0.1459975612)69:0.037696905,Equus_caballus:0.1706754351);
+end ;

@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(((Betaeopsis_aequimanus:0.1938714979,(((Betaeus_australis:0.1915634377,(((Betaeus_ensenadensis:0.0770174702,Betaeus_laevifrons:0.0456430213)99:0.0356844033,(Betaeus_harrimani:0.0323287874,Betaeus_longidactylus:0.0484978489)97:0.0332714312)98:0.0365936739,Betaeus_truncatus:0.0948794589)73:0.0141007644)49:0.0185185048,((Betaeus_cf_gracilis:0.0062026471,Betaeus_setosus:2.0324e-06)84:0.0361317108,(Betaeus_harfordi:0.0061299197,Betaeus_macginitae:0.0110110746)97:0.0495982146)100:0.073617128)41:0.0336059053,(Betaeus_emarginatus:0.068586463,(Betaeus_granulimanus:0.0788007706,Betaeus_lilianae:0.1109492292)96:0.0323467733)88:0.0322318513)56:0.0877467188)78:0.1096260487,Nennalpheus_sp.:0.2929227817)82:0.3337042569,Metabetaeus_sp.:0.0134757498);
+end ;

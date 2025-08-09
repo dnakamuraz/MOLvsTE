@@ -1,0 +1,113 @@
+Pruning Report
+================
+
+Pair 1:
+  Number of common tips: 9
+  Unique tips in list1[[ 1 ]] ( 0 ): None
+  Unique tips in list2[[ 1 ]] ( 28 ): Agriochoerus, Ambulocetus, Pakicetus, Remingtonocetus, Protocetidae_sp._Cross_Whale, Protocetus, Basilosaurus, Dorudon, Hexaprotodon_liberiensis, Poebrotherium, Archaeotherium, Elomeryx, Diacodexis, Andrewsarchus, Ankalagon, Harpagolestes, Mesonyx, Synoplotherium, Pachyaena, Sinonyx, Dissacus, Hapalodectes, Eoconodon, Arctocyon, Hyopsodus, Phenacodus, Meniscotherium, Hyracotherium
+
+Pair 2:
+  Number of common tips: 267
+  Unique tips in list1[[ 2 ]] ( 0 ): None
+  Unique tips in list2[[ 2 ]] ( 3 ): Hemiphractus_johnsoni, Hemiphractus_fasciatus_ZSM, Cryptobatrachus_sp
+
+Pair 3:
+  Number of common tips: 28
+  Unique tips in list1[[ 3 ]] ( 0 ): None
+  Unique tips in list2[[ 3 ]] ( 5 ): Macropus_eugenii_, Dendrolagus_bennettianus, Dendrolagus_matschiei, Bohra_illuminata, Dorcopsis_veterum
+
+Pair 4:
+  Number of common tips: 32
+  Unique tips in list1[[ 4 ]] ( 0 ): None
+  Unique tips in list2[[ 4 ]] ( 5 ): Archaea_paradoxa, Myrmecarchaea_sp, Patarchaea_muralis, Baltarchaea_conica, Afrarchaea_grimaldii
+
+Pair 5:
+  Number of common tips: 16
+  Unique tips in list1[[ 5 ]] ( 0 ): None
+  Unique tips in list2[[ 5 ]] ( 7 ): Betaeus_gelasinifer, Betaeus_jucundus, Al_yaldwyni, At_nitescens, Bp_acanthops, Bp_indicus, Bp_aequimanus
+
+Pair 6:
+  Number of common tips: 107
+  Unique tips in list1[[ 6 ]] ( 0 ): None
+  Unique tips in list2[[ 6 ]] ( 75 ): Pucadelphys_andinus, Mayulestes_ferox, Allqokirus_australis, Herpetotherium_fugax, Caluromys_philander, Gracilinanus_agilis, Thylamys_pusillus, Marmosops_noctivagus, Didelphis_marsupialis, Thylophorops_chapalmalensis, Philander_opossum, Pseudochirulus_canescens, Cercartetus_caudatus, Bohra_illuminata, Onychogalea_unguifera, Macropus_giganteus, Petrogale_inornata, Notamacropus_agilis, Thylogale_stigmatica, Dorcopsis_hageni, Ganguroo_bilamina, Balbaroo_fangaroo, Ganawamaya_gillespieae, Hadronomas_puckridgi, Rhizosthenurus_flanneryi, Dendrolagus_lumholtzi, Bettongia_leseur, Bettongia_moyesi, Hypsiprymnodon_bartholomaii, Ekaltadeta_ima, Onirocuscus_reidi, Phalanger_orientalis_complex, Trichosurus_dicksoni, Neohelos_spp., Nimbadon_lavarackorum, Ngapakaldia_spp., Silvabestius_spp., Ilaria_spp., Muramura_spp., Namilamadeta_spp., Lasiorhinus_latifrons, Warendja_wakefieldi, Litokoala_kutjamarpensis, Nimiokoala_greystanei, Lekanoleo_roskellyae, Thylacoleo_carnifex, Wakaleo_vanderleuri, Microbiotherium_tehuelchum, Nimbacinus_dicksoni, Badjcinus_turnbulli, Barinya_wangala, Mutpuracinus_archibaldi, Ningaui_timealeyi, Antechinus_flavipes, Micromurexia_hageni, Dasyurus_maculatus, Myoictis_melas, Planigale_ingrami, Galadi_speciosus, Echymipera_kalubu, Microperoryctes_ornata, Yarala_burchfieldi, Bulungu_palara, Yalkaparidon_coheni, Caenolestes_spp., Stilotherium_dissimile, Pichipilus_spp., Acdestis_spp., Palaeothentes_spp., Evolestes_spp., Monodelphis_brevicaudata, Sparassocynus_derivatus, Hesperocynus_dolgopolae, Thylatheridium_cristatum, Mimoperadectes_spp.
+
+Pair 7:
+  Number of common tips: 37
+  Unique tips in list1[[ 7 ]] ( 0 ): None
+  Unique tips in list2[[ 7 ]] ( 25 ): Pojetaia, Pelagiella, Conocardium, Yochelcionella, ochmazochiton, Echinochiton, Halkieria, Calvapilosa, Siphogonuchites, Orthrozanclus, polysacos, protobalanus, glaphurochiton, acaenoplax, Matthevia, phthipodochiton, kulindroplax, Kimberella, Odontogriphus, Wiwaxia, Canadia, Fossundecima, Kenostrychus, Eccentrotheca, Micrina
+
+Pair 8:
+  Number of common tips: 59
+  Unique tips in list1[[ 8 ]] ( 0 ): None
+  Unique tips in list2[[ 8 ]] ( 47 ): Paremphytus, Palaeathalia, Undatoma, Xyelotoma, Dahuratoma, Pseudoxyelocerus, Onochoius, Xyelula, Anaxyela, Syntexyela, Brachysyntexis, Kulbastavia, Mesorussus, Paroryssus, Praeoryssus, Leptephialtites, Cleistogaster, Stephanogaster, Symphytopterus, Brigittepterus, Karatavites, Grimmaratavites, Prosyntexis, Trematothorax, Thoracotrema, Aulisca, Ferganolyda, PamphiliidaeUndesc, Protosirex, Megalodontessk, Turgidontes, Aulidontes, Rudisiricius, Sepulca, Ghilarella, Sogutia, Mesolyda, Xyela_mesozoica, Spathoxyela, Triassoxyela, Asioxyela, Abrotoxyela, Gigantoxyelinae, Eoxyela, Nigrimonticola, Liadoxyela, Angaridyela
+
+Pair 9:
+  Number of common tips: 37
+  Unique tips in list1[[ 9 ]] ( 0 ): None
+  Unique tips in list2[[ 9 ]] ( 26 ): Armandisaurus_explorator, Isodontosaurus_gracilis, Temujinia_ellisoni, Ctenomastax_parva, Helodermoides_tuberculatus, Saniwa, Estesia_mongoliensis, Aiolosaurus_oriens, Gobiderma_pulchrum, Parasaniwa_wyomingensis, Tetrapodophis_amplectus, Najash_rionegrina, Dinilysia_patagonica, Sanajeh, Wonambi_naracoortensis, Yurlunggur, Haasiophis_terrasanctus, Eupodophis_descouensis, Pachyrhachis_problematicus, Kataria_anisodonta, Coniophis_praecedens, Parviraptor_estesi, Diablophis_gilmorei, Portugalophis_lignites, Eophis_underwoodi, Phrynosomimus_asper
+
+Pair 10:
+  Number of common tips: 39
+  Unique tips in list1[[ 10 ]] ( 0 ): None
+  Unique tips in list2[[ 10 ]] ( 5 ): Pseudoscorpiones, Opie, Aethelstan, Halitherses, Oncopus
+
+Pair 11:
+  Number of common tips: 26
+  Unique tips in list1[[ 11 ]] ( 0 ): None
+  Unique tips in list2[[ 11 ]] ( 52 ): Augeneriella_basifurcata, Augeneriella_lagunari, Augeneriella_mossambica, Augeneriella_pectinata, Pseudoaugeneriella_brevirama, Pseudoaugeneriella_unirama, Fabricinuda_longilabrum, Fabricinuda_rosaelenae, Fabricinuda_bikinii, Fabricinuda_pseudocollaris, Fabricinuda_limnicola, Pseudoaugeneriella_nigra, Bansella_oregonica, Novafabricia_tenuiseta, Brifacia_metastellaris, Ra___ciba_barryi, Parafabricia_ventricingulata, Pseudofabriciola_incisura, Pseudofabriciola_analis, Pseudofabriciola_longa, Pseudofabriciola____lamentosa, Pseudofabriciola____laris, Pseudofabriciola_rousei, Pseudofabriciola_so___a, Pseudofabriciola_longipyga, Pseudofabriciola_peduncula, Pseudofabriciola_californica, Pseudofabriciola_capensis, Novafabricia_exiguus, Novafabricia_bilobata, Novafabricia_chilensis, Novafabricia_gerdi, Novafabricia_guana, Novafabricia_triangularis, Pseudofabricia_aberrans, Rubifabriciola_cri, Rubifabriciola_rubra, Rubifabriciola_tonerella, Rubifabriciola_berkeleyi, Rubifabriciola_phuketensis, Rubifabriciola_mediaseta, Rubifabriciola_brevibranchiata, Rubifabriciola_ghardaqa, Fabricinuda_parvus, Fabricinuda_minuta, Echinofabricia_dubia, Monroika_africana, Manayunkia_brasiliensis, Manayunkia_mizu, Manayunkia_polaris, Manayunkia_baicalensis, Manayunkia_speciosa
+
+Pair 12:
+  Number of common tips: 44
+  Unique tips in list1[[ 12 ]] ( 0 ): None
+  Unique tips in list2[[ 12 ]] ( 3 ): Hoplobunus_planus, Karos_depressus, Tampiconus_philippii
+
+Pair 13:
+  Number of common tips: 39
+  Unique tips in list1[[ 13 ]] ( 0 ): None
+  Unique tips in list2[[ 13 ]] ( 5 ): Hydrobius_arcticus_MORPH, Hydramara_argentina_MORPH, Limnoxenus_oahuensis_MORPH, Limnoxenus_punctatostriatus_MORPH, Limnoxenus_nesiticus_MORPH
+
+Pair 14:
+  Number of common tips: 62
+  Unique tips in list1[[ 14 ]] ( 0 ): None
+  Unique tips in list2[[ 14 ]] ( 32 ): acostatrichia_brevipenis, zumatrichia_anomaloptera, zumatrichia_palmara, zumatrichia_bifida, zumatrichia_galtena, zumatrichia_filosa, zumatrichia_notosa, acostatrichia_plaumanni, acostatrichia_spinifera, costatrichia_simplex, costatrichia_lodora, costatrichia_tripartita, acostatrichia_digitata, acostatrichia_fimbriata, ascotrichia_surinamensis, betrichia_longistyla, betrichia_argentinica, costatrichia_zopilote, leucotrichia_inops, leucotrichia_limpia, leucotrichia_fairchildi, leucotrichia_sarita, anchitrichia_trifurcata, anchitrichia_palmatiloba, ceratotrichia_fairchildi, ceratotrichia_flavicoma, alisotrichia_nessimiani, cerasmatrichia_trinitatis, mejicanotrichia_blantoni, mejicanotrichia_tridentata, mejicanotrichia_estaquillosa, byrsopteryx_mirifica
+
+Pair 15:
+  Number of common tips: 43
+  Unique tips in list1[[ 15 ]] ( 0 ): None
+  Unique tips in list2[[ 15 ]] ( 18 ): Pachygnatha, Tetragnatha, Pimoa, Nesticus, Steatoda, Opadometa, Nephila_sexpunctata, Nephilengys_borbonica, Nephilengys_cruentata, Nephilengys_malabarensis, Nephilengys_papuana, Nephila_sumptuosa, Nephila_turneri, Perilla, Singafrotypa, Phonognatha_graeffei, Phonognatha_melanopyga, Uloborus
+
+Pair 16:
+  Number of common tips: 10
+  Unique tips in list1[[ 16 ]] ( 0 ): None
+  Unique tips in list2[[ 16 ]] ( 89 ): Acanthodes_bronni, Cladodoides_wildungensis, Ozarcus_mapesae, _Ligulalepis_, Dicksonosteus_arcticus, Entelognathus_primordialis, Diplocercides_kayseri, Miguashaia_bureaui, Styloichthys_changae, Eusthenopteron_foordi, Osteolepis_macrolepidotus, Gogonasus_andrewsae, Glyptolepis_groenlandica, Porolepis_sp., Guiyu_oneiros, Psarolepis_romeri, Onychodus_jandemarrai, Meemannia_eos, Dialipina_salguerioensis, Beishanichthys_brevicaudalis, Fukangichthys_longidorsalis, Scanilepis_dubia, Tanaocrossus_kalliokoskii, Polypterus_bichir, Evenkia_eunoptera, Acipenser_brevirostrum, Chondrosteus_acipenseroides, Birgeria_groenlandica, Platysomus_superbus, Aesopichthys_erinaceus, Cyranorhis_bergeraci, Wendyichthys_dicksoni, Beagiascus_pulcherrimus, Cosmoptychius_striatus, Kalops_monophyrum, Brachydegma_caelatum_, Pteronisculus_stensioi, Lawrenciella_schaefferi, Boreosomus_piveteaui, Luederia_kempi, Coccocephalichthys_wildi, Kansasiella_eatoni_, Mesopoma_planti, Woodichthys_bearsdeni, Kentuckia_deani, Melanecta_anneae, Cheirolepis_canadensis, Cheirolepis_schultzei, Cheirolepis_trailli, Raynerius_splendens, Donnrosenia_schaefferi, Howqualepis_rostridens, Gogosardina_coatesi, Mimipiscis_bartrami, Mimipiscis_toombsi, Moythomasia_durgaringa, Moythomasia_lineata, Moythomasia_nitida, Osorioichthys_marginis, Tegeolepis_clarki, Australosomus_kochi, Saurichthys_madagascarensis, Amphicentrum_granulosum_, Fouldenia_ischiptera, Styracopterus_fulcratus, Bobosatrania_groenlandica, Ebenaqua_ritchei, Discoserra_pectinodon, Dipteronotus_ornatus, Luganoia_lepidosteoides, Peltopleurus_lissocephalus, Caturus_furcatus, Watsonulus_eugnathoides, Atractosteus_spatula, Obaichthys_decoratus, Macrosemimimus_lennieri, Semionotus_elegans, Macrosemius_rostratus, Propterus_elongatus, Macrepistius_arenatus, Dapedium_LIAS, Dapedium_pholidotum, Tetragonolepis_semicincta, Dorsetichthys_bechei_, Leptolepis_bronni, Elops_hawaiensis, Ichthyokentema_purbeckensis, Hulettia_americana, Venusichthys_comptus
+
+Pair 17:
+  Number of common tips: 35
+  Unique tips in list1[[ 17 ]] ( 0 ): None
+  Unique tips in list2[[ 17 ]] ( 5 ): Palaeooreomunnea_stoneana, Polyptera_manningiii, Palaeoplatycarya, Platycarya_americana, Cruciptera_schaarsc
+
+Pair 18:
+  Number of common tips: 92
+  Unique tips in list1[[ 18 ]] ( 0 ): None
+  Unique tips in list2[[ 18 ]] ( 7 ): Photocorynus_spiniceps, Borophryne_apogon, Spiniphryne_sp, Pentherichthys_atratus, Chirophryne_xenolophus, Phyllorhinichthys_sp, Danaphryne_nigrifilis
+
+Pair 19:
+  Number of common tips: 53
+  Unique tips in list1[[ 19 ]] ( 0 ): None
+  Unique tips in list2[[ 19 ]] ( 2 ): S_palustris, S_bromelicola
+
+Pair 20:
+  Number of common tips: 94
+  Unique tips in list1[[ 20 ]] ( 0 ): None
+  Unique tips in list2[[ 20 ]] ( 129 ): Paragerrhonotus, Arpadosaurus, Melanosaurus, Glyptosaurus, Helodermoides, Paraglyptosaurus, Proglyptosaurus, Peltosaurus, Proxestops, Xestops, Parophisaurus, Ophisauriscus, Apodosauriscus, Odaxosaurus, Becklesius, Paramacellodus, Pseudosaurillussp, Eolacerta, Meyasaurus, Carusia, Exostinus, Lancensis, Restes, Adriosaurus, Pontosaurus, Aigialosaurus, Opetiosaurus, Carsosaurus, Clidastes, Globidens, Plotosaurus, Mlemonnieri, Rikisaurus, Mosasaurus, Ectenosaurus, Goronyosaurus, Prognathovertoni, Prognathsolvayi, Plioplatecarpus, Platecarpus, Hainosaurus, Lakumasaurus, Tylosaurus, Halisaurusaram, Halisaurusstern, Halisaurusplaty, Tethysaurus, Eidolosaurus, Parviraptor, Aphanizocnemus, Coniasaurus, Dolichosaurus, Paravaranus, Parviderma, Aiolosaurus, Cherminotus, Feisti, Necrosaurus_cayluxi, Necrosaurus_euc, Saniwa_ensidens, VMegalania, Vrusingensis, Telmasaurus, Saniwides, Proplatynotia, Eosaniwa, Estesia, Eurheloderma, Htexana, Lowesaurus, Palaeosaniwa, Paraderma, Primaderma, Gobiderma, Colpodontosaurus, Bahndwivici, Dalinghosaurus, Parasaniwa, Mimeosaurus, Priscagama, Phrynosomimus, Isodontosaurus, AMNHiguana, Anchaurosaurus, Zapsosaurus, Temujinia, Ctenomastax, FMNHpolychrotid, AnoleAMBER, Igua, Polrussia, Hoyalacerta, Huehuecuetzpalli, Adamisaurus, Cherminsaurus, Erdenetesaurus, Darchansaurus, MacrocephCHUL, Sineoamphisbaena, Polyglyphanodon, Gobinatus, Tchingisaurus, Chamops, Eupodophis, Haasiophis, Pachyophis, Wonambi, Pachyrhachis, Dinilysia, Slavoia, Bainguis, Eoxanta, Myrmecodaptria, Globaura, Parmeosaurus, Ornatocephalus, Sakurasaurus, Pseudosaurillus, Tepexisaurus, Palaeoxantusia, Gobekko, Nyctisaurops, Parviraptor_mj, Bavarisaurus, Eichstaettisaurus, Dorsetisaurus, Yabeinosaurus, Ardeosaurus, Scandensia
+
+Pair 21:
+  Number of common tips: 20
+  Unique tips in list1[[ 21 ]] ( 0 ): None
+  Unique tips in list2[[ 21 ]] ( 28 ): Stirtonia, Antillothrix, Paralouatta, Nuciruptor, Cebupithecia, Proteropithecia, Acrecebus, Aotus_dindensis, Mohanamico, Neosaimiri, Panamacebus, Perupithecus, Lagonimico, Tremacebus, Branisella, Mazzonicebus, Soriacebus, Canaanimico, Homunculus, Carlocebus, Dolichocebus, Chilecebus, Aegyptopithecus, Apidium, Simonsius, Parvimico, Catopithecus, Proteopithecus
+
+Pair 22:
+  Number of common tips: 44
+  Unique tips in list1[[ 22 ]] ( 0 ): None
+  Unique tips in list2[[ 22 ]] ( 6 ): Anolis_cristatellus, Tropidurus_torquatus, Geiseltaliellus_maarius, Suzanniwanna_patriciana, Iguana_iguana, Agama_agama
+

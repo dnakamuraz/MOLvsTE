@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Paraneoptera,(Chrysopidae,Raphidioptera,Coleo_Polyphaga,Mecoptera,Xyela,Macroxyela,Runaria,Blasticotoma,Tenthredo,Aglaostigma,Dolerus,Selandria,Strongylogaster,Monophadnoides,Metallus,Athalia,Taxonus,Hoplocampa,Nematinus,Nematus,Cladius,Monoctenus,Gilpinia,Diprion,Cimbicinae,Abia,Corynis,Arge,Sterictiphora,Perga,Phylacteophaga,Lophyrotoma,Acordulecera,Decameria,Neurotoma,Onycholyda,Pamphilius,Cephalcia,Acantholyda,Megalodontesc,Cephus,Calameuta,Hartigia,Syntexis,Sirex,Xeris,Urocerus,Tremex,Xiphydria,Orussus,StephanidaeA,Megalyra,Trigonalidae,Evanioidea,Ichneumonidae,Cynipoidea,ApoideaA,Vespidae));
+end ;

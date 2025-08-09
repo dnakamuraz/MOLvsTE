@@ -1,0 +1,5 @@
+#NEXUS
+begin trees ;
+tree tagged_tree = [&U]
+(Callorhinchus_milii:0.2871358658,Leucoraja_erinacea:0.2799710352,(Latimeria_chalumnae:0.3182192121,((Erpetoichthys_calabaricus:0.0121414383,Polypterus_senegalus:0.0112626014)100:0.3213365911,(Acipenser_fulvescens:0.1393312775,((Lepisosteus_osseus:0.1394425914,Amia_calva:0.1346942081)100:0.0368941345,(Hiodon_alosoides:0.1877319349,Elops_saurus:0.2155215355)100:0.1949265268)100:0.0858036980)65:0.0391779989)100:0.2495439057)100:0.3234982132);
+end ;
