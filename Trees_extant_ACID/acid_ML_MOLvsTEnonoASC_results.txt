@@ -226,14 +226,14 @@ Cluster Info Dist's to tree 0:
  
              0        1   
                           
-      0     --    0.01044 
+      0     --    0.00638 
  
  
 Cluster Info Dist's to tree 1: 
  
              0        1   
                           
-      0  0.01044     --   
+      0  0.00638     --   
  
  
 Reading from ../../Other/ALL_DATA/008/tnt/008_MOL_data.tnt 

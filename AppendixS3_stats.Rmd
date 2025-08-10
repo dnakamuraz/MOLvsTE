@@ -1,0 +1,1028 @@
+---
+title: "Supporting Information 3"
+author: "Daniel Y.M. Nakamura, Ward C. Wheeler, Taran Grant"
+date: "2025-01-25"
+output: html_document
+---
+
+# PRE-AMBLE
+
+```{r setup, include=FALSE}
+# Set the working directory 
+knitr::opts_knit$set(root.dir = "/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/")
+
+# Load libraries
+library(ape)
+library(cowplot)
+library(dplyr)
+library(dunn.test)
+library(ggpubr)
+library(ggridges)
+library(glmmTMB)
+library(gridExtra)
+library(phytools)
+library(RNODE)
+library(tidyverse)
+library(TreeDist)
+library(viridis)
+```
+
+# Q1. Are topologies impacted by the addition of phenomic evidence?
+
+Dataset with MOL-TE topological distances were calculated in script 1.
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# Number of datasets impacted by the addition of phenomic evidence
+sum(df$MP_MOLvsTE_NormalizedRF > 0) / nrow(df) # MP MOL vs MP TE
+sum(df$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df) # ML MOL vs ML TE ASC
+sum(df$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df) # ML MOL vs ML TE noASC
+```
+
+The phenomic evidence impacted topologies in 90.3% (47/52) of the datasets in MP and ML (with ASC) and 88.5% (46/52) in ML (without ASC).
+
+## Q1.1 Data exploration
+
+```{r}
+# 1.a MPmol_MPte
+# No. shared clades
+mean(df$MP_MOLvsTE_nSharedClades)
+sd(df$MP_MOLvsTE_nSharedClades)
+range(df$MP_MOLvsTE_nSharedClades)
+# No. unique MOL clades
+mean(df$MP_nUniqueCladesMOL)
+sd(df$MP_nUniqueCladesMOL)
+range(df$MP_nUniqueCladesMOL)
+# No. unique TE clades
+mean(df$MP_nUniqueCladesTE)
+sd(df$MP_nUniqueCladesTE)
+range(df$MP_nUniqueCladesTE)
+# RF
+mean(df$MP_MOLvsTE_NormalizedRF)
+sd(df$MP_MOLvsTE_NormalizedRF)
+range(df$MP_MOLvsTE_NormalizedRF)
+# CID
+mean(df$MP_MOLvsTE_NormalizedCID)
+sd(df$MP_MOLvsTE_NormalizedCID)
+range(df$MP_MOLvsTE_NormalizedCID)
+# SPR
+mean(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
+sd(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
+range(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
+# Resolution MOL
+mean(as.numeric(df$MP_nPolytomiesMOL))
+sd(as.numeric(df$MP_nPolytomiesMOL))
+range(as.numeric(df$MP_nPolytomiesMOL))
+# Resolution TE
+mean(as.numeric(df$MP_nPolytomiesTE))
+sd(as.numeric(df$MP_nPolytomiesTE))
+range(as.numeric(df$MP_nPolytomiesTE))
+
+# 1.b MLmol_MLteAsc
+# No. shared clades
+mean(df$ML_MOLvsTEASC_nSharedClades)
+sd(df$ML_MOLvsTEASC_nSharedClades)
+range(df$ML_MOLvsTEASC_nSharedClades)
+# No. unique MOL clades
+mean(df$ML_MOLvsTEASC_nUniqueCladesMOL)
+sd(df$ML_MOLvsTEASC_nUniqueCladesMOL)
+range(df$ML_MOLvsTEASC_nUniqueCladesMOL)
+# No. unique TE clades
+mean(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
+sd(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
+range(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
+# RF
+mean(df$ML_MOLvsTEASC_NormalizedRF)
+sd(df$ML_MOLvsTEASC_NormalizedRF)
+range(df$ML_MOLvsTEASC_NormalizedRF)
+# CID
+mean(df$ML_MOLvsTEASC_NormalizedCID)
+sd(df$ML_MOLvsTEASC_NormalizedCID)
+range(df$ML_MOLvsTEASC_NormalizedCID)
+# SPR
+mean(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
+sd(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
+range(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
+
+# 1.c MLmol_MLteNoAsc
+# No. shared clades
+mean(df$ML_MOLvsTEnoASC_nSharedClades)
+sd(df$ML_MOLvsTEnoASC_nSharedClades)
+range(df$ML_MOLvsTEnoASC_nSharedClades)
+# No. unique MOL clades
+mean(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+sd(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+range(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+# No. unique TE clades
+mean(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+sd(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+range(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+# RF
+mean(df$ML_MOLvsTEnoASC_NormalizedRF)
+sd(df$ML_MOLvsTEnoASC_NormalizedRF)
+range(df$ML_MOLvsTEnoASC_NormalizedRF)
+# CID
+mean(df$ML_MOLvsTEnoASC_NormalizedCID)
+sd(df$ML_MOLvsTEnoASC_NormalizedCID)
+range(df$ML_MOLvsTEnoASC_NormalizedCID)
+# SPR
+mean(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
+sd(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
+range(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
+```
+
+## Q1.2 Statistical tests
+
+In MP and ML (with ASC), there are 47 datasets in which MOL-TE incongruences are not equal to zero and 5 datasets in which they are equal to zero. In ML (without ASC), there are 46 datasets in which MOL-TE incongruences are not equal to zero and 6 datasets in which they are equal to zero. To test if MOL-TE incongruences are significantly different from zero, we can check if the distribution of observed values are significantly different from zero. 
+
+For each comparison and for each topological distance metric, we tested for normality. Because data are not normal according to Shapiro-Wilk tests (P < 0.05 in all cases), we tested if the median of each topological distance metric is different from zero using a non-parametric Wilcoxon Signed-Ranked test. First, the V statistic is computed by summing the signed ranks of the differences between the observed values and the hypothesized value (i.e. zero). The ranks are assigned based on the absolute values of the differences, and the sign is determined by whether the original value is positive or negative. Second, given that the distribution of V values is normally distributed for a large sample size due to the Central Limit Theorem, P-values can be calculated by finding the area under the normal curve corresponding to the calculated Z-score.
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# 1a. MPmol vs MPte
+# RF
+shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedRF)) # non-parametric, p < 0.05
+q1a_rf <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1a_rf
+# CID
+shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedCID))  # non-parametric, p < 0.05
+q1a_cid <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1a_cid
+# SPR
+shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedSPR)) # non-parametric, p < 0.05
+q1a_spr <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+q1a_spr
+
+# 1b. MLmol vs MLteAsc
+#RF
+shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedRF)) # non-parametric, p < 0.05
+q1b_rf <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1b_rf
+# CID
+shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedCID)) # non-parametric, p < 0.05
+q1b_cid <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1b_cid
+# SPR
+shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR)) # non-parametric, p < 0.05
+q1b_spr <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+q1b_spr
+
+# 1c. MLmol vs MLteNoAsc
+# RF
+shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedRF)) # non-parametric, p < 0.05
+q1c_rf <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1c_rf
+# CID
+shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedCID)) # non-parametric, p < 0.05
+q1c_cid <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1c_cid
+# SPR
+shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR)) # non-parametric, p < 0.05
+q1c_spr <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+q1c_spr
+```
+In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the phenomic evidence tends to impact topologies in empirical studies.
+
+## Q1.3 Figure
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# Create a dataframe
+df <- data.frame(
+  RFdist = c(df$MP_MOLvsTE_NormalizedRF, df$ML_MOLvsTEASC_NormalizedRF, df$ML_MOLvsTEnoASC_NormalizedRF),  # Combine the vectors into a single column
+  CID = c(df$MP_MOLvsTE_NormalizedCID, df$ML_MOLvsTEASC_NormalizedCID, df$ML_MOLvsTEnoASC_NormalizedCID),
+  SPR = c(df$MP_MOLvsTE_NormalizedSPR, df$ML_MOLvsTEASC_NormalizedSPR, df$ML_MOLvsTEnoASC_NormalizedSPR),
+  comparison = rep(c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"), each = length(df$MP_MOLvsTE_NormalizedRF))  # Repeat vector names
+)
+df$comparison <- factor(df$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
+custom_palette <- c("MPmol_MPte" = "#339999",
+                    "MLmol_MLteAsc" = "#6f77b4",
+                    "MLmol_MLteNoAsc" = "#cccccc")
+custom_labels <- c(
+  "MPmol_MPte" = "MP-MOL vs MP-TE",
+  "MLmol_MLteAsc" = "ML-MOL vs ML-TE (with ASC)",
+  "MLmol_MLteNoAsc" = "ML-MOL vs ML-TE (without ASC)"
+)
+s1_rf = ggplot(df, aes(x=RFdist, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized RF", y=NULL,tag="A")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", linewidth = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+s1_cid = ggplot(df, aes(x=CID, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized CID", y=NULL,tag="B")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", size = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+s1_spr = ggplot(df, aes(x=SPR, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized SPR", y=NULL,tag="C")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", size = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+# Extract the legend as a separate ggplot object
+legend <- ggplot(df, aes(x = comparison, y = CID, color = comparison)) +
+  geom_point() +
+  scale_color_manual(values = custom_palette, labels = custom_labels) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+  )+
+  guides(color = guide_legend(override.aes = list(size = 2, alpha=.7)))  # Increase dot size in legend
+legend_grob <- cowplot::get_legend(legend)
+
+#tiff("Figures/figQ1_density.tiff", width = 6, height = 8, units = "in", res = 300)
+grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
+                         s1_cid + theme(plot.margin = margin(.01,1,1,.01)),
+                         s1_spr + theme(plot.margin = margin(.01,1,1,.01)),
+                         nrow=3, ncol=1),
+             legend_grob,
+             nrow=2,
+             heights= c(20,1))
+#dev.off()
+```
+
+# Q2.Are MOL-TE incongruences associated with the proportion of phenomic characters? 
+
+## Q2.1 Spearman's Rank Correlations
+
+To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test.
+
+```{r, warning=F}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# RF: MP MOL vs MP TE
+cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedRF, method = "spearman")
+plot_mp_rf = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized RF\n", x = NULL)
+
+# CID: MP MOL vs MP TE
+cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedCID, method = "spearman")
+plot_mp_cid = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized CID\n", x = NULL)
+
+# SPR: MP MOL vs MP TE
+cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedSPR, method = "spearman")
+plot_mp_spr = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized SPR\n", x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+# RF: ML MOL vs ML TE (ASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
+plot_mlasc_rf = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL) # Remove x and y axis titles
+
+# CID: ML MOL vs ML TE (ASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
+plot_mlasc_cid = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+  
+# SPR: ML MOL vs ML TE (ASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedSPR, method = "spearman")
+plot_mlasc_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+# RF: ML MOL vs ML TE (noASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
+plot_mlno_rf = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+# CID: ML MOL vs ML TE (noASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
+plot_mlno_cid = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+# SPR: ML MOL vs ML TE (noASC)
+cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedSPR, method = "spearman")
+plot_mlno_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
+## Q2.2 Figure
+
+```{r}
+# Grid 3x3
+#tiff("Figures/figQ2_proportion.tiff", width = 12, height = 10, units = "in", res = 300)
+grid.arrange(arrangeGrob(plot_mp_rf + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_rf + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_rf + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mp_cid + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_cid + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_cid + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mp_spr + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_spr + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_spr + theme(plot.margin = margin(.01,1,1,.01)),
+                         nrow=3, ncol=3),
+             legend_grob,
+             nrow=2,
+             heights= c(20,1))
+#dev.off()
+```
+
+
+# Q3. Is the addition of phenomic evidence equally impactful on ML and MP topologies?
+
+## Q3.1 MOL-TE incongruences ~ Optimality criteria
+
+To test whether the MOL-TE incongruences are different between ML and MP, we first need to change the format of the dataframe.
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# Create an empty data frame for RF
+q3_rf <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of RF into the data frame
+q3_rf <- rbind(q3_rf, data.frame(value = df$MP_MOLvsTE_NormalizedRF, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedRF))))
+q3_rf <- rbind(q3_rf, data.frame(value = df$ML_MOLvsTEASC_NormalizedRF, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedRF))))
+q3_rf <- rbind(q3_rf, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedRF, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedRF))))
+
+# Create an empty data frame for CID
+q3_cid <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_cid <- rbind(q3_cid, data.frame(value = df$MP_MOLvsTE_NormalizedCID, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedCID))))
+q3_cid <- rbind(q3_cid, data.frame(value = df$ML_MOLvsTEASC_NormalizedCID, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedCID))))
+q3_cid <- rbind(q3_cid, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedCID, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedCID))))
+
+# Create an empty data frame for SPR
+q3_spr <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_spr <- rbind(q3_spr, data.frame(value = df$MP_MOLvsTE_NormalizedSPR, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedSPR))))
+q3_spr <- rbind(q3_spr, data.frame(value = df$ML_MOLvsTEASC_NormalizedSPR, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedSPR))))
+q3_spr <- rbind(q3_spr, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedSPR, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedSPR))))
+```
+
+Then, we need to statistically test whether MOL-TE incongruences (operationally measured as normalized RF, CID, and SPR) differ between (1) MP MOL vs TE, (2) ML MOL vs TE (with ASC), and (3) ML MOL vs TE (no ASC). Because data are not normally distributed (Shapiro-Wilk tests: P < 0.05) and more than one category is present in the predictor variable, we used Kruskal-Wallis tests for multiple categories and Mann-Whitney U tests for pairwise comparisons. 
+
+- The Kruskal-Wallis test is a non-parametric test used to compare the medians (or ranks) of more than two groups. It is often used when you want to test whether there are statistically significant differences in the distribution of a continuous variable across multiple groups (i.e., a categorical factor with more than two levels), without assuming normality in the data. First, data is ranked (from the lowest to the highest value). Then, the statistic H (which involves calculating the sum of ranks for each group and comparing it to the overall mean rank) and the degrees of freedom are calculated. Finally, p-values can be estimated by comparing the statistic H and chi-squared distribution (if H is large, the p-value will be small).
+
+- The Mann-Whitney U test is a non-parametric test, meaning it doesn't assume that the data follows a normal distribution. Instead of comparing means (like the t-test), the Mann-Whitney U test compares the ranks of the data values across two groups.
+
+```{r}
+# RF
+shapiro.test(q3_rf$value) # p < 0.05, non-parametric
+# Kruskal-Wallis: non-parametric test for multiple groups (non-paired values)
+kruskal.test(q3_rf$value ~ q3_rf$source)
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(q3_rf$value, q3_rf$source, p.adjust.method = "bonferroni")
+# Friedman: non-parametric test for paired values and multiple groups
+q3_rf_fri = data.frame(df$MP_MOLvsTE_NormalizedRF, df$ML_MOLvsTEASC_NormalizedRF, df$ML_MOLvsTEnoASC_NormalizedRF)
+friedman.test(as.matrix(q3_rf_fri))
+
+# CID
+shapiro.test(q3_cid$value) # p < 0.05, non-parametric
+# Kruskal-Wallis: non-parametric test for multiple groups
+kruskal.test(q3_cid$value ~ q3_cid$source)
+# Wilcoxon: pairwise comparisons
+pairwise.wilcox.test(q3_cid$value, q3_cid$source, p.adjust.method = "bonferroni")
+# Friedman: non-parametric test for paired values and multiple groups
+q3_cid_fri = data.frame(df$MP_MOLvsTE_NormalizedCID, df$ML_MOLvsTEASC_NormalizedCID, df$ML_MOLvsTEnoASC_NormalizedCID)
+friedman.test(as.matrix(q3_cid_fri))
+# CALCULATE NEMENYI TESTS IN RCLOUD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# SPR
+shapiro.test(q3_spr$value) # p < 0.05, non-parametric
+# Kruskal-Wallis: non-parametric test for multiple groups
+kruskal.test(q3_spr$value ~ q3_spr$source)
+# Perform pairwise comparisons using the Wilcoxon test for each pair
+pairwise.wilcox.test(q3_spr$value, q3_spr$source, p.adjust.method = "bonferroni")
+# Friedman: non-parametric test for paired values and multiple groups
+q3_spr_fri = data.frame(df$MP_MOLvsTE_NormalizedSPR, df$ML_MOLvsTEASC_NormalizedSPR, df$ML_MOLvsTEnoASC_NormalizedSPR)
+friedman.test(as.matrix(q3_spr_fri))
+```
+
+In all cases, Kruskal-Wallis results indicated that there is no association between MOL-TE incongruences and optimality criteria. Pairwise Mann-Whitney U (Wilcoxon rank-sum) tests also indicated no differences of MOL-TE incongruences between each pair of analysis. Thus, the addition of phenomic evidence is equally impactful on ML and MP topologies.
+
+## Q3.2 Number of politomies
+
+One importance difference, however, is the fact that trees were always binary in ML MOL and ML TE, whereas the addition of phenomic evidence can maintain, increase or decrease resolution of MP trees.
+
+```{r}
+# MP: Number of datasets in which the number of politomies is higher in TE than MOL
+sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) > 0)
+
+# MP: Number of datasets in which the number of politomies is higher in MOL than TE
+sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) < 0)
+
+# MP: Number of datasets in which the number of politomies is equal in MOL and TE
+sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) == 0)
+```
+
+## Q3.3 Contribution of phenomic evidence to the TE optimality score
+
+In addition to testing whether MOL-TE incongruences differ among optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses. 
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_06-03-25.csv")
+
+# Exploratory data analyses
+sum(df$MP_MORPH.TE_Score > df$ML_MORPH.TeASC_Score) # number of times that %MORPH/TE is higher in MP than ML ASC
+sum(df$MP_MORPH.TE_Score < df$ML_MORPH.TeASC_Score) # number of times that %MORPH/TE is lower in MP than ML ASC
+
+mean(df$MP_MORPH.TE_Score)
+sd(df$MP_MORPH.TE_Score)
+min(df$MP_MORPH.TE_Score)
+max(df$MP_MORPH.TE_Score)
+
+mean(df$ML_MORPH.TeASC_Score)
+sd(df$ML_MORPH.TeASC_Score)
+min(df$ML_MORPH.TeASC_Score)
+max(df$ML_MORPH.TeASC_Score)
+
+mean(df$ML_MORPH.TEnoASC_Score)
+sd(df$ML_MORPH.TEnoASC_Score)
+min(df$ML_MORPH.TEnoASC_Score)
+max(df$ML_MORPH.TEnoASC_Score)
+
+# Normality tests
+shapiro.test(df$MP_MORPH.TE_Score) # p < 0.05, non-parametric
+shapiro.test(df$ML_MORPH.TeASC_Score) # p < 0.05, non-parametric
+shapiro.test(df$ML_MORPH.TEnoASC_Score) # p < 0.05, non-parametric
+
+# Kruskal-Wallis (non-parametric, multiple groups, non-paired values)
+y = c(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
+x = factor(rep(c("MP MOL vs MP TE", "ML MOL vs ML TE ASC", "ML MOL vs ML TE noASC"), each = length(df$MP_MORPH.TE_Score)))
+kruskal.test(y ~ x)
+
+# Friedman test (non-parametric, multiple groups, paired values)
+q3_fri = data.frame(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
+friedman.test(as.matrix(q3_fri))
+
+# Nemenyi test (post-hoc pairwise test, non-parametric, paired values). Run in RCLOUD
+values <- c(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
+group <- c(rep("MP", length(df$MP_MORPH.TE_Score)),
+             rep("ML ASC", length(df$ML_MORPH.TeASC_Score)),
+             rep("ML noASC", length(df$ML_MORPH.TEnoASC_Score)))
+block = rep(1:length(df$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
+df_nemenyi <- data.frame(value = values, group = group, block=block)
+#PMCMRplus::frdAllPairsNemenyiTest(y = df_nemenyi$value, 
+#                                  groups = df_nemenyi$group,
+#                                  blocks = df_nemenyi$block)
+
+# Figure
+df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML ASC", "ML noASC"))
+custom_palette <- c("MP" = "#339999", "ML ASC" = "#6f77b4", "ML noASC" = "#cccccc")
+
+ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
+  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
+  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "% Phenomic/TE optimality score\n") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette)
+```
+
+## Q3.4 Figures
+
+```{r}
+# Set order of comparisons
+q3_rf$source <- factor(q3_rf$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+q3_cid$source <- factor(q3_cid$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+q3_spr$source <- factor(q3_spr$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+# Set colors
+custom_palette <- c("MP_MOLvsTE" = "#339999", "ML_MOLvsTEASC" = "#6f77b4", "ML_MOLvsTEnoASC" = "#cccccc")
+# Create custom legend labels
+custom_labels <- c(
+  "MP_MOLvsTE" = "MP-MOL vs MP-TE",
+  "ML_MOLvsTEASC" = "ML-MOL vs ML-TE (with ASC)",
+  "ML_MOLvsTEnoASC" = "ML-MOL vs ML-TE (without ASC)"
+)
+
+# Boxplot Normalized RF
+plot_q3_rf = ggplot(q3_rf, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "Normalized RF\n", tag="A") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Boxplot CID
+plot_q3_cid = ggplot(q3_cid, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "\nNormalized CID\n", tag="B") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Boxplot SPR
+plot_q3_spr = ggplot(q3_spr, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "\nSPR moves\n", tag="C") +
+  theme_minimal() +
+  theme(legend.position = "bottom", legend.title = element_blank())+
+#theme(axis.text.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+
+# Plot 3x1
+#tiff("Figures/figQ3_boxplots.tiff", width = 3, height = 6, units = "in", res = 300)
+grid.arrange(plot_q3_rf + theme(plot.margin = margin(.01,1,1,.01)),
+             plot_q3_cid + theme(plot.margin = margin(.001,1,1,.01)),
+             plot_q3_spr + theme(plot.margin = margin(.001,1,1,.01)),
+             nrow=3, ncol=1)
+#dev.off()
+```
+
+
+# Q4. How do bootstrap values of shared clades differ between MOL and TE trees? 
+
+First, we need to load the data. Support values of shared clades were identified and organized using the package RNODE. See script 2.
+
+```{r}
+# Load data
+df_q4 = read.csv("Dataset_R_q4_06-03-25.csv")
+
+# Set order of optimality criteria
+df_q4$Optimality <- factor(df_q4$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
+df_q4$SupportDiff = df_q4$Support_Tree_1 - df_q4$Support_Tree_2
+```
+
+For each optimality criterion, we tested whether the paired values of bootstrap of shared clades differ between MOL and TE trees. First, we computed the number of clades in which bootstrap values were the same in MOL and TE trees, higher in MOL than TE trees, or higher in TE than MOL trees. Next, we tested the normality of bootstrap values using Shapiro-Wilk tests. Finally, we used both the non-parametric Wilcoxon signed-rank and Generalized Linear Mixed Models with Binomial distribution.
+
+## Q4.1 MP MOL vs MP TE
+
+```{r}
+# Filter dataset keeping only MP
+df_MP <- df_q4[grepl("MP", df_q4$Optimality), ]
+
+# Exploratory data analysis
+mean(df_MP$Support_Tree_1) # MOL
+sd(df_MP$Support_Tree_1) # MOL
+
+mean(df_MP$Support_Tree_2) # TE
+sd(df_MP$Support_Tree_2) # TE
+
+nrow(df_MP)# total number of shared clades between MOL and TE trees
+sum(df_MP$Support_Tree_1 == df_MP$Support_Tree_2) # number of clades with BS MOL = BS TE
+sum(df_MP$Support_Tree_1 > df_MP$Support_Tree_2) # number of clades with BS MOL > BS TE
+sum(df_MP$Support_Tree_1 < df_MP$Support_Tree_2) # number of clades with BS MOL < BS TE
+
+hist(1/df_MP$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "Support Values")
+hist(1/df_MP$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "Support Values")
+```
+
+Data exploration of MP analyses revealed 43.4% (806/1858) of the clades whose bootstrap values were the same between MOL and TE analyses, 20.4% (380/1858) of the clades whose bootstrap values were higher in MOL than TE analyses, and 36.2% (672/1858) of the clades whose bootstrap values were higher in TE than MOL analyses. Moreover, the bootstrap in MOL clades was 89.2 ± 14.5, whereas the boostrap in TE clades was 90.4 ± 13.8.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MP$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MP$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MP$Support_Tree_1),
+                           as.numeric(df_MP$Support_Tree_2),
+                           paired = TRUE)
+
+# Dataset for GLMMs
+df_MP_glmm <- data.frame(
+  Node = c(df_MP$Node_Tree_1, df_MP$Node_Tree_2),
+  Approach = c(df_MP$Approach1, df_MP$Approach2),
+  Support = c(df_MP$Support_Tree_1, df_MP$Support_Tree_2),
+  ID = c(df_MP$ID, df_MP$ID)
+)
+
+# GLMM Binomial considering the paired structure of shared clades
+df_MP_glmm$Successes <- df_MP_glmm$Support
+df_MP_glmm$Failures <- 100 - df_MP_glmm$Support
+mp_binomial <- glmmTMB(cbind(Successes, Failures) ~ Approach + (1 | ID),
+                       family = binomial(link = "logit"),
+                       zi = ~1,
+                       data = df_MP_glmm)
+summary(mp_binomial)
+```
+
+## Q4.2 ML MOL vs ML TE ASC
+
+```{r}
+# Filter dataset keeping only MP
+df_MLASC <- df_q4[grepl("ML-ASC", df_q4$Optimality), ]
+
+# Exploratory data analysis
+mean(df_MLASC$Support_Tree_1) # MOL
+sd(df_MLASC$Support_Tree_1) # MOL
+
+mean(df_MLASC$Support_Tree_2) # TE
+sd(df_MLASC$Support_Tree_2) # TE
+
+nrow(df_MLASC)# total number of shared clades between MOL and TE trees
+sum(df_MLASC$Support_Tree_1 == df_MLASC$Support_Tree_2) # number of clades with BS MOL = BS TE
+sum(df_MLASC$Support_Tree_1 > df_MLASC$Support_Tree_2) # number of clades with BS MOL > BS TE
+sum(df_MLASC$Support_Tree_1 < df_MLASC$Support_Tree_2) # number of clades with BS MOL < BS TE
+
+hist(1/df_MLASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "Support Values")
+hist(1/df_MLASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "Support Values")
+```
+
+Data exploration of ML (with TE ASC) analyses revealed 47.1% (1089/2315) of the clades whose bootstrap values were the same between MOL and TE analyses, 26.6% (616/2315) of the clades whose bootstrap values were higher in MOL than TE analyses, and 26.3% (610/2315) of the clades whose bootstrap values were higher in TE than MOL analyses. Moreover, the bootstrap in MOL clades was 87.2 ± 19.1, whereas the boostrap in TE clades was 87.2 ± 19.6.
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MLASC$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MLASC$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MLASC$Support_Tree_1),
+                       as.numeric(df_MLASC$Support_Tree_2),
+                       paired = TRUE)
+
+# Dataset for GLMMs
+df_MLASC_glmm <- data.frame(
+  Node = c(df_MLASC$Node_Tree_1, df_MLASC$Node_Tree_2),
+  Approach = c(df_MLASC$Approach1, df_MLASC$Approach2),
+  Support = c(df_MLASC$Support_Tree_1, df_MLASC$Support_Tree_2),
+  ID = c(df_MLASC$ID, df_MLASC$ID)
+)
+
+# GLMM Binomial considering the paired structure of shared clades
+df_MLASC_glmm$Successes <- df_MLASC_glmm$Support
+df_MLASC_glmm$Failures <- 100 - df_MLASC_glmm$Support
+mlasc_binomial <- glmmTMB(cbind(Successes, Failures) ~ Approach + (1 | ID),
+                       family = binomial(link = "logit"),
+                       zi = ~1,
+                       data = df_MLASC_glmm)
+summary(mlasc_binomial)
+```
+
+## Q4.3 ML MOL vs ML TE noASC
+
+```{r}
+# Filter dataset keeping only MP
+df_MLnoASC <- df_q4[grepl("ML-noASC", df_q4$Optimality), ]
+
+# Exploratory data analysis
+mean(df_MLnoASC$Support_Tree_1) # MOL
+sd(df_MLnoASC$Support_Tree_1) # MOL
+
+mean(df_MLnoASC$Support_Tree_2) # TE
+sd(df_MLnoASC$Support_Tree_2) # TE
+
+nrow(df_MLnoASC)# total number of shared clades between MOL and TE trees
+sum(df_MLnoASC$Support_Tree_1 == df_MLnoASC$Support_Tree_2) # number of clades with BS MOL = BS TE
+sum(df_MLnoASC$Support_Tree_1 > df_MLnoASC$Support_Tree_2) # number of clades with BS MOL > BS TE
+sum(df_MLnoASC$Support_Tree_1 < df_MLnoASC$Support_Tree_2) # number of clades with BS MOL < BS TE
+
+hist(1/df_MLnoASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "Support Values")
+hist(1/df_MLnoASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "Support Values")
+```
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MLnoASC$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MLnoASC$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MLnoASC$Support_Tree_1),
+                       as.numeric(df_MLnoASC$Support_Tree_2),
+                       paired = TRUE)
+
+# Dataset for GLMMs
+df_MLnoASC_glmm <- data.frame(
+  Node = c(df_MLnoASC$Node_Tree_1, df_MLnoASC$Node_Tree_2),
+  Approach = c(df_MLnoASC$Approach1, df_MLnoASC$Approach2),
+  Support = c(df_MLnoASC$Support_Tree_1, df_MLnoASC$Support_Tree_2),
+  ID = c(df_MLnoASC$ID, df_MLnoASC$ID)
+)
+
+# GLMM Binomial considering the paired structure of shared clades
+df_MLnoASC_glmm$Successes <- df_MLnoASC_glmm$Support
+df_MLnoASC_glmm$Failures <- 100 - df_MLnoASC_glmm$Support
+mlnoasc_binomial <- glmmTMB(cbind(Successes, Failures) ~ Approach + (1 | ID),
+                       family = binomial(link = "logit"),
+                       zi = ~1,
+                       data = df_MLnoASC_glmm)
+summary(mlnoasc_binomial)
+```
+
+## Q4.4 Figure
+
+Remove the # after the chunk name.
+
+```{r}#
+# Create a new column with the optimality criterion
+df_MP_glmm$comparison = "MPmol_MPte"
+df_MLASC_glmm$comparison = "MLmol_MLteAsc"
+df_MLnoASC_glmm$comparison = "MLmol_MLteNoAsc"
+
+# Merge all comparisons into the same dataset
+df_plot = bind_rows(df_MP_glmm, df_MLASC_glmm, df_MLnoASC_glmm)
+View(df_plot)
+
+# Set order of comparisons
+df_plot$comparison <- factor(df_plot$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
+df_plot = df_plot[!is.na(df_plot$comparison), ]
+
+# Set colors
+custom_palette <- c("MPmol_MPte" = "#339999", "MLmol_MLteAsc" = "#6f77b4", "MLmol_MLteNoAsc" = "#cccccc")
+# Create custom legend labels
+custom_labels <- c(
+  "MPmol_MPte" = "MP-MOL vs MP-TE",
+  "MLmol_MLteAsc" = "ML-MOL vs ML-TE (with ASC)",
+  "MLmol_MLteNoAsc" = "ML-MOL vs ML-TE (without ASC)"
+)
+
+# Box Plot MP
+plot_mp = ggplot(df_MP_glmm, aes(x = Approach, y = Support)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(color = "#339999", alpha = .05, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "\nBootstrap\n", tag="A") +
+  theme_minimal() +
+  #theme(axis.text.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Box Plot ML ASC
+plot_ml_asc = ggplot(df_MLASC_glmm, aes(x = Approach, y = Support)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(color = "#6f77b4", alpha = .05, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "\nBootstrap\n", tag="B") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(50, NA)) + # Define o mínimo para 50, o máximo será ajustado automaticamente
+  #theme(axis.text.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Box Plot ML noASC
+plot_ml_noasc = ggplot(df_MLnoASC_glmm, aes(x = Approach, y = Support)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(color = "#cccccc", alpha = .08, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "\nBootstrap\n", tag="C") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(50, NA)) + # Define o mínimo para 50, o máximo será ajustado automaticamente
+  #theme(axis.text.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+
+# Extract the legend as a separate ggplot object
+legend <- ggplot(df_plot, aes(x = comparison, y = Support, color = comparison)) +
+  geom_point() +
+  scale_color_manual(values = custom_palette, labels = custom_labels) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+  )+
+  guides(color = guide_legend(override.aes = list(size = 2, alpha=.7)))  # Increase dot size in legend
+# Convert the plot to a grob
+plot_grob <- ggplotGrob(legend)
+# Extract the legend from the grob
+legend_grob <- gtable::gtable_filter(plot_grob, "guide-box")
+
+# Plot 2x2
+#tiff("../../GitHub/Figures/figQ4_BS.tiff", width = 6, height = 6, units = "in", res = 300)
+grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
+                         plot_ml_asc + theme(plot.margin = margin(1,1,1,.01)),
+                         plot_ml_noasc + theme(plot.margin = margin(1,1,1,.01)),
+                         nrow=1, ncol=3),
+             legend_grob,
+             nrow=2,
+             heights= c(20,1))
+#dev.off()
+```
+
+# Q5. Can bootstrap from MOL clades retrodict the monophyly of TE groups?
+
+The dataset used in the Q5 was prepared with the package RNODE using the script 3.
+
+```{r}
+# Load data
+df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_02-06-25.csv")
+
+# Select MP 
+MPlogistic <- df_q5[df_q5$optimality == "MP", ]
+# Select ML ASC
+MLASClogistic <- df_q5[df_q5$optimality == "MLASC", ]
+# Select ML no ASC
+MLnoASClogistic <- df_q5[df_q5$optimality == "MLnoASC", ]
+
+```
+
+## Q5.1 Data exploration
+
+```{r}
+#############################
+# EXPLORATORY DATA ANALYSES #
+#############################
+
+# A) MP
+# Total number of MOL clades
+nrow(MPlogistic)
+# Shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion shared/total
+mean(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion uniqueMOL/total
+mean(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+# B) ML ASC
+# Total number of MOL clades
+nrow(MLASClogistic)
+# Shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion shared/total
+mean(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+
+# C) ML noASC
+# Total number of MOL clades
+nrow(MLnoASClogistic)
+# Shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion shared/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <75 present in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+```
+
+## Q5.2 Logistic regressions
+
+```{r}
+
+#######################
+# LOGISTIC REGRESSION #
+#######################
+
+# A) MP
+# Perform logistic regression
+mp_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MPlogistic, family = binomial)
+# Print a summary of the model
+summary(mp_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mp_logistic_result)
+# Interpretation
+exp(mp_logistic_result$coefficients[[2]]) # If coefficient is 0.09 and exp(0.09) is 1.1, then each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 10%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MPlogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#339999", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# B) ML ASC
+# Perform logistic regression
+mlasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlasc_logistic_result)
+# Interpretation
+exp(mlasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#6f77b4", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# C) ML noASC
+# Perform logistic regression
+mlnoasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLnoASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlnoasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlnoasc_logistic_result)
+# Interpretation
+exp(mlnoasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#cccccc", size = 1.2) +  # Logistic regression curve
+  labs(x = "\nBootstrap of MOL clade", y = "Probability of occurrence in the TE tree\n") +
+  theme_minimal()
+```
+
