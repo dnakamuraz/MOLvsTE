@@ -11,17 +11,22 @@ output: html_document
 # Set the working directory 
 knitr::opts_knit$set(root.dir = "/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/")
 
+# Seed
+set.seed(44)
+
 # Load libraries
 library(ape)
 library(cowplot)
 library(dplyr)
 library(dunn.test)
+library(ggplot2)
 library(ggpubr)
 library(ggridges)
 library(glmmTMB)
 library(gridExtra)
 library(phytools)
 library(RNODE)
+library(tidyr)
 library(tidyverse)
 library(TreeDist)
 library(viridis)
@@ -33,174 +38,354 @@ Dataset with MOL-TE topological distances were calculated in script 1.
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
+df <- read.csv("Dataset_R_q123_08-25.csv")
 
-# Number of datasets impacted by the addition of phenomic evidence
-sum(df$MP_MOLvsTE_NormalizedRF > 0) / nrow(df) # MP MOL vs MP TE
-sum(df$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df) # ML MOL vs ML TE ASC
-sum(df$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df) # ML MOL vs ML TE noASC
+print("EXTANT: Number of datasets impacted by the addition of phenomic evidence")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+print("MP MOL vs MP TE (number)")
+sum(df_extant$MP_MOLvsTE_NormalizedRF > 0) 
+print("MP MOL vs MP TE (proportion)")
+sum(df_extant$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_extant) 
+print("ML MOL vs ML TE ASC (number)")
+sum(df_extant$ML_MOLvsTEASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE ASC (proportion)")
+sum(df_extant$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df_extant) 
+print("ML MOL vs ML TE noASC")
+sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE noASC (proportion)")
+sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extant) 
+
+print("EXTINCT: Number of datasets impacted by the addition of phenomic evidence")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+print("MP MOL vs MP TE (number)")
+sum(df_extinct$MP_MOLvsTE_NormalizedRF > 0) 
+print("MP MOL vs MP TE (proportion)")
+sum(df_extinct$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_extinct) 
+print("ML MOL vs ML TE ASC (number)")
+sum(df_extinct$ML_MOLvsTEASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE ASC (proportion)")
+sum(df_extinct$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df_extinct) 
+print("ML MOL vs ML TE noASC")
+sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE noASC (proportion)")
+sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extinct) 
 ```
 
-The phenomic evidence impacted topologies in 90.3% (47/52) of the datasets in MP and ML (with ASC) and 88.5% (46/52) in ML (without ASC).
+Considering extant taxa only (n = 57), the phenomic evidence impacted topologies in 87.7% (50/57) of the datasets in MP and ML (MKv with bias correction) and 85.9% (49/57) in ML (MK without bias correction). Considering both extant and extinct taxa (n = 22), the phenomic evidence impacted topologies in 95.5% (21/22) of the data sets and 81.8% (18/22) in ML (both in MKv and MK).
 
 ## Q1.1 Data exploration
 
+### Q1.1.1 Extant (Table 1)
+
+Considering extant taxa (n = 57; see Table 1):
+
 ```{r}
-# 1.a MPmol_MPte
-# No. shared clades
-mean(df$MP_MOLvsTE_nSharedClades)
-sd(df$MP_MOLvsTE_nSharedClades)
-range(df$MP_MOLvsTE_nSharedClades)
-# No. unique MOL clades
-mean(df$MP_nUniqueCladesMOL)
-sd(df$MP_nUniqueCladesMOL)
-range(df$MP_nUniqueCladesMOL)
-# No. unique TE clades
-mean(df$MP_nUniqueCladesTE)
-sd(df$MP_nUniqueCladesTE)
-range(df$MP_nUniqueCladesTE)
-# RF
-mean(df$MP_MOLvsTE_NormalizedRF)
-sd(df$MP_MOLvsTE_NormalizedRF)
-range(df$MP_MOLvsTE_NormalizedRF)
-# CID
-mean(df$MP_MOLvsTE_NormalizedCID)
-sd(df$MP_MOLvsTE_NormalizedCID)
-range(df$MP_MOLvsTE_NormalizedCID)
-# SPR
-mean(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
-sd(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
-range(as.numeric(df$MP_MOLvsTE_NormalizedSPR))
-# Resolution MOL
-mean(as.numeric(df$MP_nPolytomiesMOL))
-sd(as.numeric(df$MP_nPolytomiesMOL))
-range(as.numeric(df$MP_nPolytomiesMOL))
-# Resolution TE
-mean(as.numeric(df$MP_nPolytomiesTE))
-sd(as.numeric(df$MP_nPolytomiesTE))
-range(as.numeric(df$MP_nPolytomiesTE))
+print("1.a MP MOL vs MP TE")
+print("No. shared clades")
+mean(df_extant$MP_MOLvsTE_nSharedClades)
+sd(df_extant$MP_MOLvsTE_nSharedClades)
+range(df_extant$MP_MOLvsTE_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extant$MP_nUniqueCladesMOL)
+sd(df_extant$MP_nUniqueCladesMOL)
+range(df_extant$MP_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extant$MP_nUniqueCladesTE)
+sd(df_extant$MP_nUniqueCladesTE)
+range(df_extant$MP_nUniqueCladesTE)
+print("RF")
+mean(df_extant$MP_MOLvsTE_NormalizedRF)
+sd(df_extant$MP_MOLvsTE_NormalizedRF)
+range(df_extant$MP_MOLvsTE_NormalizedRF)
+print("CID")
+mean(df_extant$MP_MOLvsTE_NormalizedCID)
+sd(df_extant$MP_MOLvsTE_NormalizedCID)
+range(df_extant$MP_MOLvsTE_NormalizedCID)
+print("Mean SPR")
+mean(as.numeric(df_extant$MP_MOLvsTE_NormalizedMeanSPR))
+sd(as.numeric(df_extant$MP_MOLvsTE_NormalizedMeanSPR))
+range(as.numeric(df_extant$MP_MOLvsTE_NormalizedMeanSPR))
+print("Min SPR")
+mean(as.numeric(df_extant$MP_MOLvsTE_NormalizedMinSPR))
+sd(as.numeric(df_extant$MP_MOLvsTE_NormalizedMinSPR))
+range(as.numeric(df_extant$MP_MOLvsTE_NormalizedMinSPR))
+print("Resolution MOL")
+mean(as.numeric(df_extant$MP_nPolytomiesMOL))
+sd(as.numeric(df_extant$MP_nPolytomiesMOL))
+range(as.numeric(df_extant$MP_nPolytomiesMOL))
+print("Resolution TE")
+mean(as.numeric(df_extant$MP_nPolytomiesTE))
+sd(as.numeric(df_extant$MP_nPolytomiesTE))
+range(as.numeric(df_extant$MP_nPolytomiesTE))
 
-# 1.b MLmol_MLteAsc
-# No. shared clades
-mean(df$ML_MOLvsTEASC_nSharedClades)
-sd(df$ML_MOLvsTEASC_nSharedClades)
-range(df$ML_MOLvsTEASC_nSharedClades)
-# No. unique MOL clades
-mean(df$ML_MOLvsTEASC_nUniqueCladesMOL)
-sd(df$ML_MOLvsTEASC_nUniqueCladesMOL)
-range(df$ML_MOLvsTEASC_nUniqueCladesMOL)
-# No. unique TE clades
-mean(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
-sd(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
-range(df$ML_MOLvsTEASC_nUniqueCladesTEASC)
-# RF
-mean(df$ML_MOLvsTEASC_NormalizedRF)
-sd(df$ML_MOLvsTEASC_NormalizedRF)
-range(df$ML_MOLvsTEASC_NormalizedRF)
-# CID
-mean(df$ML_MOLvsTEASC_NormalizedCID)
-sd(df$ML_MOLvsTEASC_NormalizedCID)
-range(df$ML_MOLvsTEASC_NormalizedCID)
-# SPR
-mean(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
-sd(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
-range(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR))
+cat("\n1.b ML MOL vs ML TE MKv")
+print("No. shared clades")
+mean(df_extant$ML_MOLvsTEASC_nSharedClades)
+sd(df_extant$ML_MOLvsTEASC_nSharedClades)
+range(df_extant$ML_MOLvsTEASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extant$ML_MOLvsTEASC_nUniqueCladesMOL)
+sd(df_extant$ML_MOLvsTEASC_nUniqueCladesMOL)
+range(df_extant$ML_MOLvsTEASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extant$ML_MOLvsTEASC_nUniqueCladesTEASC)
+sd(df_extant$ML_MOLvsTEASC_nUniqueCladesTEASC)
+range(df_extant$ML_MOLvsTEASC_nUniqueCladesTEASC)
+print("RF")
+mean(df_extant$ML_MOLvsTEASC_NormalizedRF)
+sd(df_extant$ML_MOLvsTEASC_NormalizedRF)
+range(df_extant$ML_MOLvsTEASC_NormalizedRF)
+print("CID")
+mean(df_extant$ML_MOLvsTEASC_NormalizedCID)
+sd(df_extant$ML_MOLvsTEASC_NormalizedCID)
+range(df_extant$ML_MOLvsTEASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR))
+sd(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR))
+range(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR))
 
-# 1.c MLmol_MLteNoAsc
-# No. shared clades
-mean(df$ML_MOLvsTEnoASC_nSharedClades)
-sd(df$ML_MOLvsTEnoASC_nSharedClades)
-range(df$ML_MOLvsTEnoASC_nSharedClades)
-# No. unique MOL clades
-mean(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
-sd(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
-range(df$ML_MOLvsTEnoASC_nUniqueCladesMOL)
-# No. unique TE clades
-mean(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
-sd(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
-range(df$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
-# RF
-mean(df$ML_MOLvsTEnoASC_NormalizedRF)
-sd(df$ML_MOLvsTEnoASC_NormalizedRF)
-range(df$ML_MOLvsTEnoASC_NormalizedRF)
-# CID
-mean(df$ML_MOLvsTEnoASC_NormalizedCID)
-sd(df$ML_MOLvsTEnoASC_NormalizedCID)
-range(df$ML_MOLvsTEnoASC_NormalizedCID)
-# SPR
-mean(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
-sd(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
-range(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR))
+cat("\n1.c MLmol_MLteNoAsc")
+print("No. shared clades")
+mean(df_extant$ML_MOLvsTEnoASC_nSharedClades)
+sd(df_extant$ML_MOLvsTEnoASC_nSharedClades)
+range(df_extant$ML_MOLvsTEnoASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extant$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+sd(df_extant$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+range(df_extant$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extant$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+sd(df_extant$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+range(df_extant$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+print("RF")
+mean(df_extant$ML_MOLvsTEnoASC_NormalizedRF)
+sd(df_extant$ML_MOLvsTEnoASC_NormalizedRF)
+range(df_extant$ML_MOLvsTEnoASC_NormalizedRF)
+print("CID")
+mean(df_extant$ML_MOLvsTEnoASC_NormalizedCID)
+sd(df_extant$ML_MOLvsTEnoASC_NormalizedCID)
+range(df_extant$ML_MOLvsTEnoASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+sd(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+range(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+```
+
+### Q1.1.2 Extant + Extinct (Table 1)
+
+Considering both extant and extinct taxa (n = 22; see Table S4):
+
+```{r}
+print("1.a MP MOL vs MP TE")
+print("No. shared clades")
+mean(df_extinct$MP_MOLvsTE_nSharedClades)
+sd(df_extinct$MP_MOLvsTE_nSharedClades)
+range(df_extinct$MP_MOLvsTE_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extinct$MP_nUniqueCladesMOL)
+sd(df_extinct$MP_nUniqueCladesMOL)
+range(df_extinct$MP_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extinct$MP_nUniqueCladesTE)
+sd(df_extinct$MP_nUniqueCladesTE)
+range(df_extinct$MP_nUniqueCladesTE)
+print("RF")
+mean(df_extinct$MP_MOLvsTE_NormalizedRF)
+sd(df_extinct$MP_MOLvsTE_NormalizedRF)
+range(df_extinct$MP_MOLvsTE_NormalizedRF)
+print("CID")
+mean(df_extinct$MP_MOLvsTE_NormalizedCID)
+sd(df_extinct$MP_MOLvsTE_NormalizedCID)
+range(df_extinct$MP_MOLvsTE_NormalizedCID)
+print("Mean SPR")
+mean(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMeanSPR))
+sd(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMeanSPR))
+range(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMeanSPR))
+print("Min SPR")
+mean(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMinSPR))
+sd(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMinSPR))
+range(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMinSPR))
+print("Resolution MOL")
+mean(as.numeric(df_extinct$MP_nPolytomiesMOL))
+sd(as.numeric(df_extinct$MP_nPolytomiesMOL))
+range(as.numeric(df_extinct$MP_nPolytomiesMOL))
+print("Resolution TE")
+mean(as.numeric(df_extinct$MP_nPolytomiesTE))
+sd(as.numeric(df_extinct$MP_nPolytomiesTE))
+range(as.numeric(df_extinct$MP_nPolytomiesTE))
+
+cat("\n1.b ML MOL vs ML TE MKv")
+print("No. shared clades")
+mean(df_extinct$ML_MOLvsTEASC_nSharedClades)
+sd(df_extinct$ML_MOLvsTEASC_nSharedClades)
+range(df_extinct$ML_MOLvsTEASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extinct$ML_MOLvsTEASC_nUniqueCladesMOL)
+sd(df_extinct$ML_MOLvsTEASC_nUniqueCladesMOL)
+range(df_extinct$ML_MOLvsTEASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extinct$ML_MOLvsTEASC_nUniqueCladesTEASC)
+sd(df_extinct$ML_MOLvsTEASC_nUniqueCladesTEASC)
+range(df_extinct$ML_MOLvsTEASC_nUniqueCladesTEASC)
+print("RF")
+mean(df_extinct$ML_MOLvsTEASC_NormalizedRF)
+sd(df_extinct$ML_MOLvsTEASC_NormalizedRF)
+range(df_extinct$ML_MOLvsTEASC_NormalizedRF)
+print("CID")
+mean(df_extinct$ML_MOLvsTEASC_NormalizedCID)
+sd(df_extinct$ML_MOLvsTEASC_NormalizedCID)
+range(df_extinct$ML_MOLvsTEASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR))
+sd(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR))
+range(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR))
+
+cat("\n1.c MLmol_MLteNoAsc")
+print("No. shared clades")
+mean(df_extinct$ML_MOLvsTEnoASC_nSharedClades)
+sd(df_extinct$ML_MOLvsTEnoASC_nSharedClades)
+range(df_extinct$ML_MOLvsTEnoASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+sd(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+range(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+sd(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+range(df_extinct$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+print("RF")
+mean(df_extinct$ML_MOLvsTEnoASC_NormalizedRF)
+sd(df_extinct$ML_MOLvsTEnoASC_NormalizedRF)
+range(df_extinct$ML_MOLvsTEnoASC_NormalizedRF)
+print("CID")
+mean(df_extinct$ML_MOLvsTEnoASC_NormalizedCID)
+sd(df_extinct$ML_MOLvsTEnoASC_NormalizedCID)
+range(df_extinct$ML_MOLvsTEnoASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+sd(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+range(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
 ```
 
 ## Q1.2 Statistical tests
 
-In MP and ML (with ASC), there are 47 datasets in which MOL-TE incongruences are not equal to zero and 5 datasets in which they are equal to zero. In ML (without ASC), there are 46 datasets in which MOL-TE incongruences are not equal to zero and 6 datasets in which they are equal to zero. To test if MOL-TE incongruences are significantly different from zero, we can check if the distribution of observed values are significantly different from zero. 
+### Q1.2.1 Extant (Table S3)
+
+Considering extant taxa only, there are 50 datasets in which MOL-TE incongruences are not equal to zero and 7 datasets in which they are equal to zero in MP and ML (with MKv). In ML (with MK, no bias correction), there are 49 datasets in which MOL-TE incongruences are not equal to zero and 8 datasets in which they are equal to zero. To test if MOL-TE incongruences are significantly different from zero, we can check if the distribution of observed values are significantly different from zero. 
 
 For each comparison and for each topological distance metric, we tested for normality. Because data are not normal according to Shapiro-Wilk tests (P < 0.05 in all cases), we tested if the median of each topological distance metric is different from zero using a non-parametric Wilcoxon Signed-Ranked test. First, the V statistic is computed by summing the signed ranks of the differences between the observed values and the hypothesized value (i.e. zero). The ranks are assigned based on the absolute values of the differences, and the sign is determined by whether the original value is positive or negative. Second, given that the distribution of V values is normally distributed for a large sample size due to the Central Limit Theorem, P-values can be calculated by finding the area under the normal curve corresponding to the calculated Z-score.
 
 ```{r}
-# Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
-
-# 1a. MPmol vs MPte
-# RF
-shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedRF)) # non-parametric, p < 0.05
-q1a_rf <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedRF), mu = 0, exact=F, conf.int=T)
+print("1a. MPmol vs MPte")
+print("RF")
+shapiro.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedRF)) # non-parametric, p < 0.05
+q1a_rf <- wilcox.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedRF), mu = 0, exact=F, conf.int=T)
 q1a_rf
-# CID
-shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedCID))  # non-parametric, p < 0.05
-q1a_cid <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedCID), mu = 0, exact=F, conf.int=T)
+print("CID")
+shapiro.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedCID))  # non-parametric, p < 0.05
+q1a_cid <- wilcox.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedCID), mu = 0, exact=F, conf.int=T)
 q1a_cid
-# SPR
-shapiro.test(as.numeric(df$MP_MOLvsTE_NormalizedSPR)) # non-parametric, p < 0.05
-q1a_spr <- wilcox.test(as.numeric(df$MP_MOLvsTE_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+print("SPR")
+shapiro.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedMeanSPR)) # non-parametric, p < 0.05
+q1a_spr <- wilcox.test(as.numeric(df_extant$MP_MOLvsTE_NormalizedMeanSPR), mu = 0, exact=F, conf.int=T)
 q1a_spr
 
-# 1b. MLmol vs MLteAsc
-#RF
-shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedRF)) # non-parametric, p < 0.05
-q1b_rf <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+print("1b. MLmol vs MLteAsc")
+print("RF")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedRF)) # non-parametric, p < 0.05
+q1b_rf <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
 q1b_rf
-# CID
-shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedCID)) # non-parametric, p < 0.05
-q1b_cid <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+print("CID")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedCID)) # non-parametric, p < 0.05
+q1b_cid <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
 q1b_cid
-# SPR
-shapiro.test(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR)) # non-parametric, p < 0.05
-q1b_spr <- wilcox.test(as.numeric(df$ML_MOLvsTEASC_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+print("SPR")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR)) # non-parametric, p < 0.05
+q1b_spr <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR), mu = 0, exact=F, conf.int=T)
 q1b_spr
 
-# 1c. MLmol vs MLteNoAsc
-# RF
-shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedRF)) # non-parametric, p < 0.05
-q1c_rf <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+print("1c. MLmol vs MLteNoAsc")
+print("RF")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedRF)) # non-parametric, p < 0.05
+q1c_rf <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
 q1c_rf
-# CID
-shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedCID)) # non-parametric, p < 0.05
-q1c_cid <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+print("CID")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedCID)) # non-parametric, p < 0.05
+q1c_cid <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
 q1c_cid
-# SPR
-shapiro.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR)) # non-parametric, p < 0.05
-q1c_spr <- wilcox.test(as.numeric(df$ML_MOLvsTEnoASC_NormalizedSPR), mu = 0, exact=F, conf.int=T)
+print("SPR")
+shapiro.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR)) # non-parametric, p < 0.05
+q1c_spr <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR), mu = 0, exact=F, conf.int=T)
 q1c_spr
 ```
 In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the phenomic evidence tends to impact topologies in empirical studies.
 
-## Q1.3 Figure
+### Q1.2.2 Extant + extinct (Table S4)
+
+Now, let's test the same for the 22 data sets including fossils.
+
+```{r}
+print("1a. MPmol vs MPte")
+print("RF")
+shapiro.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedRF)) # non-parametric, p < 0.05
+q1a_rf <- wilcox.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1a_rf
+print("CID")
+shapiro.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedCID))  # non-parametric, p < 0.05
+q1a_cid <- wilcox.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1a_cid
+print("SPR")
+shapiro.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMinSPR)) # non-parametric, p < 0.05
+q1a_spr <- wilcox.test(as.numeric(df_extinct$MP_MOLvsTE_NormalizedMeanSPR), mu = 0, exact=F, conf.int=T)
+q1a_spr
+
+print("1b. MLmol vs MLteAsc")
+print("RF")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedRF)) # non-parametric, p < 0.05
+q1b_rf <- wilcox.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1b_rf
+print("CID")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedCID)) # non-parametric, p < 0.05
+q1b_cid <- wilcox.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1b_cid
+print("SPR")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR)) # parametric, p > 0.05
+q1b_spr <- t.test(as.numeric(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR), mu = 0)
+q1b_spr
+
+print("1c. MLmol vs MLteNoAsc")
+print("RF")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedRF)) # non-parametric, p < 0.05
+q1c_rf <- wilcox.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1c_rf
+print("CID")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedCID)) # non-parametric, p < 0.05
+q1c_cid <- wilcox.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1c_cid
+print("SPR")
+shapiro.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR)) # non-parametric, p < 0.05
+q1c_spr <- t.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR), mu = 0)
+q1c_spr
+```
+
+
+## Q1.3 Figures
+
+### Q1.3.1 Extant (Figure S1)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 # Create a dataframe
-df <- data.frame(
-  RFdist = c(df$MP_MOLvsTE_NormalizedRF, df$ML_MOLvsTEASC_NormalizedRF, df$ML_MOLvsTEnoASC_NormalizedRF),  # Combine the vectors into a single column
-  CID = c(df$MP_MOLvsTE_NormalizedCID, df$ML_MOLvsTEASC_NormalizedCID, df$ML_MOLvsTEnoASC_NormalizedCID),
-  SPR = c(df$MP_MOLvsTE_NormalizedSPR, df$ML_MOLvsTEASC_NormalizedSPR, df$ML_MOLvsTEnoASC_NormalizedSPR),
-  comparison = rep(c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"), each = length(df$MP_MOLvsTE_NormalizedRF))  # Repeat vector names
+df_extant <- data.frame(
+  RFdist = c(df_extant$MP_MOLvsTE_NormalizedRF, df_extant$ML_MOLvsTEASC_NormalizedRF, df_extant$ML_MOLvsTEnoASC_NormalizedRF),  # Combine the vectors into a single column
+  CID = c(df_extant$MP_MOLvsTE_NormalizedCID, df_extant$ML_MOLvsTEASC_NormalizedCID, df_extant$ML_MOLvsTEnoASC_NormalizedCID),
+  SPR = c(df_extant$MP_MOLvsTE_NormalizedMeanSPR, df_extant$ML_MOLvsTEASC_NormalizedMeanSPR, df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR),
+  comparison = rep(c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"), each = length(df_extant$MP_MOLvsTE_NormalizedRF))  # Repeat vector names
 )
-df$comparison <- factor(df$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
+df_extant$comparison <- factor(df_extant$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
 custom_palette <- c("MPmol_MPte" = "#339999",
                     "MLmol_MLteAsc" = "#6f77b4",
                     "MLmol_MLteNoAsc" = "#cccccc")
@@ -209,7 +394,7 @@ custom_labels <- c(
   "MLmol_MLteAsc" = "ML-MOL vs ML-TE (with ASC)",
   "MLmol_MLteNoAsc" = "ML-MOL vs ML-TE (without ASC)"
 )
-s1_rf = ggplot(df, aes(x=RFdist, y=comparison, fill=comparison))+
+s1_rf = ggplot(df_extant, aes(x=RFdist, y=comparison, fill=comparison))+
   geom_density_ridges() +
   scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
@@ -226,7 +411,7 @@ s1_rf = ggplot(df, aes(x=RFdist, y=comparison, fill=comparison))+
     legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
     axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
   )
-s1_cid = ggplot(df, aes(x=CID, y=comparison, fill=comparison))+
+s1_cid = ggplot(df_extant, aes(x=CID, y=comparison, fill=comparison))+
   geom_density_ridges() +
   scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
@@ -243,7 +428,7 @@ s1_cid = ggplot(df, aes(x=CID, y=comparison, fill=comparison))+
     legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
     axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
   )
-s1_spr = ggplot(df, aes(x=SPR, y=comparison, fill=comparison))+
+s1_spr = ggplot(df_extant, aes(x=SPR, y=comparison, fill=comparison))+
   geom_density_ridges() +
   scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
@@ -261,7 +446,7 @@ s1_spr = ggplot(df, aes(x=SPR, y=comparison, fill=comparison))+
     axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
   )
 # Extract the legend as a separate ggplot object
-legend <- ggplot(df, aes(x = comparison, y = CID, color = comparison)) +
+legend <- ggplot(df_extant, aes(x = comparison, y = CID, color = comparison)) +
   geom_point() +
   scale_color_manual(values = custom_palette, labels = custom_labels) +
   theme_minimal() +
@@ -277,7 +462,7 @@ legend <- ggplot(df, aes(x = comparison, y = CID, color = comparison)) +
   guides(color = guide_legend(override.aes = list(size = 2, alpha=.7)))  # Increase dot size in legend
 legend_grob <- cowplot::get_legend(legend)
 
-#tiff("Figures/figQ1_density.tiff", width = 6, height = 8, units = "in", res = 300)
+#tiff("Figures/figS1_density.tiff", width = 6, height = 8, units = "in", res = 300)
 grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_cid + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_spr + theme(plot.margin = margin(.01,1,1,.01)),
@@ -288,37 +473,143 @@ grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
 #dev.off()
 ```
 
+### Q1.3.2 Extant + Extinct (Figure S2)
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+
+# Create a dataframe
+df_extinct <- data.frame(
+  RFdist = c(df_extinct$MP_MOLvsTE_NormalizedRF, df_extinct$ML_MOLvsTEASC_NormalizedRF, df_extinct$ML_MOLvsTEnoASC_NormalizedRF),  # Combine the vectors into a single column
+  CID = c(df_extinct$MP_MOLvsTE_NormalizedCID, df_extinct$ML_MOLvsTEASC_NormalizedCID, df_extinct$ML_MOLvsTEnoASC_NormalizedCID),
+  SPR = c(df_extinct$MP_MOLvsTE_NormalizedMeanSPR, df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR, df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR),
+  comparison = rep(c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"), each = length(df_extinct$MP_MOLvsTE_NormalizedRF))  # Repeat vector names
+)
+df_extinct$comparison <- factor(df_extinct$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
+custom_palette <- c("MPmol_MPte" = "#339999",
+                    "MLmol_MLteAsc" = "#6f77b4",
+                    "MLmol_MLteNoAsc" = "#cccccc")
+custom_labels <- c(
+  "MPmol_MPte" = "MP-MOL vs MP-TE",
+  "MLmol_MLteAsc" = "ML-MOL vs ML-TE (with ASC)",
+  "MLmol_MLteNoAsc" = "ML-MOL vs ML-TE (without ASC)"
+)
+s1_rf = ggplot(df_extinct, aes(x=RFdist, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized RF", y=NULL,tag="A")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", linewidth = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+s1_cid = ggplot(df_extinct, aes(x=CID, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized CID", y=NULL,tag="B")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", size = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+s1_spr = ggplot(df_extinct, aes(x=SPR, y=comparison, fill=comparison))+
+  geom_density_ridges() +
+  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  theme_ridges()+
+  labs(x="Normalized SPR", y=NULL,tag="C")+
+  scale_fill_manual(values = custom_palette, labels = custom_labels)+
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", size = 1, alpha=.5) +
+  theme(
+    axis.text.y = element_blank(),  # Remove y-axis values
+    legend.position = "none",     # Move the legend below the plot
+    legend.direction = "horizontal", # Display legend items horizontally (side by side)
+    legend.box = "horizontal",      # Make sure the legend is laid out horizontally
+    legend.title = element_blank(),  # Optional: Remove legend title
+    legend.text = element_text(size = 8),  # Reduce the size of legend text
+    legend.key.size = unit(0.5, "cm"),    # Reduce the size of legend keys
+    axis.title.x = element_text(hjust = 0.5)  # Center the x-axis title
+  )
+# Extract the legend as a separate ggplot object
+legend <- ggplot(df_extinct, aes(x = comparison, y = CID, color = comparison)) +
+  geom_point() +
+  scale_color_manual(values = custom_palette, labels = custom_labels) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+  )+
+  guides(color = guide_legend(override.aes = list(size = 2, alpha=.7)))  # Increase dot size in legend
+legend_grob <- cowplot::get_legend(legend)
+
+#tiff("Figures/figS2_density.tiff", width = 6, height = 8, units = "in", res = 300)
+grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
+                         s1_cid + theme(plot.margin = margin(.01,1,1,.01)),
+                         s1_spr + theme(plot.margin = margin(.01,1,1,.01)),
+                         nrow=3, ncol=1),
+             legend_grob,
+             nrow=2,
+             heights= c(20,1))
+#dev.off()
+```
+
+
 # Q2.Are MOL-TE incongruences associated with the proportion of phenomic characters? 
 
-## Q2.1 Spearman's Rank Correlations
+## Q2.1 Spearman correlations
 
-To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test.
+To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
+
+### Q2.1.1 Extant (Table 2)
 
 ```{r, warning=F}
 # Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
-# RF: MP MOL vs MP TE
-cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedRF, method = "spearman")
-plot_mp_rf = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
+print("RF: MP MOL vs MP TE")
+cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedRF, method = "spearman")
+plot_mp_rf = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized RF\n", x = NULL)
 
-# CID: MP MOL vs MP TE
-cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedCID, method = "spearman")
-plot_mp_cid = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
+print("CID: MP MOL vs MP TE")
+cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedCID, method = "spearman")
+plot_mp_cid = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized CID\n", x = NULL)
 
-# SPR: MP MOL vs MP TE
-cor.test(df$X.Morph.Total, df$MP_MOLvsTE_NormalizedSPR, method = "spearman")
-plot_mp_spr = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedSPR)) +
+print("SPR: MP MOL vs MP TE")
+cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedMeanSPR, method = "spearman")
+plot_mp_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
@@ -327,27 +618,27 @@ plot_mp_spr = ggplot(df, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedSPR)) +
 ```
 
 ```{r, warning=F}
-# RF: ML MOL vs ML TE (ASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
-plot_mlasc_rf = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
+print("RF: ML MOL vs ML TE (ASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
+plot_mlasc_rf = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL) # Remove x and y axis titles
 
-# CID: ML MOL vs ML TE (ASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
-plot_mlasc_cid = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
+print("CID: ML MOL vs ML TE (ASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
+plot_mlasc_cid = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
   
-# SPR: ML MOL vs ML TE (ASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEASC_NormalizedSPR, method = "spearman")
-plot_mlasc_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedSPR)) +
+print("SPR: ML MOL vs ML TE (ASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedMeanSPR, method = "spearman")
+plot_mlasc_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
@@ -356,27 +647,27 @@ plot_mlasc_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedS
 ```
 
 ```{r, warning=F}
-# RF: ML MOL vs ML TE (noASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
-plot_mlno_rf = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
+print("RF: ML MOL vs ML TE (noASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
+plot_mlno_rf = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
-# CID: ML MOL vs ML TE (noASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
-plot_mlno_cid = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
+print("CID: ML MOL vs ML TE (noASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
+plot_mlno_cid = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
-# SPR: ML MOL vs ML TE (noASC)
-cor.test(df$X.Morph.Total, df$ML_MOLvsTEnoASC_NormalizedSPR, method = "spearman")
-plot_mlno_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedSPR)) +
+print("SPR: ML MOL vs ML TE (noASC)")
+cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR, method = "spearman")
+plot_mlno_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
@@ -384,11 +675,108 @@ plot_mlno_spr = ggplot(df, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_Normalized
   labs(y = NULL, x = "\n% Phenomic characters")
 ```
 
-## Q2.2 Figure
+### Q2.1.2 Extant + extinct (Table 2)
+
+To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
+
+```{r, warning=F}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+
+print("RF: MP MOL vs MP TE")
+cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedRF, method = "spearman")
+plot_mp_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized RF\n", x = NULL)
+
+print("CID: MP MOL vs MP TE")
+cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedCID, method = "spearman")
+plot_mp_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized CID\n", x = NULL)
+
+print("SPR: MP MOL vs MP TE")
+cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedMeanSPR, method = "spearman")
+plot_mp_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized SPR\n", x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+print("RF: ML MOL vs ML TE (ASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
+plot_mlasc_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL) # Remove x and y axis titles
+
+print("CID: ML MOL vs ML TE (ASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
+plot_mlasc_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+  
+print("SPR: ML MOL vs ML TE (ASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR, method = "spearman")
+plot_mlasc_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+print("RF: ML MOL vs ML TE (noASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
+plot_mlno_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+print("CID: ML MOL vs ML TE (noASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
+plot_mlno_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+print("SPR: ML MOL vs ML TE (noASC)")
+cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR, method = "spearman")
+plot_mlno_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
+## Q2.2 Figures
+
+### Q2.2.1 Extant (Figure 3)
 
 ```{r}
 # Grid 3x3
-#tiff("Figures/figQ2_proportion.tiff", width = 12, height = 10, units = "in", res = 300)
+tiff("Figures/fig3_proportion.tiff", width = 12, height = 10, units = "in", res = 300)
 grid.arrange(arrangeGrob(plot_mp_rf + theme(plot.margin = margin(.01,1,1,.01)),
                          plot_mlasc_rf + theme(plot.margin = margin(.01,1,1,.01)),
                          plot_mlno_rf + theme(plot.margin = margin(.01,1,1,.01)),
@@ -402,171 +790,235 @@ grid.arrange(arrangeGrob(plot_mp_rf + theme(plot.margin = margin(.01,1,1,.01)),
              legend_grob,
              nrow=2,
              heights= c(20,1))
-#dev.off()
+dev.off()
 ```
 
+### Q2.2.2 Extant + extinct (Figure S3)
+
+```{r}
+# Grid 3x3
+tiff("Figures/figS3_proportion_fossils.tiff", width = 12, height = 10, units = "in", res = 300)
+grid.arrange(arrangeGrob(plot_mp_rf_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_rf_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_rf_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mp_cid_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_cid_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_cid_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mp_spr_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlasc_spr_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         plot_mlno_spr_fossil + theme(plot.margin = margin(.01,1,1,.01)),
+                         nrow=3, ncol=3),
+             legend_grob,
+             nrow=2,
+             heights= c(20,1))
+dev.off()
+```
 
 # Q3. Is the addition of phenomic evidence equally impactful on ML and MP topologies?
 
 ## Q3.1 MOL-TE incongruences ~ Optimality criteria
 
-To test whether the MOL-TE incongruences are different between ML and MP, we first need to change the format of the dataframe.
+To test whether the MOL-TE incongruences are different between ML and MP, we first need to change the structure of the dataframe.
+
+### Q3.1.1 Extant (Table 3)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 # Create an empty data frame for RF
 q3_rf <- data.frame(value = numeric(0), source = character(0))
 # Combine the vectors of RF into the data frame
-q3_rf <- rbind(q3_rf, data.frame(value = df$MP_MOLvsTE_NormalizedRF, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedRF))))
-q3_rf <- rbind(q3_rf, data.frame(value = df$ML_MOLvsTEASC_NormalizedRF, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedRF))))
-q3_rf <- rbind(q3_rf, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedRF, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedRF))))
+q3_rf <- rbind(q3_rf, data.frame(value = df_extant$MP_MOLvsTE_NormalizedRF, source = rep("MP_MOLvsTE", length(df_extant$MP_MOLvsTE_NormalizedRF))))
+q3_rf <- rbind(q3_rf, data.frame(value = df_extant$ML_MOLvsTEASC_NormalizedRF, source = rep("ML_MOLvsTEASC", length(df_extant$ML_MOLvsTEASC_NormalizedRF))))
+q3_rf <- rbind(q3_rf, data.frame(value = df_extant$ML_MOLvsTEnoASC_NormalizedRF, source = rep("ML_MOLvsTEnoASC", length(df_extant$ML_MOLvsTEnoASC_NormalizedRF))))
+# Summary of medians
+q3_rf %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 
 # Create an empty data frame for CID
 q3_cid <- data.frame(value = numeric(0), source = character(0))
 # Combine the vectors of CID into the data frame
-q3_cid <- rbind(q3_cid, data.frame(value = df$MP_MOLvsTE_NormalizedCID, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedCID))))
-q3_cid <- rbind(q3_cid, data.frame(value = df$ML_MOLvsTEASC_NormalizedCID, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedCID))))
-q3_cid <- rbind(q3_cid, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedCID, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedCID))))
+q3_cid <- rbind(q3_cid, data.frame(value = df_extant$MP_MOLvsTE_NormalizedCID, source = rep("MP_MOLvsTE", length(df_extant$MP_MOLvsTE_NormalizedCID))))
+q3_cid <- rbind(q3_cid, data.frame(value = df_extant$ML_MOLvsTEASC_NormalizedCID, source = rep("ML_MOLvsTEASC", length(df_extant$ML_MOLvsTEASC_NormalizedCID))))
+q3_cid <- rbind(q3_cid, data.frame(value = df_extant$ML_MOLvsTEnoASC_NormalizedCID, source = rep("ML_MOLvsTEnoASC", length(df_extant$ML_MOLvsTEnoASC_NormalizedCID))))
+# Summary of medians
+q3_cid %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 
 # Create an empty data frame for SPR
 q3_spr <- data.frame(value = numeric(0), source = character(0))
 # Combine the vectors of CID into the data frame
-q3_spr <- rbind(q3_spr, data.frame(value = df$MP_MOLvsTE_NormalizedSPR, source = rep("MP_MOLvsTE", length(df$MP_MOLvsTE_NormalizedSPR))))
-q3_spr <- rbind(q3_spr, data.frame(value = df$ML_MOLvsTEASC_NormalizedSPR, source = rep("ML_MOLvsTEASC", length(df$ML_MOLvsTEASC_NormalizedSPR))))
-q3_spr <- rbind(q3_spr, data.frame(value = df$ML_MOLvsTEnoASC_NormalizedSPR, source = rep("ML_MOLvsTEnoASC", length(df$ML_MOLvsTEnoASC_NormalizedSPR))))
+q3_spr <- rbind(q3_spr, data.frame(value = df_extant$MP_MOLvsTE_NormalizedMeanSPR, source = rep("MP_MOLvsTE", length(df_extant$MP_MOLvsTE_NormalizedMeanSPR))))
+q3_spr <- rbind(q3_spr, data.frame(value = df_extant$ML_MOLvsTEASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEASC", length(df_extant$ML_MOLvsTEASC_NormalizedMeanSPR))))
+q3_spr <- rbind(q3_spr, data.frame(value = df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEnoASC", length(df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR))))
+# Summary of medians
+q3_spr %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 ```
 
-Then, we need to statistically test whether MOL-TE incongruences (operationally measured as normalized RF, CID, and SPR) differ between (1) MP MOL vs TE, (2) ML MOL vs TE (with ASC), and (3) ML MOL vs TE (no ASC). Because data are not normally distributed (Shapiro-Wilk tests: P < 0.05) and more than one category is present in the predictor variable, we used Kruskal-Wallis tests for multiple categories and Mann-Whitney U tests for pairwise comparisons. 
+Then, we need to statistically test whether MOL-TE incongruences (operationally measured as normalized RF, CID, and SPR) differ between (1) MP MOL vs TE, (2) ML MOL vs TE MKv (with bias correction), and (3) ML MOL vs TE MK (no bias correction). Because data are not normally distributed (Shapiro-Wilk tests: P < 0.05) and more than one category is present in the predictor variable, we performed the following tests:
 
-- The Kruskal-Wallis test is a non-parametric test used to compare the medians (or ranks) of more than two groups. It is often used when you want to test whether there are statistically significant differences in the distribution of a continuous variable across multiple groups (i.e., a categorical factor with more than two levels), without assuming normality in the data. First, data is ranked (from the lowest to the highest value). Then, the statistic H (which involves calculating the sum of ranks for each group and comparing it to the overall mean rank) and the degrees of freedom are calculated. Finally, p-values can be estimated by comparing the statistic H and chi-squared distribution (if H is large, the p-value will be small).
+- The Kruskal-Wallis test is a nonparametric test used to compare the medians (or ranks) between >2 groups. As assumptions, this test does not require normality and observations must be independent. First, data is ranked (from the lowest to the highest value) and the mean rank computed. Next, we compute the statistic H (differences between group mean ranks and the overall mean rank, scaled by sample size). Finally, p-values can be estimated by comparing the statistic H and chi-squared distribution (if H is large, the p-value will be small).
 
-- The Mann-Whitney U test is a non-parametric test, meaning it doesn't assume that the data follows a normal distribution. Instead of comparing means (like the t-test), the Mann-Whitney U test compares the ranks of the data values across two groups.
+- The Friedman test is a nonparametric test used to compare ordinal or continuous values that are paired between >2 groups. As assumptions, this test does not require normality and observations can be dependent (paired). First, ranks are assigned to the pairwise structure across groups. Next, the average rank within group is computed. The Friedman statistic measures how far group rank sums deviate from the expected value in the null model. Finally, p-values are computed by comparing the Friedman statistic and chi-squared distribution.
 
-```{r}
-# RF
+- The Wilcoxon signed-rank test is a nonparametric test used to compare the ordinal or continuous values between 2 groups (e.g. as posthoc analysis of Friedman tests). As assumptions, this test does not require normality and observations can be dependent. First, all values are ranked. The number of times that a value from one group precedes a value from the other is computed, generating the U statistic (the number of pairwise wins of one group over the other). Next, U is standardized to a normal distribution to obtain the p-value.
+
+
+```{r, warning=FALSE}
+print("RF")
 shapiro.test(q3_rf$value) # p < 0.05, non-parametric
-# Kruskal-Wallis: non-parametric test for multiple groups (non-paired values)
+print("Kruskal-Wallis: non-parametric test for multiple groups (non-paired values)")
 kruskal.test(q3_rf$value ~ q3_rf$source)
-# Wilcoxon: pairwise comparisons for paired values
-pairwise.wilcox.test(q3_rf$value, q3_rf$source, p.adjust.method = "bonferroni")
-# Friedman: non-parametric test for paired values and multiple groups
-q3_rf_fri = data.frame(df$MP_MOLvsTE_NormalizedRF, df$ML_MOLvsTEASC_NormalizedRF, df$ML_MOLvsTEnoASC_NormalizedRF)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_rf_fri = data.frame(df_extant$MP_MOLvsTE_NormalizedRF, df_extant$ML_MOLvsTEASC_NormalizedRF, df_extant$ML_MOLvsTEnoASC_NormalizedRF)
 friedman.test(as.matrix(q3_rf_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_rf_fri),
+                     g=factor(rep(names(q3_rf_fri), each = nrow(q3_rf_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
 
-# CID
+print("CID")
 shapiro.test(q3_cid$value) # p < 0.05, non-parametric
-# Kruskal-Wallis: non-parametric test for multiple groups
+print("Kruskal-Wallis: non-parametric test for multiple groups")
 kruskal.test(q3_cid$value ~ q3_cid$source)
-# Wilcoxon: pairwise comparisons
-pairwise.wilcox.test(q3_cid$value, q3_cid$source, p.adjust.method = "bonferroni")
-# Friedman: non-parametric test for paired values and multiple groups
-q3_cid_fri = data.frame(df$MP_MOLvsTE_NormalizedCID, df$ML_MOLvsTEASC_NormalizedCID, df$ML_MOLvsTEnoASC_NormalizedCID)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_cid_fri = data.frame(df_extant$MP_MOLvsTE_NormalizedCID, df_extant$ML_MOLvsTEASC_NormalizedCID, df_extant$ML_MOLvsTEnoASC_NormalizedCID)
 friedman.test(as.matrix(q3_cid_fri))
-# CALCULATE NEMENYI TESTS IN RCLOUD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_cid_fri),
+                     g=factor(rep(names(q3_cid_fri), each = nrow(q3_cid_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
 
-# SPR
+print("SPR")
 shapiro.test(q3_spr$value) # p < 0.05, non-parametric
-# Kruskal-Wallis: non-parametric test for multiple groups
+print("Kruskal-Wallis: non-parametric test for multiple groups")
 kruskal.test(q3_spr$value ~ q3_spr$source)
-# Perform pairwise comparisons using the Wilcoxon test for each pair
-pairwise.wilcox.test(q3_spr$value, q3_spr$source, p.adjust.method = "bonferroni")
-# Friedman: non-parametric test for paired values and multiple groups
-q3_spr_fri = data.frame(df$MP_MOLvsTE_NormalizedSPR, df$ML_MOLvsTEASC_NormalizedSPR, df$ML_MOLvsTEnoASC_NormalizedSPR)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_spr_fri = data.frame(df_extant$MP_MOLvsTE_NormalizedMeanSPR, df_extant$ML_MOLvsTEASC_NormalizedMeanSPR, df_extant$ML_MOLvsTEnoASC_NormalizedMeanSPR)
 friedman.test(as.matrix(q3_spr_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_spr_fri),
+                     g=factor(rep(names(q3_spr_fri), each = nrow(q3_spr_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
 ```
 
-In all cases, Kruskal-Wallis results indicated that there is no association between MOL-TE incongruences and optimality criteria. Pairwise Mann-Whitney U (Wilcoxon rank-sum) tests also indicated no differences of MOL-TE incongruences between each pair of analysis. Thus, the addition of phenomic evidence is equally impactful on ML and MP topologies.
-
-## Q3.2 Number of politomies
-
-One importance difference, however, is the fact that trees were always binary in ML MOL and ML TE, whereas the addition of phenomic evidence can maintain, increase or decrease resolution of MP trees.
-
-```{r}
-# MP: Number of datasets in which the number of politomies is higher in TE than MOL
-sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) > 0)
-
-# MP: Number of datasets in which the number of politomies is higher in MOL than TE
-sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) < 0)
-
-# MP: Number of datasets in which the number of politomies is equal in MOL and TE
-sum((df$MP_nPolytomiesTE - df$MP_nPolytomiesMOL) == 0)
-```
-
-## Q3.3 Contribution of phenomic evidence to the TE optimality score
-
-In addition to testing whether MOL-TE incongruences differ among optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses. 
+### Q3.1.2 Extant + extinct (Table 3)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_06-03-25.csv")
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
 
-# Exploratory data analyses
-sum(df$MP_MORPH.TE_Score > df$ML_MORPH.TeASC_Score) # number of times that %MORPH/TE is higher in MP than ML ASC
-sum(df$MP_MORPH.TE_Score < df$ML_MORPH.TeASC_Score) # number of times that %MORPH/TE is lower in MP than ML ASC
+# Create an empty data frame for RF
+q3_rf_extinct <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of RF into the data frame
+q3_rf_extinct <- rbind(q3_rf_extinct, data.frame(value = df_extinct$MP_MOLvsTE_NormalizedRF, source = rep("MP_MOLvsTE", length(df_extinct$MP_MOLvsTE_NormalizedRF))))
+q3_rf_extinct <- rbind(q3_rf_extinct, data.frame(value = df_extinct$ML_MOLvsTEASC_NormalizedRF, source = rep("ML_MOLvsTEASC", length(df_extinct$ML_MOLvsTEASC_NormalizedRF))))
+q3_rf_extinct <- rbind(q3_rf_extinct, data.frame(value = df_extinct$ML_MOLvsTEnoASC_NormalizedRF, source = rep("ML_MOLvsTEnoASC", length(df_extinct$ML_MOLvsTEnoASC_NormalizedRF))))
+# Summary of medians
+q3_rf_extinct %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 
-mean(df$MP_MORPH.TE_Score)
-sd(df$MP_MORPH.TE_Score)
-min(df$MP_MORPH.TE_Score)
-max(df$MP_MORPH.TE_Score)
+# Create an empty data frame for CID
+q3_cid_extinct <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_cid_extinct <- rbind(q3_cid_extinct, data.frame(value = df_extinct$MP_MOLvsTE_NormalizedCID, source = rep("MP_MOLvsTE", length(df_extinct$MP_MOLvsTE_NormalizedCID))))
+q3_cid_extinct <- rbind(q3_cid_extinct, data.frame(value = df_extinct$ML_MOLvsTEASC_NormalizedCID, source = rep("ML_MOLvsTEASC", length(df_extinct$ML_MOLvsTEASC_NormalizedCID))))
+q3_cid_extinct <- rbind(q3_cid_extinct, data.frame(value = df_extinct$ML_MOLvsTEnoASC_NormalizedCID, source = rep("ML_MOLvsTEnoASC", length(df_extinct$ML_MOLvsTEnoASC_NormalizedCID))))
+# Summary of medians
+q3_cid_extinct %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 
-mean(df$ML_MORPH.TeASC_Score)
-sd(df$ML_MORPH.TeASC_Score)
-min(df$ML_MORPH.TeASC_Score)
-max(df$ML_MORPH.TeASC_Score)
-
-mean(df$ML_MORPH.TEnoASC_Score)
-sd(df$ML_MORPH.TEnoASC_Score)
-min(df$ML_MORPH.TEnoASC_Score)
-max(df$ML_MORPH.TEnoASC_Score)
-
-# Normality tests
-shapiro.test(df$MP_MORPH.TE_Score) # p < 0.05, non-parametric
-shapiro.test(df$ML_MORPH.TeASC_Score) # p < 0.05, non-parametric
-shapiro.test(df$ML_MORPH.TEnoASC_Score) # p < 0.05, non-parametric
-
-# Kruskal-Wallis (non-parametric, multiple groups, non-paired values)
-y = c(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
-x = factor(rep(c("MP MOL vs MP TE", "ML MOL vs ML TE ASC", "ML MOL vs ML TE noASC"), each = length(df$MP_MORPH.TE_Score)))
-kruskal.test(y ~ x)
-
-# Friedman test (non-parametric, multiple groups, paired values)
-q3_fri = data.frame(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
-friedman.test(as.matrix(q3_fri))
-
-# Nemenyi test (post-hoc pairwise test, non-parametric, paired values). Run in RCLOUD
-values <- c(df$MP_MORPH.TE_Score, df$ML_MORPH.TeASC_Score, df$ML_MORPH.TEnoASC_Score)
-group <- c(rep("MP", length(df$MP_MORPH.TE_Score)),
-             rep("ML ASC", length(df$ML_MORPH.TeASC_Score)),
-             rep("ML noASC", length(df$ML_MORPH.TEnoASC_Score)))
-block = rep(1:length(df$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
-df_nemenyi <- data.frame(value = values, group = group, block=block)
-#PMCMRplus::frdAllPairsNemenyiTest(y = df_nemenyi$value, 
-#                                  groups = df_nemenyi$group,
-#                                  blocks = df_nemenyi$block)
-
-# Figure
-df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML ASC", "ML noASC"))
-custom_palette <- c("MP" = "#339999", "ML ASC" = "#6f77b4", "ML noASC" = "#cccccc")
-
-ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
-  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
-  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
-  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
-  labs(x = "", y = "% Phenomic/TE optimality score\n") +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
-  scale_color_manual(values = custom_palette)
+# Create an empty data frame for SPR
+q3_spr_extinct <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_spr_extinct <- rbind(q3_spr_extinct, data.frame(value = df_extinct$MP_MOLvsTE_NormalizedMeanSPR, source = rep("MP_MOLvsTE", length(df_extinct$MP_MOLvsTE_NormalizedMeanSPR))))
+q3_spr_extinct <- rbind(q3_spr_extinct, data.frame(value = df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEASC", length(df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR))))
+q3_spr_extinct <- rbind(q3_spr_extinct, data.frame(value = df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEnoASC", length(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))))
+# Summary of medians
+q3_spr_extinct %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
 ```
 
-## Q3.4 Figures
+```{r, warning=FALSE}
+print("RF")
+shapiro.test(q3_rf_extinct$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups (non-paired values)")
+kruskal.test(q3_rf_extinct$value ~ q3_rf_extinct$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_rf_fri = data.frame(df_extinct$MP_MOLvsTE_NormalizedRF, df_extinct$ML_MOLvsTEASC_NormalizedRF, df_extinct$ML_MOLvsTEnoASC_NormalizedRF)
+friedman.test(as.matrix(q3_rf_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_rf_fri),
+                     g=factor(rep(names(q3_rf_fri), each = nrow(q3_rf_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+print("CID")
+shapiro.test(q3_cid_extinct$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups")
+kruskal.test(q3_cid_extinct$value ~ q3_cid_extinct$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_cid_fri = data.frame(df_extinct$MP_MOLvsTE_NormalizedCID, df_extinct$ML_MOLvsTEASC_NormalizedCID, df_extinct$ML_MOLvsTEnoASC_NormalizedCID)
+friedman.test(as.matrix(q3_cid_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_cid_fri),
+                     g=factor(rep(names(q3_cid_fri), each = nrow(q3_cid_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+print("SPR")
+shapiro.test(q3_spr_extinct$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups")
+kruskal.test(q3_spr_extinct$value ~ q3_spr_extinct$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_spr_fri = data.frame(df_extinct$MP_MOLvsTE_NormalizedMeanSPR, df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR, df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR)
+friedman.test(as.matrix(q3_spr_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_spr_fri),
+                     g=factor(rep(names(q3_spr_fri), each = nrow(q3_spr_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+```
+
+### Q3.1.3 Plot (Figure 4)
 
 ```{r}
 # Set order of comparisons
 q3_rf$source <- factor(q3_rf$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
 q3_cid$source <- factor(q3_cid$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
 q3_spr$source <- factor(q3_spr$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+
 # Set colors
 custom_palette <- c("MP_MOLvsTE" = "#339999", "ML_MOLvsTEASC" = "#6f77b4", "ML_MOLvsTEnoASC" = "#cccccc")
 # Create custom legend labels
@@ -582,7 +1034,7 @@ plot_q3_rf = ggplot(q3_rf, aes(x = source, y = value)) +
   geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
   labs(x = "", y = "Normalized RF\n", tag="A") +
   theme_minimal() +
-  theme(axis.text.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), axis.ticks.x = element_blank(), legend.position = "none") +  # Hide legend if not needed
   scale_color_manual(values = custom_palette, labels = custom_labels)
 # Boxplot CID
 plot_q3_cid = ggplot(q3_cid, aes(x = source, y = value)) +
@@ -590,7 +1042,7 @@ plot_q3_cid = ggplot(q3_cid, aes(x = source, y = value)) +
   geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
   labs(x = "", y = "\nNormalized CID\n", tag="B") +
   theme_minimal() +
-  theme(axis.text.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(),axis.ticks.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
   scale_color_manual(values = custom_palette, labels = custom_labels)
 # Boxplot SPR
 plot_q3_spr = ggplot(q3_spr, aes(x = source, y = value)) +
@@ -598,17 +1050,398 @@ plot_q3_spr = ggplot(q3_spr, aes(x = source, y = value)) +
   geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
   labs(x = "", y = "\nSPR moves\n", tag="C") +
   theme_minimal() +
-  theme(legend.position = "bottom", legend.title = element_blank())+
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(),legend.position = "none", axis.ticks.x = element_blank(),legend.title = element_blank())+
 #theme(axis.text.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
   scale_color_manual(values = custom_palette, labels = custom_labels)
+```
 
+```{r}
+q3_rf_extinct$source <- factor(q3_rf_extinct$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+q3_cid_extinct$source <- factor(q3_cid_extinct$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+q3_spr_extinct$source <- factor(q3_spr_extinct$source, levels = c("MP_MOLvsTE", "ML_MOLvsTEASC", "ML_MOLvsTEnoASC"))
+
+# Boxplot Normalized RF
+plot_q3_rf_extinct = ggplot(q3_rf_extinct, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "", tag="D") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(), axis.ticks.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Boxplot CID
+plot_q3_cid_extinct = ggplot(q3_cid_extinct, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "", tag="E") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(),axis.ticks.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+# Boxplot SPR
+plot_q3_spr_extinct = ggplot(q3_spr_extinct, aes(x = source, y = value)) +
+  geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_jitter(aes(color = source), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "", tag="F") +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),axis.text.x = element_blank(),legend.position = "none", axis.ticks.x = element_blank(),legend.title = element_blank())+
+#theme(axis.text.x = element_blank(),legend.position = "none") +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette, labels = custom_labels)
+```
+
+```{r}
 # Plot 3x1
-#tiff("Figures/figQ3_boxplots.tiff", width = 3, height = 6, units = "in", res = 300)
+tiff("Figures/fig4_boxplots.tiff", width = 5, height = 6, units = "in", res = 300)
 grid.arrange(plot_q3_rf + theme(plot.margin = margin(.01,1,1,.01)),
+             plot_q3_rf_extinct + theme(plot.margin = margin(.01,1,1,.01)),
              plot_q3_cid + theme(plot.margin = margin(.001,1,1,.01)),
+             plot_q3_cid_extinct + theme(plot.margin = margin(.001,1,1,.01)),
              plot_q3_spr + theme(plot.margin = margin(.001,1,1,.01)),
-             nrow=3, ncol=1)
-#dev.off()
+             plot_q3_spr_extinct + theme(plot.margin = margin(.001,1,1,.01)),
+             nrow=3, ncol=2)
+dev.off()
+```
+
+
+## Q3.2 Number of politomies
+
+One importance difference, however, is the fact that trees were always binary in ML MOL and ML TE, whereas the addition of phenomic evidence can maintain, increase or decrease resolution of MP trees.
+
+### Q3.2.1 Extant
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+
+print("MP: Number of datasets in which the number of politomies is higher in TE than MOL")
+sum((df_extant$MP_nPolytomiesTE - df_extant$MP_nPolytomiesMOL) > 0)
+print("MP: Number of datasets in which the number of politomies is higher in MOL than TE")
+sum((df_extant$MP_nPolytomiesTE - df_extant$MP_nPolytomiesMOL) < 0)
+print("MP: Number of datasets in which the number of politomies is equal in MOL and TE")
+sum((df_extant$MP_nPolytomiesTE - df_extant$MP_nPolytomiesMOL) == 0)
+cat("\n")
+print("MP MOL: Mean no. polytomies")
+mean(df_extant$MP_nPolytomiesMOL)
+print("MP MOL: SD no. polytomies")
+sd(df_extant$MP_nPolytomiesMOL)
+print("MP MOL: Min no. polytomies")
+min(df_extant$MP_nPolytomiesMOL)
+print("MP MOL: Max no. polytomies")
+max(df_extant$MP_nPolytomiesMOL)
+print("MP TE: Mean no. polytomies")
+mean(df_extant$MP_nPolytomiesTE)
+print("MP TE: SD no. polytomies")
+sd(df_extant$MP_nPolytomiesTE)
+print("MP TE: Min no. polytomies")
+min(df_extant$MP_nPolytomiesTE)
+print("MP TE: Max no. polytomies")
+max(df_extant$MP_nPolytomiesTE)
+```
+
+### Q3.2.2 Extant + extinct
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+
+print("MP: Number of datasets in which the number of politomies is higher in TE than MOL")
+sum((df_extinct$MP_nPolytomiesTE - df_extinct$MP_nPolytomiesMOL) > 0)
+print("MP: Number of datasets in which the number of politomies is higher in MOL than TE")
+sum((df_extinct$MP_nPolytomiesTE - df_extinct$MP_nPolytomiesMOL) < 0)
+print("MP: Number of datasets in which the number of politomies is equal in MOL and TE")
+sum((df_extinct$MP_nPolytomiesTE - df_extinct$MP_nPolytomiesMOL) == 0)
+cat("\n")
+print("MP MOL: Mean no. polytomies")
+mean(df_extinct$MP_nPolytomiesMOL)
+print("MP MOL: SD no. polytomies")
+sd(df_extinct$MP_nPolytomiesMOL)
+print("MP MOL: Min no. polytomies")
+min(df_extinct$MP_nPolytomiesMOL)
+print("MP MOL: Max no. polytomies")
+max(df_extinct$MP_nPolytomiesMOL)
+print("MP TE: Mean no. polytomies")
+mean(df_extinct$MP_nPolytomiesTE)
+print("MP TE: SD no. polytomies")
+sd(df_extinct$MP_nPolytomiesTE)
+print("MP TE: Min no. polytomies")
+min(df_extinct$MP_nPolytomiesTE)
+print("MP TE: Max no. polytomies")
+max(df_extinct$MP_nPolytomiesTE)
+```
+
+### Q3.2.3 Statistical tests (Figure S4; Table S5)
+Is the difference between MOL and TE resolution higher when fossils are incorporated? 
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+# 1. Filter rows where Dataset is duplicated
+df_filtered <- df %>%
+  filter(Dataset %in% Dataset[duplicated(Dataset)])
+# 2. Keep only the relevant columns
+df_filtered <- df_filtered %>%
+  select(Type, MP_nPolytomiesMOL, MP_nPolytomiesTE)
+# 3. Compute paired difference
+df_filtered <- df_filtered %>%
+  mutate(diff = MP_nPolytomiesTE - MP_nPolytomiesMOL)
+# 4. Reshape
+df_extant <- df_filtered %>% filter(Type == "Extant")
+df_extinct <- df_filtered %>% filter(Type == "Extinct")
+n_extant <- nrow(df_extant)
+df_extinct <- df_extinct %>% slice(1:n_extant)
+df_extinct <- df_extinct %>%
+  select(-Type) %>%
+  rename_with(~ paste0(.x, "_Extinct"))
+df_wide <- cbind(df_extant, df_extinct)
+df_wide <- df_wide %>% select(-Type)
+# Exclude MP_nPolytomiesMOL_Extinct
+df_reduced <- df_wide %>%
+  select(-MP_nPolytomiesMOL_Extinct)
+
+# 5. Exploratory (Table S5)
+print("Median of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
+median(df_reduced$MP_nPolytomiesTE - df_reduced$MP_nPolytomiesMOL)
+print("SD of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
+sd(df_reduced$MP_nPolytomiesTE - df_reduced$MP_nPolytomiesMOL)
+print("Min of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
+min(df_reduced$MP_nPolytomiesTE - df_reduced$MP_nPolytomiesMOL)
+print("Max of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
+max(df_reduced$MP_nPolytomiesTE - df_reduced$MP_nPolytomiesMOL)
+
+print("Median of paired differences in number of polytomies between MP MOL and MP TE (with fossils")
+median(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesMOL)
+print("SD of paired differences in number of polytomies between MP MOL and MP TE (with fossils")
+sd(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesMOL)
+print("Min of paired differences in number of polytomies between MP MOL and MP TE (with fossils")
+min(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesMOL)
+print("Max of paired differences in number of polytomies between MP MOL and MP TE (with fossils")
+max(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesMOL)
+
+print("Median of paired differences in number of polytomies between MP TE (without fossils) and MP TE (with fossils")
+median(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
+print("SD of paired differences in number of polytomies between MP TE (without fossils) and MP TE (with fossils")
+sd(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
+print("Min of paired differences in number of polytomies between MP TE (without fossils) and MP TE (with fossils")
+min(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
+print("Max of paired differences in number of polytomies between MP TE (without fossils) and MP TE (with fossils")
+max(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
+
+# 6. Statistical inference (Table S5)
+df_friedman <- df_wide %>% 
+  select(MP_nPolytomiesMOL, MP_nPolytomiesTE, MP_nPolytomiesTE_Extinct)
+# Friedman test
+friedman_test <- friedman.test(as.matrix(df_friedman))
+friedman_test
+# Posthoc Wilcoxon
+pairwise.wilcox.test(df_long$value, df_long$group, 
+                     paired = TRUE, 
+                     p.adjust.method = "bonferroni")
+
+# 7. FIGURE S4
+# Add row ID for pairing
+df_plot <- df_wide %>%
+  mutate(row_id = row_number())
+# Convert to long format
+df_long <- df_plot %>%
+  pivot_longer(
+    cols = c(MP_nPolytomiesMOL, MP_nPolytomiesTE, MP_nPolytomiesTE_Extinct),
+    names_to = "group",
+    values_to = "value"
+  )
+# Create a factor to order the groups in plotting
+df_long$group <- factor(df_long$group, levels = c("MP_nPolytomiesMOL", 
+                                                  "MP_nPolytomiesTE",
+                                                  "MP_nPolytomiesTE_Extinct"))
+# Plot paired dots with connecting lines
+custom_colors <- c(
+  "MP_nPolytomiesTE" = "#339999",         # lightest
+  "MP_nPolytomiesMOL" = "#66CCCC",        # light
+  "MP_nPolytomiesTE_Extinct" = "#006666" # darker
+)
+# Custom legend labels
+custom_labels <- c(
+  "MP_nPolytomiesMOL" = "MOL (without fossils)",
+  "MP_nPolytomiesTE" = "TE (without fossils)",
+  "MP_nPolytomiesTE_Extinct" = "TE (with fossils)"
+)
+# Plot with gray lines, colored dots, renamed legend, no x-axis
+p = ggplot(df_long, aes(x = group, y = value, group = row_id)) +
+  geom_line(color = "gray70", alpha = 0.5) +
+  geom_point(aes(color = group), size = 3) +
+  theme_minimal() +
+  labs(x = NULL, y = "Number of Polytomies\n", 
+       title = "") +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  ) +
+  scale_color_manual(values = custom_colors, labels = custom_labels, name=NULL)
+p
+# Save the plot as JPG, 300 dpi
+ggsave(filename = "Figures/figS4_polytomies_MP.jpg", 
+       plot = p, 
+       width = 8, height = 5,      # size in inches
+       dpi = 300,                   # resolution
+       units = "in")
+```
+
+
+## Q3.3 Contribution of phenomic evidence to the TE optimality score
+
+In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses. 
+
+### Q3.3.1 Extant
+
+```{r}
+# Load data for extant taxa
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+
+# Exploratory data analyses
+print("Number of times that %MORPH/TE is higher in MP than ML ASC")
+sum(df_extant$MP_MORPH.TE_Score > df_extant$ML_MORPH.TeASC_Score)
+print("Number of times that %MORPH/TE is lower in MP than ML ASC")
+sum(df_extant$MP_MORPH.TE_Score < df_extant$ML_MORPH.TeASC_Score)
+
+print("Number of times that %MORPH/TE is higher in MP than ML noASC")
+sum(df_extant$MP_MORPH.TE_Score > df_extant$ML_MORPH.TEnoASC_Score)
+print("Number of times that %MORPH/TE is lower in MP than ML noASC")
+sum(df_extant$MP_MORPH.TE_Score < df_extant$ML_MORPH.TEnoASC_Score)
+
+print("Stats MP MORPH/TE")
+mean(df_extant$MP_MORPH.TE_Score)
+sd(df_extant$MP_MORPH.TE_Score)
+min(df_extant$MP_MORPH.TE_Score)
+max(df_extant$MP_MORPH.TE_Score)
+
+print("Stats ML MKV MORPH/TE")
+mean(df_extant$ML_MORPH.TeASC_Score)
+sd(df_extant$ML_MORPH.TeASC_Score)
+min(df_extant$ML_MORPH.TeASC_Score)
+max(df_extant$ML_MORPH.TeASC_Score)
+
+print("Stats ML MK MORPH/TE")
+mean(df_extant$ML_MORPH.TEnoASC_Score)
+sd(df_extant$ML_MORPH.TEnoASC_Score)
+min(df_extant$ML_MORPH.TEnoASC_Score)
+max(df_extant$ML_MORPH.TEnoASC_Score)
+
+# Normality tests
+shapiro.test(df_extant$MP_MORPH.TE_Score) # p < 0.05, non-parametric
+shapiro.test(df_extant$ML_MORPH.TeASC_Score) # p < 0.05, non-parametric
+shapiro.test(df_extant$ML_MORPH.TEnoASC_Score) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+q3_fri = data.frame(df_extant$MP_MORPH.TE_Score, df_extant$ML_MORPH.TeASC_Score, df_extant$ML_MORPH.TEnoASC_Score)
+friedman.test(as.matrix(q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(q3_fri),
+                     g=factor(rep(names(q3_fri), each = nrow(q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Figure
+values <- c(df_extant$MP_MORPH.TE_Score, df_extant$ML_MORPH.TeASC_Score, df_extant$ML_MORPH.TEnoASC_Score)
+group <- c(rep("MP", length(df_extant$MP_MORPH.TE_Score)),
+             rep("ML MKV", length(df_extant$ML_MORPH.TeASC_Score)),
+             rep("ML MK", length(df_extant$ML_MORPH.TEnoASC_Score)))
+block = rep(1:length(df_extant$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
+df_nemenyi <- data.frame(value = values, group = group, block=block)
+df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML MKV", "ML MK"))
+custom_palette <- c("MP" = "#339999", "ML MKV" = "#6f77b4", "ML MK" = "#cccccc")
+
+contribution_extant = ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
+  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
+  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "% Phenomic/TE optimality score\n") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette)
+```
+
+### Q3.3.2 Extant + extinct
+
+```{r}
+# Load data for extant taxa
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+
+# Exploratory data analyses
+print("Number of times that %MORPH/TE is higher in MP than ML ASC")
+sum(df_extinct$MP_MORPH.TE_Score > df_extinct$ML_MORPH.TeASC_Score)
+print("Number of times that %MORPH/TE is lower in MP than ML ASC")
+sum(df_extinct$MP_MORPH.TE_Score < df_extinct$ML_MORPH.TeASC_Score)
+
+print("Number of times that %MORPH/TE is higher in MP than ML noASC")
+sum(df_extinct$MP_MORPH.TE_Score > df_extinct$ML_MORPH.TEnoASC_Score)
+print("Number of times that %MORPH/TE is lower in MP than ML noASC")
+sum(df_extinct$MP_MORPH.TE_Score < df_extinct$ML_MORPH.TEnoASC_Score)
+
+print("Stats MP MORPH/TE")
+mean(df_extinct$MP_MORPH.TE_Score)
+sd(df_extinct$MP_MORPH.TE_Score)
+min(df_extinct$MP_MORPH.TE_Score)
+max(df_extinct$MP_MORPH.TE_Score)
+
+print("Stats ML MKV MORPH/TE")
+mean(df_extinct$ML_MORPH.TeASC_Score)
+sd(df_extinct$ML_MORPH.TeASC_Score)
+min(df_extinct$ML_MORPH.TeASC_Score)
+max(df_extinct$ML_MORPH.TeASC_Score)
+
+print("Stats ML MK MORPH/TE")
+mean(df_extinct$ML_MORPH.TEnoASC_Score)
+sd(df_extinct$ML_MORPH.TEnoASC_Score)
+min(df_extinct$ML_MORPH.TEnoASC_Score)
+max(df_extinct$ML_MORPH.TEnoASC_Score)
+
+# Normality tests
+shapiro.test(df_extinct$MP_MORPH.TE_Score) # p < 0.05, non-parametric
+shapiro.test(df_extinct$ML_MORPH.TeASC_Score) # p > 0.05, parametric
+shapiro.test(df_extinct$ML_MORPH.TEnoASC_Score) # p > 0.05, parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+q3_fri = data.frame(df_extinct$MP_MORPH.TE_Score, df_extinct$ML_MORPH.TeASC_Score, df_extinct$ML_MORPH.TEnoASC_Score)
+friedman.test(as.matrix(q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(q3_fri),
+                     g=factor(rep(names(q3_fri), each = nrow(q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Figure
+values <- c(df_extinct$MP_MORPH.TE_Score, df_extinct$ML_MORPH.TeASC_Score, df_extinct$ML_MORPH.TEnoASC_Score)
+group <- c(rep("MP", length(df_extinct$MP_MORPH.TE_Score)),
+             rep("ML MKV", length(df_extinct$ML_MORPH.TeASC_Score)),
+             rep("ML MK", length(df_extinct$ML_MORPH.TEnoASC_Score)))
+block = rep(1:length(df_extinct$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
+df_nemenyi <- data.frame(value = values, group = group, block=block)
+df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML MKV", "ML MK"))
+custom_palette <- c("MP" = "#339999", "ML MKV" = "#6f77b4", "ML MK" = "#cccccc")
+
+contribution_extinct = ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
+  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
+  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
+  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
+  labs(x = "", y = "% Phenomic/TE optimality score\n") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
+  scale_color_manual(values = custom_palette)
+```
+
+### Q3.3.3 Plot (Figure S5)
+
+```{r}
+s5= plot_grid(contribution_extant, 
+          contribution_extinct, 
+          labels = c("A", "B"),   # adds panel labels
+          ncol = 1)               # A on top of B
+# Save to JPG at 300 dpi
+ggsave("Figures/figS5_contributionPhenomic.jpg", s5, dpi = 300,
+       width = 6, height = 8, units = "in")  # adjust size
 ```
 
 
