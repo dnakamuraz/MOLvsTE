@@ -269,7 +269,7 @@ range(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
 
 ## Q1.2 Statistical tests
 
-### Q1.2.1 Extant (Table S3)
+### Q1.2.1 Extant (Table S4)
 
 Considering extant taxa only, there are 50 datasets in which MOL-TE incongruences are not equal to zero and 7 datasets in which they are equal to zero in MP and ML (with MKv). In ML (with MK, no bias correction), there are 49 datasets in which MOL-TE incongruences are not equal to zero and 8 datasets in which they are equal to zero. To test if MOL-TE incongruences are significantly different from zero, we can check if the distribution of observed values are significantly different from zero. 
 
@@ -320,7 +320,7 @@ q1c_spr
 ```
 In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the phenomic evidence tends to impact topologies in empirical studies.
 
-### Q1.2.2 Extant + extinct (Table S4)
+### Q1.2.2 Extant + extinct (Table S5)
 
 Now, let's test the same for the 22 data sets including fossils.
 
@@ -1169,7 +1169,7 @@ print("MP TE: Max no. polytomies")
 max(df_extinct$MP_nPolytomiesTE)
 ```
 
-### Q3.2.3 Statistical tests (Figure S4; Table S5)
+### Q3.2.3 Statistical tests (Figure S4; Table S6)
 Is the difference between MOL and TE resolution higher when fossils are incorporated? 
 
 ```{r}
