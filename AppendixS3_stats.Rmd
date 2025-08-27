@@ -396,7 +396,7 @@ custom_labels <- c(
 )
 s1_rf = ggplot(df_extant, aes(x=RFdist, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized RF", y=NULL,tag="A")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -413,7 +413,7 @@ s1_rf = ggplot(df_extant, aes(x=RFdist, y=comparison, fill=comparison))+
   )
 s1_cid = ggplot(df_extant, aes(x=CID, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized CID", y=NULL,tag="B")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -430,7 +430,7 @@ s1_cid = ggplot(df_extant, aes(x=CID, y=comparison, fill=comparison))+
   )
 s1_spr = ggplot(df_extant, aes(x=SPR, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized SPR", y=NULL,tag="C")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -498,7 +498,7 @@ custom_labels <- c(
 )
 s1_rf = ggplot(df_extinct, aes(x=RFdist, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized RF", y=NULL,tag="A")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -515,7 +515,7 @@ s1_rf = ggplot(df_extinct, aes(x=RFdist, y=comparison, fill=comparison))+
   )
 s1_cid = ggplot(df_extinct, aes(x=CID, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized CID", y=NULL,tag="B")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -532,7 +532,7 @@ s1_cid = ggplot(df_extinct, aes(x=CID, y=comparison, fill=comparison))+
   )
 s1_spr = ggplot(df_extinct, aes(x=SPR, y=comparison, fill=comparison))+
   geom_density_ridges() +
-  scale_x_continuous(limits = c(0, NA)) +  # Set lower limit to 0, prevents extrapolation below 0
+  scale_x_continuous(limits = c(0, 1)) +  # Set lower limit to 0, prevents extrapolation below 0
   theme_ridges()+
   labs(x="Normalized SPR", y=NULL,tag="C")+
   scale_fill_manual(values = custom_palette, labels = custom_labels)+
@@ -689,7 +689,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedRF, method = 
 plot_mp_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized RF\n", x = NULL)
 
@@ -698,7 +698,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedCID, method =
 plot_mp_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized CID\n", x = NULL)
 
@@ -707,7 +707,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedMeanSPR, meth
 plot_mp_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized SPR\n", x = "\n% Phenomic characters")
 ```
@@ -718,7 +718,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedRF, method
 plot_mlasc_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL) # Remove x and y axis titles
 
@@ -727,7 +727,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedCID, metho
 plot_mlasc_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+ # stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
   
@@ -736,7 +736,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedMeanSPR, m
 plot_mlasc_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = "\n% Phenomic characters")
 ```
@@ -747,7 +747,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedRF, meth
 plot_mlno_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
@@ -756,7 +756,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedCID, met
 plot_mlno_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+ # stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
@@ -765,7 +765,7 @@ cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR,
 plot_mlno_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedMeanSPR)) +
   geom_point() +  # scatter plot
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+ # stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = "\n% Phenomic characters")
 ```
