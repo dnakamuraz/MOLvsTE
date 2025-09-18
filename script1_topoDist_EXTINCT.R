@@ -271,11 +271,86 @@ df_bootstrap_means <- collect_bootstrap_means_df()
 View(df_bootstrap_means)
 
 # Check number of polytomies (necessary because I want to report the number of polytomies in the tree with fossils, before pruning)
-poly_counts_mp <- length(mp_te_cons)
-for (i in 1:length(mp_te_cons)) {
-  poly_counts[i] <- RNODE:::howManyPolytomies(mp_te_cons[[i]])
-}
-poly_counts_mp
+# No. polytomies: MP MOL
+mp_mol_polytomies = vector("list", length(mp_mol_cons))
+for (i in seq_along(mp_mol_cons)) {
+  mp_mol_polytomies[[i]] = RNODE:::howManyPolytomies(mp_mol_cons[[i]])}
+values <- unlist(mp_mol_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
+# No. polytomies: MP TE
+mp_te_polytomies = vector("list", length(mp_te_cons))
+for (i in seq_along(mp_te_cons)) {
+  mp_te_polytomies[[i]] = RNODE:::howManyPolytomies(mp_te_cons[[i]])}
+values <- unlist(mp_te_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
+# No. polytomies: ML MOL
+ml_mol_polytomies = vector("list", length(ml_mol_best))
+for (i in seq_along(ml_mol_best)) {
+  ml_mol_polytomies[[i]] = RNODE:::howManyPolytomies(ml_mol_best[[i]])}
+values <- unlist(ml_mol_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
+# No. polytomies: TE ASC (MKv)
+ml_te_asc_polytomies = vector("list", length(ml_te_asc_best))
+for (i in seq_along(ml_te_asc_best)) {
+  ml_te_asc_polytomies[[i]] = RNODE:::howManyPolytomies(ml_te_asc_best[[i]])}
+values <- unlist(ml_te_asc_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
+# No. polytomies: TE noASC (MK)
+ml_te_noasc_polytomies = vector("list", length(ml_te_noasc_best))
+for (i in seq_along(ml_te_noasc_best)) {
+  ml_te_noasc_polytomies[[i]] = RNODE:::howManyPolytomies(ml_te_noasc_best[[i]])}
+values <- unlist(ml_te_noasc_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
 
 #########################################
 # PREPARING TE TREES BY PRUNING FOSSILS #

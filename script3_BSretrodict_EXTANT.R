@@ -144,7 +144,7 @@ MLnoASClogistic <- MLnoASClogistic %>%
   mutate(optimality = "MLnoASC")
 # Merge all three dataframes
 combined_df <- bind_rows(MPlogistic, MLASClogistic, MLnoASClogistic)
-#write.csv(combined_df, file="../Dataset_R_q5_02-06-25.csv")
+write.csv(combined_df, file="../Dataset_R_q5_09-25.csv")
 
 #############################
 # EXPLORATORY DATA ANALYSES #

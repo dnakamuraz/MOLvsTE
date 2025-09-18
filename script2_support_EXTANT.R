@@ -110,13 +110,13 @@ for (prefix in prefixes) {
 }
 
 # Check number of datasets
-length(mp_mol_cons) # 52
-length(mp_mol_bs) # 52
-length(mp_te_cons) # 52
-length(mp_te_bs) # 52
-length(ml_mol) # 52
-length(ml_te_asc) # 52
-length(ml_te_noasc) # 52
+length(mp_mol_cons) # 57
+length(mp_mol_bs) # 57
+length(mp_te_cons) # 57
+length(mp_te_bs) # 57
+length(ml_mol) # 57
+length(ml_te_asc) # 57
+length(ml_te_noasc) # 57
 
 ########################################
 # DATASET: BOOTSTRAP OF SHARED CLADES  #
@@ -124,7 +124,7 @@ length(ml_te_noasc) # 52
 
 # A) MP MOL vs MP TE
 MPmol_MPte = vector("list", length(mp_mol_bs))
-# For each dataset, calculate metrics of topological distance
+# For each dataset, save BS of shared clades
 for (i in seq_along(mp_mol_bs)) {
   MPmol_MPte[[i]] = sharedNodes(mp_mol_bs[[i]], mp_te_bs[[i]], spearman=F)
 }
@@ -172,7 +172,7 @@ MPmol_MPte$Optimality <- "MP"
 
 # B) ML MOL vs ML TE ASC
 MLmol_MLteAsc = vector("list", length(ml_mol))
-# For each dataset, calculate metrics of topological distance
+# For each dataset, save BS of shared clades
 for (i in seq_along(ml_mol)) {
   MLmol_MLteAsc[[i]] = sharedNodes(ml_mol[[i]], ml_te_asc[[i]], spearman=F)
 }
@@ -220,7 +220,7 @@ MLmol_MLteAsc$Optimality <- "ML-ASC"
 
 # C) ML MOL vs ML TE noASC
 MLmol_MLteNoAsc = vector("list", length(ml_mol))
-# For each dataset, calculate metrics of topological distance
+# For each dataset, save BS of shared clades
 for (i in seq_along(ml_mol)) {
   MLmol_MLteNoAsc[[i]] = sharedNodes(ml_mol[[i]], ml_te_noasc[[i]], spearman=F)
 }
@@ -265,18 +265,111 @@ MLmol_MLteNoAsc <- do.call(rbind, MLmol_MLteNoAsc)
 # Add the Optimality column
 MLmol_MLteNoAsc$Optimality <- "ML-noASC"
 
-
 # Combine the dataframes
 combined_df <- rbind(MPmol_MPte, MLmol_MLteAsc, MLmol_MLteNoAsc)
 combined_df$ID = paste0(combined_df$ID, "_", combined_df$Optimality)
+# Convert support to numeric vectors
+combined_df$Support_Tree_1 <- as.numeric(as.character(combined_df$Support_Tree_1))
+combined_df$Support_Tree_2 <- as.numeric(as.character(combined_df$Support_Tree_2))
+# Remove <50 BS values (present in IQTREE)
+combined_df <- combined_df[combined_df$Support_Tree_1 >= 50 &
+                             combined_df$Support_Tree_2 >= 50, ]
 # Write to CSV file
-write.csv(combined_df, file = "/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_06-03-25.csv", row.names = FALSE)
+write.csv(combined_df, file = "Dataset_R_q4_09-25_shared.csv", row.names = FALSE)
 
+###################
+# BS UNIQUE NODES #
+###################
+
+# A) MP MOL vs MP TE
+MPmol_MPte_unique = vector("list", length(mp_mol_bs))
+# For each dataset, save BS of shared clades
+for (i in seq_along(mp_mol_bs)) {
+  MPmol_MPte_unique[[i]] = uniqueNodes(mp_mol_bs[[i]], mp_te_bs[[i]], composition=F)
+}
+# Convert nested lists to a flat dataframe
+MP_unique_df <- bind_rows(
+  lapply(seq_along(MPmol_MPte_unique), function(i) {
+    mol_df <- MPmol_MPte_unique[[i]][[1]] %>%
+      mutate(Analysis = i, Type = "MOL", Method = "MP")
+    
+    te_df <- MPmol_MPte_unique[[i]][[2]] %>%
+      mutate(Analysis = i, Type = "TE", Method = "MP")
+    
+    bind_rows(mol_df, te_df)
+  })
+)
+# Reorder columns
+MP_unique_df <- MP_unique_df %>% select(Analysis, Type, Method, Node, Support)
+View(MP_unique_df)
+
+# B) ML MOL vs ML TE ASC
+MLmol_MLteAsc_unique = vector("list", length(ml_mol))
+# For each dataset, save BS of shared clades
+for (i in seq_along(ml_mol)) {
+  MLmol_MLteAsc_unique[[i]] = uniqueNodes(ml_mol[[i]], ml_te_asc[[i]], composition=F)
+}
+# Convert nested lists to a flat dataframe
+ML_ASC_unique_df <- bind_rows(
+  lapply(seq_along(MLmol_MLteAsc_unique), function(i) {
+    mol_df <- MLmol_MLteAsc_unique[[i]][[1]] %>%
+      mutate(Analysis = i, Type = "MOL", Method = "ML_ASC")
+    te_df <- MLmol_MLteAsc_unique[[i]][[2]] %>%
+      mutate(Analysis = i, Type = "TE", Method = "ML_ASC")
+    bind_rows(mol_df, te_df)
+  })
+)
+# Reorder columns
+ML_ASC_unique_df <- ML_ASC_unique_df %>% select(Analysis, Type, Method, Node, Support)
+# Remove <50% BS from IQ-TREE
+ML_ASC_unique_df <- ML_ASC_unique_df %>%
+  mutate(Support = as.numeric(Support)) %>%
+  filter(Support >= 50)
+# View
+View(ML_ASC_unique_df) 
+
+# C) ML MOL vs MP TE noASC
+MLmol_MLteNoAsc_unique = vector("list", length(ml_mol))
+# For each dataset, save BS of shared clades
+for (i in seq_along(ml_mol)) {
+  MLmol_MLteNoAsc_unique[[i]] = uniqueNodes(ml_mol[[i]], ml_te_noasc[[i]], composition=F)
+}
+# Convert nested lists to a flat dataframe
+ML_noASC_unique_df <- bind_rows(
+  lapply(seq_along(MLmol_MLteNoAsc_unique), function(i) {
+    mol_df <- MLmol_MLteNoAsc_unique[[i]][[1]] %>%
+      mutate(Analysis = i, Type = "MOL", Method = "ML_noASC")
+    te_df <- MLmol_MLteNoAsc_unique[[i]][[2]] %>%
+      mutate(Analysis = i, Type = "TE", Method = "ML_noASC")
+    bind_rows(mol_df, te_df)
+  })
+)
+# Reorder columns
+ML_noASC_unique_df <- ML_noASC_unique_df %>% select(Analysis, Type, Method, Node, Support)
+# Remove <50% BS from IQ-TREE
+ML_noASC_unique_df <- ML_noASC_unique_df %>%
+  mutate(Support = as.numeric(Support)) %>%
+  filter(Support >= 50)
+# View
+View(ML_noASC_unique_df) 
+
+# Ensure Support is numeric in all dataframes
+MP_unique_df <- MP_unique_df %>% mutate(Support = as.numeric(Support))
+ML_ASC_unique_df <- ML_ASC_unique_df %>% mutate(Support = as.numeric(Support))
+ML_noASC_unique_df <- ML_noASC_unique_df %>% mutate(Support = as.numeric(Support))
+# Combine dataframes
+all_unique_df <- bind_rows(MP_unique_df, ML_ASC_unique_df, ML_noASC_unique_df)
+View(all_unique_df)
+# Save as CSV
+write.csv(all_unique_df, "./Dataset_R_q4_09-25_unique.csv", row.names = FALSE)
+
+
+
+'
 ########################
 # GLMMs in Posit Cloud #
 ########################
 
-'
 # Install and load the package
 if (!requireNamespace("dplyr", quietly = TRUE)) {
   install.packages("dplyr")
@@ -305,8 +398,9 @@ library("glmmTMB")
 library("tidyr")
 
 # Load the data
-df <- read.csv("df_q4.csv")
-df$Optimality <- factor(df$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
+setwd("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/")
+df <- read.csv("Dataset_R_q4_09-25.csv")
+df$Optimality <- factor(df$Optimality, levels = c("MP", "ML-MKv", "ML-MK"))
 df$SupportDiff = df$Support_Tree_1 - df$Support_Tree_2
 View(df)
 
@@ -322,8 +416,10 @@ mean(df_MP$Support_Tree_1) # MOL
 mean(df_MP$Support_Tree_2) # TE
 sd(df_MP$Support_Tree_1) # MOL
 sd(df_MP$Support_Tree_2) # TE
-var(df_MP$Support_Tree_1) # MOL
-var(df_MP$Support_Tree_2) # TE
+min(df_MP$Support_Tree_1) # MOL
+min(df_MP$Support_Tree_2) # TE
+max(df_MP$Support_Tree_1) # MOL
+max(df_MP$Support_Tree_2) # TE
 sum(df_MP$Support_Tree_1 == df_MP$Support_Tree_2) # number of clades with BS MOL = BS TE
 sum(df_MP$Support_Tree_1 > df_MP$Support_Tree_2) # number of clades with BS MOL > BS TE
 sum(df_MP$Support_Tree_1 < df_MP$Support_Tree_2) # number of clades with BS MOL < BS TE
@@ -577,7 +673,6 @@ grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
              nrow=2,
              heights= c(20,1))
 dev.off()
-'
 
 ################
 # UNIQUE NODES #
@@ -683,3 +778,4 @@ mlnoasc_total_clades = mlnoasc_shared_clades+mlnoasc_unique_MOL_clades+mlasc_uni
 mlnoasc_total_clades
 # ML: Check the proportion of shared/total
 mlnoasc_shared_clades/mlnoasc_total_clades
+'

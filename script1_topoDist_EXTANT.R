@@ -235,6 +235,38 @@ MLmol_MLteAsc_df$dataset = names(ml_mol_best)
 MLmol_MLteAsc_df <- MLmol_MLteAsc_df[, c(ncol(MLmol_MLteAsc_df), 1:(ncol(MLmol_MLteAsc_df) - 1))]
 MLmol_MLteAsc_df
 #write_csv(MLmol_MLteAsc_df, "../MLmol_MLteAsc_df.csv")
+# No. polytomies: MOL
+ml_mol_polytomies = vector("list", length(ml_mol_best))
+for (i in seq_along(ml_mol_best)) {
+  ml_mol_polytomies[[i]] = RNODE:::howManyPolytomies(ml_mol_best[[i]])}
+values <- unlist(ml_mol_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
+# No. polytomies: TE ASC
+ml_te_asc_polytomies = vector("list", length(ml_te_asc_best))
+for (i in seq_along(ml_te_asc_best)) {
+  ml_te_asc_polytomies[[i]] = RNODE:::howManyPolytomies(ml_te_asc_best[[i]])}
+values <- unlist(ml_te_asc_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
 
 # C) ML MOL vs ML TE noASC
 MLmol_MLteNoAsc = vector("list", length(ml_mol_best))
@@ -257,3 +289,19 @@ MLmol_MLteNoAsc_df$dataset = names(ml_mol_best)
 MLmol_MLteNoAsc_df <- MLmol_MLteNoAsc_df[, c(ncol(MLmol_MLteNoAsc_df), 1:(ncol(MLmol_MLteNoAsc_df) - 1))]
 View(MLmol_MLteNoAsc_df)
 #write.csv(MLmol_MLteNoAsc_df, "../MLmol_MLteNoAsc_df.csv")
+# No. polytomies: TE noASC
+ml_te_noasc_polytomies = vector("list", length(ml_te_noasc_best))
+for (i in seq_along(ml_te_noasc_best)) {
+  ml_te_noasc_polytomies[[i]] = RNODE:::howManyPolytomies(ml_te_noasc_best[[i]])}
+values <- unlist(ml_te_noasc_polytomies)
+mean_val <- mean(values, na.rm = TRUE)
+min_val  <- min(values, na.rm = TRUE)
+max_val  <- max(values, na.rm = TRUE)
+sd_val   <- sd(values, na.rm = TRUE)
+summary_stats <- data.frame(
+  Mean = mean_val,
+  Min  = min_val,
+  Max  = max_val,
+  SD   = sd_val
+)
+summary_stats
