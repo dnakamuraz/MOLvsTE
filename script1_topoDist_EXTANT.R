@@ -193,26 +193,119 @@ length(ml_te_noasc_bs) # 57
 
 # A) MP MOL vs MP TE
 MPmol_MPte = vector("list", length(mp_mol_cons))
-# For each dataset, calculate metrics of topological distance
-for (i in seq_along(mp_mol_cons)) {
-  MPmol_MPte[[i]] = summaryTopologicalDist(mp_mol_cons[[i]], mp_te_cons[[i]])
+# Compute SPR
+SPR <- vector("list", length(mp_mol_mpts)) # empty list
+batch_size <- 5 # run analyses in batches of 5 to avoid crash
+n <- length(mp_mol_mpts) # number of analyses
+for (start in seq(1, n, by = batch_size)) {
+  end <- min(start + batch_size - 1, n)
+  cat("\nProcessing batch:", start, "to", end, "\n")
+  for (i in start:end) {
+    SPR[[i]] <- RNODE::multiSPR(
+      mp_mol_mpts[[i]]$mp_mol_mpts,
+      mp_te_mpts[[i]]$mp_te_mpts,
+      normalization = TRUE,
+      method = "all"
+    )
+    cat("Result for i =", i, "\n")
+    print(SPR[[i]])
+  }
+  saveRDS(SPR, file = "SPR_partial.rds")
+  cat("Saved progress up to index", end, "\n")
+  gc()
 }
-# Convert list to a df
-MPmol_MPte_df <- do.call(rbind, lapply(MPmol_MPte, as.data.frame))
-# Compute SPR (CHECK VALUES AND, IF NA IS PRESENT, CALCULATE MANUALLY)
-SPR = vector("list", length(mp_mol_mpts)) # empty list
-for (i in seq_along(mp_mol_mpts)) {SPR[[i]] = RNODE::multiSPR(mp_mol_mpts[[i]]$mp_mol_mpts,
-                                                              mp_te_mpts[[i]]$mp_te_mpts, 
-                                                              normalization=T, 
-                                                              method = 'minSPR')}
-MPmol_MPte_df$SPR = SPR # Append vector of SPR to df
+SPR <- lapply(SPR, function(x) {
+  # If the element is a single value
+  if (length(x) == 1) {
+    data.frame(
+      minRF = x,
+      maxRF = x,
+      meanRF = x
+    )
+  } else {
+    # Otherwise keep it as is
+    x
+  }
+})
+# Compute RF
+RF <- vector("list", length(mp_mol_mpts)) # empty list
+batch_size <- 5 # run analyses in batches of 5 to avoid crash
+n <- length(mp_mol_mpts) # number of analyses
+for (start in seq(1, n, by = batch_size)) {
+  end <- min(start + batch_size - 1, n)
+  cat("\nProcessing batch:", start, "to", end, "\n")
+  for (i in start:end) {
+    RF[[i]] <- RNODE::multiRF(
+      mp_mol_mpts[[i]]$mp_mol_mpts,
+      mp_te_mpts[[i]]$mp_te_mpts,
+      normalization = TRUE,
+      method = "all"
+    )
+    cat("Result for i =", i, "\n")
+    print(RF[[i]])
+  }
+  saveRDS(RF, file = "SPR_partial.rds")
+  cat("Saved progress up to index", end, "\n")
+  gc()
+}
+RF <- lapply(RF, function(x) {
+  # If the element is a single value
+  if (length(x) == 1) {
+    data.frame(
+      minRF = x,
+      maxRF = x,
+      meanRF = x
+    )
+  } else {
+    # Otherwise keep it as is
+    x
+  }
+})
+# Compute CID
+CID <- vector("list", length(mp_mol_mpts)) # empty list
+batch_size <- 5 # run analyses in batches of 5 to avoid crash
+n <- length(mp_mol_mpts) # number of analyses
+for (start in seq(1, n, by = batch_size)) {
+  end <- min(start + batch_size - 1, n)
+  cat("\nProcessing batch:", start, "to", end, "\n")
+  for (i in start:end) {
+    CID[[i]] <- RNODE::multiCID(
+      mp_mol_mpts[[i]]$mp_mol_mpts,
+      mp_te_mpts[[i]]$mp_te_mpts,
+      normalization = TRUE,
+      method = "all"
+    )
+    cat("Result for i =", i, "\n")
+    print(CID[[i]])
+  }
+  saveRDS(CID, file = "SPR_partial.rds")
+  cat("Saved progress up to index", end, "\n")
+  gc()
+}
+CID <- lapply(CID, function(x) {
+  # If the element is a single value
+  if (length(x) == 1) {
+    data.frame(
+      minCID = x,
+      maxCID = x,
+      meanCID = x
+    )
+  } else {
+    # Otherwise keep it as is
+    x
+  }
+})
+# Summarize in a dataframe
+MPmol_MPte_df <- data.frame(
+  index = seq_along(SPR),
+  setNames(do.call(rbind, lapply(SPR, unlist)), c("minSPR","maxSPR","meanSPR")),
+  setNames(do.call(rbind, lapply(RF,  unlist)), c("minRF","maxRF","meanRF")),
+  setNames(do.call(rbind, lapply(CID, unlist)), c("minCID","maxCID","meanCID"))
+)
 # Add a new column with the category of comparison
 MPmol_MPte_df$comparison = "MPmol_MPte"
-# Add a new column with the dataset name
-MPmol_MPte_df$dataset = names(mp_mol_cons)
-MPmol_MPte_df <- MPmol_MPte_df[, c(ncol(MPmol_MPte_df), 1:(ncol(MPmol_MPte_df) - 1))]
 MPmol_MPte_df
-#write_csv(MPmol_MPte_df, "../MPmol_MPte.csv")
+#write_csv(MPmol_MPte_df, "../MPmol_MPte_extant.csv")
 
 # B) ML MOL vs ML TE ASC
 MLmol_MLteAsc = vector("list", length(ml_mol_best))
@@ -235,6 +328,7 @@ MLmol_MLteAsc_df$dataset = names(ml_mol_best)
 MLmol_MLteAsc_df <- MLmol_MLteAsc_df[, c(ncol(MLmol_MLteAsc_df), 1:(ncol(MLmol_MLteAsc_df) - 1))]
 MLmol_MLteAsc_df
 #write_csv(MLmol_MLteAsc_df, "../MLmol_MLteAsc_df.csv")
+
 # No. polytomies: MOL
 ml_mol_polytomies = vector("list", length(ml_mol_best))
 for (i in seq_along(ml_mol_best)) {

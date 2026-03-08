@@ -5,7 +5,7 @@ date: "2025-09-14"
 output: html_document
 ---
 
-Phylogenetic analyses of extant taxa have relied mostly on DNA sequences. The proportion of phenomic characters relative to molecular characters has been reduced with the advent of massive parallel DNA sequencing. However, phenomic evidence enables sampling taxa without molecular data (such as fossils). Here we examine the impact of phenomic evidence on phylogenetic analyses dominated by DNA sequences. We answer five questions using 57 empirical data sets (22 with morphology-only taxa). First, are topologies impacted by the addition of phenomic evidence in TE trees relative to MOL trees? Second, are distances between MOL and TE topologies associated with the proportion of phenomic characters? Third, is the addition of phenomic evidence equally impactful on ML and MP topologies? Fourth, how do bootstrap values of shared clades differ between MOL and TE trees? Fifth, can we retrodict the occurrence (i.e. monophyly) of TE groups based on bootstrap values of MOL clades? These questions were assessed with and without fossils.
+To test the assumption that phenomic partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including phenomic-only terminals, 14 including fossils) and evaluated the impact of phenomic evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following six questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of phenomic characters? (3) Do the effects of phenomic evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does phenomic evidence contribute differently to the TE optimality score under ML and MP analyses? (5) Does phenomic evidence affect the bootstrap values of clades shared by DNA and TE trees? (6) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
 
 # PRE-AMBLE
 
@@ -44,7 +44,7 @@ Dataset with MOL-TE topological distances were calculated in script 1.
 # Load data
 df <- read.csv("Dataset_R_q123_08-25.csv")
 
-print("EXTANT: Number of datasets impacted by the addition of phenomic evidence")
+print("EXTANT: Number of datasets (extant) impacted by the addition of phenomic evidence")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 print("MP MOL vs MP TE (number)")
 sum(df_extant$MP_MOLvsTE_NormalizedRF > 0) 
@@ -59,7 +59,7 @@ sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0)
 print("ML MOL vs ML TE noASC (proportion)")
 sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extant) 
 
-print("EXTINCT: Number of datasets impacted by the addition of phenomic evidence")
+print("EXTINCT: Number of datasets (extinct) impacted by the addition of phenomic evidence")
 df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
 print("MP MOL vs MP TE (number)")
 sum(df_extinct$MP_MOLvsTE_NormalizedRF > 0) 
@@ -73,9 +73,25 @@ print("ML MOL vs ML TE noASC")
 sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) 
 print("ML MOL vs ML TE noASC (proportion)")
 sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extinct) 
+
+print("EXTANT: Number of datasets (extant keeping the same datasets from extinct) impacted by the addition of phenomic evidence")
+df_filtered <- df[df$Dataset %in% df_extinct$Dataset, ]
+df_filtered <- df_filtered %>% filter(grepl("Extant", Type)) # keep only extant datasets
+print("MP MOL vs MP TE (number)")
+sum(df_filtered$MP_MOLvsTE_NormalizedRF > 0) 
+print("MP MOL vs MP TE (proportion)")
+sum(df_filtered$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_filtered) 
+print("ML MOL vs ML TE ASC (number)")
+sum(df_filtered$ML_MOLvsTEASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE ASC (proportion)")
+sum(df_filtered$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df_filtered) 
+print("ML MOL vs ML TE noASC")
+sum(df_filtered$ML_MOLvsTEnoASC_NormalizedRF > 0) 
+print("ML MOL vs ML TE noASC (proportion)")
+sum(df_filtered$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_filtered) 
 ```
 
-Considering extant taxa only (n = 57), the phenomic evidence impacted topologies in 87.7% (50/57) of the datasets in MP and ML (MKv with bias correction) and 85.9% (49/57) in ML (MK without bias correction). Considering both extant and extinct taxa (n = 22), the phenomic evidence impacted topologies in 95.5% (21/22) of the data sets and 81.8% (18/22) in ML (both in MKv and MK).
+Considering extant taxa only (n = 57), the phenomic evidence impacted topologies in 87.7% (50/57) of the datasets in MP and ML (MKv with bias correction) and 85.9% (49/57) in ML (MK without bias correction). Considering both extant and extinct taxa (n = 22), the phenomic evidence impacted topologies in 95.5% (21/22) of the datasets and 81.8% (18/22) in ML (both in MKv and MK). Considering a reduced dataset of extant taxa (only extant taxa for these 22 datasets where extinct taxa are available), the phenomic evidence impacted topologies in 90.1% (20/22) of the datasets in MP and ML (both in MKv and MK).
 
 ## Q1.1 Data exploration
 
@@ -271,6 +287,103 @@ sd(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
 range(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR))
 ```
 
+### Q1.1.3 Reduced (Table S10)
+
+Considering only extant taxa in datasets where extinct taxa are available (n = 22):
+
+```{r}
+print("1.a MP MOL vs MP TE")
+print("No. shared clades")
+mean(df_filtered$MP_MOLvsTE_nSharedClades)
+sd(df_filtered$MP_MOLvsTE_nSharedClades)
+range(df_filtered$MP_MOLvsTE_nSharedClades)
+print("No. unique MOL clades")
+mean(df_filtered$MP_nUniqueCladesMOL)
+sd(df_filtered$MP_nUniqueCladesMOL)
+range(df_filtered$MP_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_filtered$MP_nUniqueCladesTE)
+sd(df_filtered$MP_nUniqueCladesTE)
+range(df_filtered$MP_nUniqueCladesTE)
+print("RF")
+mean(df_filtered$MP_MOLvsTE_NormalizedRF)
+sd(df_filtered$MP_MOLvsTE_NormalizedRF)
+range(df_filtered$MP_MOLvsTE_NormalizedRF)
+print("CID")
+mean(df_filtered$MP_MOLvsTE_NormalizedCID)
+sd(df_filtered$MP_MOLvsTE_NormalizedCID)
+range(df_filtered$MP_MOLvsTE_NormalizedCID)
+print("Mean SPR")
+mean(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMeanSPR))
+sd(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMeanSPR))
+range(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMeanSPR))
+print("Min SPR")
+mean(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMinSPR))
+sd(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMinSPR))
+range(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMinSPR))
+print("Resolution MOL")
+mean(as.numeric(df_filtered$MP_nPolytomiesMOL))
+sd(as.numeric(df_filtered$MP_nPolytomiesMOL))
+range(as.numeric(df_filtered$MP_nPolytomiesMOL))
+print("Resolution TE")
+mean(as.numeric(df_filtered$MP_nPolytomiesTE))
+sd(as.numeric(df_filtered$MP_nPolytomiesTE))
+range(as.numeric(df_filtered$MP_nPolytomiesTE))
+
+cat("\n1.b ML MOL vs ML TE MKv")
+print("No. shared clades")
+mean(df_filtered$ML_MOLvsTEASC_nSharedClades)
+sd(df_filtered$ML_MOLvsTEASC_nSharedClades)
+range(df_filtered$ML_MOLvsTEASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_filtered$ML_MOLvsTEASC_nUniqueCladesMOL)
+sd(df_filtered$ML_MOLvsTEASC_nUniqueCladesMOL)
+range(df_filtered$ML_MOLvsTEASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_filtered$ML_MOLvsTEASC_nUniqueCladesTEASC)
+sd(df_filtered$ML_MOLvsTEASC_nUniqueCladesTEASC)
+range(df_filtered$ML_MOLvsTEASC_nUniqueCladesTEASC)
+print("RF")
+mean(df_filtered$ML_MOLvsTEASC_NormalizedRF)
+sd(df_filtered$ML_MOLvsTEASC_NormalizedRF)
+range(df_filtered$ML_MOLvsTEASC_NormalizedRF)
+print("CID")
+mean(df_filtered$ML_MOLvsTEASC_NormalizedCID)
+sd(df_filtered$ML_MOLvsTEASC_NormalizedCID)
+range(df_filtered$ML_MOLvsTEASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR))
+sd(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR))
+range(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR))
+
+cat("\n1.c MLmol_MLteNoAsc")
+print("No. shared clades")
+mean(df_filtered$ML_MOLvsTEnoASC_nSharedClades)
+sd(df_filtered$ML_MOLvsTEnoASC_nSharedClades)
+range(df_filtered$ML_MOLvsTEnoASC_nSharedClades)
+print("No. unique MOL clades")
+mean(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+sd(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+range(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesMOL)
+print("No. unique TE clades")
+mean(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+sd(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+range(df_filtered$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC)
+print("RF")
+mean(df_filtered$ML_MOLvsTEnoASC_NormalizedRF)
+sd(df_filtered$ML_MOLvsTEnoASC_NormalizedRF)
+range(df_filtered$ML_MOLvsTEnoASC_NormalizedRF)
+print("CID")
+mean(df_filtered$ML_MOLvsTEnoASC_NormalizedCID)
+sd(df_filtered$ML_MOLvsTEnoASC_NormalizedCID)
+range(df_filtered$ML_MOLvsTEnoASC_NormalizedCID)
+print("SPR")
+mean(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+sd(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+range(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR))
+```
+
+
 ## Q1.2 Statistical tests
 
 ### Q1.2.1 Extant (Table S4)
@@ -372,6 +485,53 @@ q1c_spr <- t.test(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedMeanSPR), mu =
 q1c_spr
 ```
 
+### Q1.2.3 Reduced (Table S11)
+
+Now, let's test the same for the 22 data sets including fossils.
+
+```{r}
+print("1a. MPmol vs MPte")
+print("RF")
+shapiro.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedRF)) # non-parametric, p < 0.05
+q1a_rf <- wilcox.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1a_rf
+print("CID")
+shapiro.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedCID))  # non-parametric, p < 0.05
+q1a_cid <- wilcox.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1a_cid
+print("SPR")
+shapiro.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMinSPR)) # non-parametric, p < 0.05
+q1a_spr <- wilcox.test(as.numeric(df_filtered$MP_MOLvsTE_NormalizedMeanSPR), mu = 0, exact=F, conf.int=T)
+q1a_spr
+
+print("1b. MLmol vs MLteAsc")
+print("RF")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedRF)) # non-parametric, p < 0.05
+q1b_rf <- wilcox.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1b_rf
+print("CID")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedCID)) # non-parametric, p < 0.05
+q1b_cid <- wilcox.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedCID), mu = 0, exact=F, conf.int=T)
+q1b_cid
+print("SPR")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR)) # parametric, p > 0.05
+q1b_spr <- t.test(as.numeric(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR), mu = 0)
+q1b_spr
+
+print("1c. MLmol vs MLteNoAsc")
+print("RF")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedRF)) # non-parametric, p < 0.05
+q1c_rf <- wilcox.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedRF), mu = 0, exact=F, conf.int=T)
+q1c_rf
+print("CID")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedCID)) # non-parametric, p < 0.05
+q1c_cid <- t.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedCID), mu = 0)
+q1c_cid
+print("SPR")
+shapiro.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR)) # non-parametric, p < 0.05
+q1c_spr <- t.test(as.numeric(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR), mu = 0)
+q1c_spr
+```
 
 ## Q1.3 Figures
 
@@ -774,6 +934,100 @@ plot_mlno_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEn
   labs(y = NULL, x = "\n% Phenomic characters")
 ```
 
+### Q2.1.3 Reduced (Table S12)
+
+```{r, warning=F}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_filtered <- df[df$Dataset %in% df_extinct$Dataset, ]
+df_filtered <- df_filtered %>% filter(grepl("Extant", Type)) # keep only extant datasets
+
+print("RF: MP MOL vs MP TE")
+cor.test(df_filtered$X.Morph.Total, df_filtered$MP_MOLvsTE_NormalizedRF, method = "spearman")
+plot_mp_rf = ggplot(df_filtered, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized RF\n", x = NULL)
+
+print("CID: MP MOL vs MP TE")
+cor.test(df_filtered$X.Morph.Total, df_filtered$MP_MOLvsTE_NormalizedCID, method = "spearman")
+plot_mp_cid = ggplot(df_filtered, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized CID\n", x = NULL)
+
+print("SPR: MP MOL vs MP TE")
+cor.test(df_filtered$X.Morph.Total, df_filtered$MP_MOLvsTE_NormalizedMeanSPR, method = "spearman")
+plot_mp_spr = ggplot(df_filtered, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = "Normalized SPR\n", x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+print("RF: ML MOL vs ML TE (ASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
+plot_mlasc_rf = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL) # Remove x and y axis titles
+
+print("CID: ML MOL vs ML TE (ASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
+plot_mlasc_cid = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+  
+print("SPR: ML MOL vs ML TE (ASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR, method = "spearman")
+plot_mlasc_spr = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
+```{r, warning=F}
+print("RF: ML MOL vs ML TE (noASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
+plot_mlno_rf = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+print("CID: ML MOL vs ML TE (noASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
+plot_mlno_cid = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(x = NULL, y = NULL)  # Remove x and y axis titles
+
+print("SPR: ML MOL vs ML TE (noASC)")
+cor.test(df_filtered$X.Morph.Total, df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR, method = "spearman")
+plot_mlno_spr = ggplot(df_filtered, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedMeanSPR)) +
+  geom_point() +  # scatter plot
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+  theme_minimal()+
+  labs(y = NULL, x = "\n% Phenomic characters")
+```
+
 ## Q2.2 Figures
 
 ### Q2.2.1 Extant (Figure 3)
@@ -1104,8 +1358,101 @@ grid.arrange(plot_q3_rf + theme(plot.margin = margin(.01,1,1,.01)),
 dev.off()
 ```
 
+### Q3.1.4 Reduced (Table S13)
 
-## Q3.2 Number of politomies
+Considering only extant taxa
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_08-25.csv")
+df_filtered <- df[df$Dataset %in% df_filtered$Dataset, ]
+df_filtered <- df_filtered %>% filter(grepl("Extant", Type)) # keep only extant datasets
+
+# Create an empty data frame for RF
+q3_rf_reduced <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of RF into the data frame
+q3_rf_reduced <- rbind(q3_rf_reduced, data.frame(value = df_filtered$MP_MOLvsTE_NormalizedRF, source = rep("MP_MOLvsTE", length(df_filtered$MP_MOLvsTE_NormalizedRF))))
+q3_rf_reduced <- rbind(q3_rf_reduced, data.frame(value = df_filtered$ML_MOLvsTEASC_NormalizedRF, source = rep("ML_MOLvsTEASC", length(df_filtered$ML_MOLvsTEASC_NormalizedRF))))
+q3_rf_reduced <- rbind(q3_rf_reduced, data.frame(value = df_filtered$ML_MOLvsTEnoASC_NormalizedRF, source = rep("ML_MOLvsTEnoASC", length(df_filtered$ML_MOLvsTEnoASC_NormalizedRF))))
+# Summary of medians
+q3_rf_reduced %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
+
+# Create an empty data frame for CID
+q3_cid_reduced <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_cid_reduced <- rbind(q3_cid_reduced, data.frame(value = df_filtered$MP_MOLvsTE_NormalizedCID, source = rep("MP_MOLvsTE", length(df_filtered$MP_MOLvsTE_NormalizedCID))))
+q3_cid_reduced <- rbind(q3_cid_reduced, data.frame(value = df_filtered$ML_MOLvsTEASC_NormalizedCID, source = rep("ML_MOLvsTEASC", length(df_filtered$ML_MOLvsTEASC_NormalizedCID))))
+q3_cid_reduced <- rbind(q3_cid_reduced, data.frame(value = df_filtered$ML_MOLvsTEnoASC_NormalizedCID, source = rep("ML_MOLvsTEnoASC", length(df_filtered$ML_MOLvsTEnoASC_NormalizedCID))))
+# Summary of medians
+q3_cid_reduced %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
+
+# Create an empty data frame for SPR
+q3_spr_reduced <- data.frame(value = numeric(0), source = character(0))
+# Combine the vectors of CID into the data frame
+q3_spr_reduced <- rbind(q3_spr_reduced, data.frame(value = df_filtered$MP_MOLvsTE_NormalizedMeanSPR, source = rep("MP_MOLvsTE", length(df_filtered$MP_MOLvsTE_NormalizedMeanSPR))))
+q3_spr_reduced <- rbind(q3_spr_reduced, data.frame(value = df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEASC", length(df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR))))
+q3_spr_reduced <- rbind(q3_spr_reduced, data.frame(value = df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR, source = rep("ML_MOLvsTEnoASC", length(df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR))))
+# Summary of medians
+q3_spr_reduced %>%
+  group_by(source) %>%
+  summarise(
+    median_value = median(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    n = n())
+```
+
+```{r, warning=FALSE}
+print("RF")
+shapiro.test(q3_rf_reduced$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups (non-paired values)")
+kruskal.test(q3_rf_reduced$value ~ q3_rf_reduced$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_rf_fri = data.frame(df_filtered$MP_MOLvsTE_NormalizedRF, df_filtered$ML_MOLvsTEASC_NormalizedRF, df_filtered$ML_MOLvsTEnoASC_NormalizedRF)
+friedman.test(as.matrix(q3_rf_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_rf_fri),
+                     g=factor(rep(names(q3_rf_fri), each = nrow(q3_rf_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+print("CID")
+shapiro.test(q3_cid_reduced$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups")
+kruskal.test(q3_cid_reduced$value ~ q3_cid_reduced$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_cid_fri = data.frame(df_filtered$MP_MOLvsTE_NormalizedCID, df_filtered$ML_MOLvsTEASC_NormalizedCID, df_filtered$ML_MOLvsTEnoASC_NormalizedCID)
+friedman.test(as.matrix(q3_cid_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_cid_fri),
+                     g=factor(rep(names(q3_cid_fri), each = nrow(q3_cid_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+print("SPR")
+shapiro.test(q3_spr_reduced$value) # p < 0.05, non-parametric
+print("Kruskal-Wallis: non-parametric test for multiple groups")
+kruskal.test(q3_spr_reduced$value ~ q3_spr_reduced$source)
+print("Friedman: non-parametric test for paired values and multiple groups")
+q3_spr_fri = data.frame(df_filtered$MP_MOLvsTE_NormalizedMeanSPR, df_filtered$ML_MOLvsTEASC_NormalizedMeanSPR, df_filtered$ML_MOLvsTEnoASC_NormalizedMeanSPR)
+friedman.test(as.matrix(q3_spr_fri))
+print("Wilcoxon: pairwise comparisons for paired values")
+pairwise.wilcox.test(x=unlist(q3_spr_fri),
+                     g=factor(rep(names(q3_spr_fri), each = nrow(q3_spr_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+```
+
+## Q3.2 Number of polytomies
 
 One importance difference, however, is the fact that trees were always binary in ML MOL and ML TE, whereas the addition of phenomic evidence can maintain, increase or decrease resolution of MP trees.
 
@@ -1237,6 +1584,16 @@ df_friedman <- df_wide %>%
 friedman_test <- friedman.test(as.matrix(df_friedman))
 friedman_test
 # Posthoc Wilcoxon
+# Add row ID for pairing
+df_plot <- df_wide %>%
+  mutate(row_id = row_number())
+# Convert to long format
+df_long <- df_plot %>%
+  pivot_longer(
+    cols = c(MP_nPolytomiesMOL, MP_nPolytomiesTE, MP_nPolytomiesTE_Extinct),
+    names_to = "group",
+    values_to = "value"
+  )
 pairwise.wilcox.test(df_long$value, df_long$group, 
                      paired = TRUE, 
                      p.adjust.method = "bonferroni")
@@ -1292,7 +1649,7 @@ ggsave(filename = "Figures/figS4_polytomies_MP.jpg",
 
 ## Q3.3 Contribution of phenomic evidence to the TE optimality score
 
-In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses. 
+In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses.
 
 ### Q3.3.1 Extant
 
@@ -1451,7 +1808,9 @@ ggsave("Figures/figS5_contributionPhenomic.jpg", s5, dpi = 300,
 
 # Q4. How do bootstrap values of shared clades differ between MOL and TE trees? 
 
-## Q4.1 Unique vs Shared (Table 1 and S7, Figure 6)
+## Q4.1 Unique vs Shared 
+
+### Q4.2 With and without fossils (Table 1 and S7, Figure 6)
 
 Before testing the differences of BS values in shared clades between MOL and TE trees, let's explore the differences of BS values between shared and unique clades.
 
@@ -1515,7 +1874,7 @@ df_uniqueVSshared <- df_uniqueVSshared %>%
 df_uniqueVSshared <- df_uniqueVSshared %>%
   mutate(Sampling = "Without_fossils")
 
-View(df_uniqueVSshared)
+#View(df_uniqueVSshared)
 ```
 
 Now, we need to format the datasets including fossils.
@@ -1576,14 +1935,14 @@ df_uniqueVSshared_extinct <- df_uniqueVSshared_extinct %>%
 # Add column Sampling (with vs without fossils)
 df_uniqueVSshared_extinct <- df_uniqueVSshared_extinct %>%
   mutate(Sampling = "With_fossils")
-View(df_uniqueVSshared_extinct)
+#View(df_uniqueVSshared_extinct)
 ```
 
 The dataframes are formatted. Now, we can combine them, perform exploratory data analyses, and plot them.
 
 ```{r}
 # Combine dataframes with and without fossils
-df_combined <- bind_rows(df_combined, df_uniqueVSshared_extinct)
+df_combined <- bind_rows(df_uniqueVSshared, df_uniqueVSshared_extinct)
 df_combined <- df_combined %>%
   mutate(Optimality = recode(Optimality,
     "ML_ASC"   = "ML_MKv",
@@ -1592,7 +1951,7 @@ df_combined <- df_combined %>%
     "ML_noASC" = "ML_MK",
     "ML MK"    = "ML_MK"
   ))
-View(df_combined)
+#View(df_combined)
 
 # Exploratory data analysis
 q4_explore = df_combined %>%
@@ -1604,7 +1963,7 @@ q4_explore = df_combined %>%
     sd_Support = sd(Support, na.rm = TRUE),
     .groups = "drop"
   )
-View(q4_explore)
+#View(q4_explore)
 
 # Rename Optimality
 df_combined <- df_combined %>%
@@ -1861,6 +2220,283 @@ pairwise_with_df %>%
 
 As expected, bootstrap values of unique clades are statistically lower than those from shared clades.
 
+### Q4.1.2 Reduced (Table S10)
+
+Now, we include only the reduced dataset of extant data (including only the datasets for which fossils are available, but now excluding fossils).
+
+```{r}
+# Load shared clades
+df_shared = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_09-25_shared.csv")
+# Load unique clades
+df_unique = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_09-25_unique.csv")
+
+# Keep the datasets for which fossils are available
+df_shared <- df_shared[df_shared$Dataset %in% c(3, 7, 8, 9, 10, 11, 13, 17, 21, 24, 28, 29, 31, 38, 39, 40, 42, 46, 48, 52, 54, 57), ]
+df_unique <- df_unique[df_unique$Analysis %in% c(3, 7, 8, 9, 10, 11, 13, 17, 21, 24, 28, 29, 31, 38, 39, 40, 42, 46, 48, 52, 54, 57), ]
+
+# Rename the column Analysis to Dataset
+df_unique <- df_unique %>% 
+  rename(Dataset = Analysis)
+# Rename the column Method to Optimality
+df_unique <- df_unique %>% 
+  rename(Optimality = Method)
+# Rename the column Type to Analysis
+df_unique <- df_unique %>% 
+  rename(Analysis = Type)
+# Create a new column called Type (unique vs shared)
+df_unique <- df_unique %>%
+  dplyr::mutate(Type = "unique")
+
+
+# Create a new dataframe from df_shared with the selected columns
+df_shared_stack <- df_shared %>%
+  transmute(
+    Dataset = Dataset,
+    Analysis = "MOL",                 # new value
+    Optimality = Optimality,
+    Node = Node_Tree_1,               # take Node_Tree_1
+    Support = Support_Tree_1,         # take Support_Tree_1
+    Type = "shared"                   # new value
+  )
+# Bind the new rows below df_unique
+df_unique_extended <- bind_rows(df_unique, df_shared_stack)
+# Create a new dataframe from df_shared for Tree 2
+df_shared_stack2 <- df_shared %>%
+  transmute(
+    Dataset = Dataset,
+    Analysis = "TE",                  # new value for Tree 2
+    Optimality = Optimality,
+    Node = Node_Tree_2,               # take Node_Tree_2
+    Support = Support_Tree_2,         # take Support_Tree_2
+    Type = "shared"                   # new value
+  )
+# Append Tree 2 rows to df_unique_extended (which already contains Tree 1 and unique rows)
+df_uniqueVSshared_reduced <- bind_rows(df_unique_extended, df_shared_stack2)
+
+# Rename
+df_uniqueVSshared_reduced <- df_uniqueVSshared_reduced %>%
+  mutate(
+    Optimality = recode(
+      Optimality,
+      "ML-ASC" = "ML_ASC",
+      "ML-noASC" = "ML_noASC"
+    )
+  )
+# Add the column Sampling (without fossils vs with fossils)
+df_uniqueVSshared_reduced <- df_uniqueVSshared_reduced %>%
+  mutate(Sampling = "Without_fossils")
+
+#View(df_uniqueVSshared_reduced)
+
+# Combine dataframes with and without fossils
+df_combined <- bind_rows(df_uniqueVSshared_reduced, df_uniqueVSshared_extinct)
+df_combined <- df_combined %>%
+  mutate(Optimality = recode(Optimality,
+    "ML_ASC"   = "ML_MKv",
+    "ML MKv"   = "ML_MKv",
+    "ML MKV"   = "ML_MKv",
+    "ML_noASC" = "ML_MK",
+    "ML MK"    = "ML_MK"
+  ))
+#View(df_combined)
+
+# Exploratory data analysis
+q4_explore = df_combined %>%
+  group_by(Analysis, Optimality, Type, Sampling) %>%
+  summarise(
+    min_Support = min(Support, na.rm = TRUE),
+    max_Support = max(Support, na.rm = TRUE),
+    mean_Support = mean(Support, na.rm = TRUE),
+    sd_Support = sd(Support, na.rm = TRUE),
+    .groups = "drop"
+  )
+#View(q4_explore)
+
+# Rename Optimality
+df_combined <- df_combined %>%
+  mutate(
+    Optimality = recode(
+      Optimality,
+      "ML_ASC" = "ML MKV",
+      "ML_noASC" = "ML MK"
+    )
+  )
+
+# Fix: Squeeze Support into (0,1) for GLMM with Beta distribution
+df_combined <- df_combined %>%
+  mutate(Support_beta = (Support + 0.5) / 101) 
+
+# Split datasets
+df_without <- df_combined %>% filter(Sampling == "Without_fossils")
+df_with    <- df_combined %>% filter(Sampling == "With_fossils")
+
+# --- Helper function for classical non-parametric tests ---
+run_nonparametric_tests <- function(df) {
+  results <- list()
+  
+  # 1. Kruskal-Wallis for Type, Optimality, Analysis
+  results$kw_type <- kruskal_test(df, Support ~ Type)
+  results$kw_opt  <- kruskal_test(df, Support ~ Optimality)
+  results$kw_an   <- kruskal_test(df, Support ~ Analysis)
+  
+  # 2. Pairwise Wilcoxon for Type by Optimality & Analysis
+  pw_list <- list()
+  
+  for(opt in unique(df$Optimality)){
+    for(an in unique(df$Analysis)){
+      subset_df <- df %>% filter(Optimality == opt, Analysis == an)
+      test_res <- pairwise_wilcox_test(
+        subset_df,
+        Support ~ Type,
+        p.adjust.method = "bonferroni"
+      )
+      test_res <- test_res %>% mutate(Optimality = opt, Analysis = an)
+      pw_list[[paste(opt, an, sep = "_")]] <- test_res
+    }
+  }
+  
+  results$pairwise <- bind_rows(pw_list)
+  return(results)
+}
+
+# Function to summarize mean, sd, min, max
+summarize_support <- function(df) {
+  df %>%
+    group_by(Optimality, Analysis, Type) %>%
+    summarise(
+      n    = n(),
+      mean = mean(Support, na.rm = TRUE),
+      sd   = sd(Support, na.rm = TRUE),
+      min  = min(Support, na.rm = TRUE),
+      max  = max(Support, na.rm = TRUE),
+      .groups = "drop"
+    )
+}
+
+
+# All combinations to test
+combinations <- expand.grid(
+  Optimality = c("MP", "ML_MK", "ML_MKv"),
+  Analysis = c("MOL", "TE"),
+  stringsAsFactors = FALSE
+)
+
+# Function to run pairwise GLMM for one subset
+run_pairwise <- function(df_subset) {
+  results <- list()
+  
+  for (i in 1:nrow(combinations)) {
+    opt <- combinations$Optimality[i]
+    ana <- combinations$Analysis[i]
+    
+    df_sub <- df_subset %>%
+      filter(Optimality == opt, Analysis == ana)
+    
+    if (nrow(df_sub) > 0) {
+      # Fit beta GLMM
+      glmm <- glmmTMB(
+        Support_beta ~ Type + (1|Dataset),
+        family = beta_family(link = "logit"),
+        data = df_sub
+      )
+      
+      # Pairwise comparisons for Type
+      em <- emmeans(glmm, ~ Type)
+      pw <- pairs(em, adjust = "bonferroni")
+      
+      results[[paste(opt, ana, sep = "_")]] <- summary(pw)
+    }
+  }
+  
+  bind_rows(results, .id = "Comparison")
+}
+
+run_pairwise_df <- function(df_subset, combinations_df, rand = "(1|Dataset)") {
+  out_list <- list()
+  for(i in seq_len(nrow(combinations_df))) {
+    opt <- combinations_df$Optimality[i]
+    ana <- combinations_df$Analysis[i]
+    df_sub <- df_subset %>% filter(Optimality == opt, Analysis == ana)
+    
+    # need at least two Type levels and some rows
+    if(nrow(df_sub) < 4 || length(unique(df_sub$Type)) < 2) {
+      warning(sprintf("Skipping %s_%s: insufficient data (n=%d, types=%s)",
+                      opt, ana, nrow(df_sub), paste(unique(df_sub$Type), collapse=", ")))
+      next
+    }
+    
+    # Fit model safely
+    glmm <- try(
+      glmmTMB(Support_beta ~ Type + (1|Dataset), data = df_sub, family = beta_family(link="logit")),
+      silent = TRUE
+    )
+    if(inherits(glmm, "try-error")) {
+      warning(sprintf("Model failed for %s_%s: %s", opt, ana, attr(glmm, "condition")$message))
+      next
+    }
+    
+    # emmeans and pairwise contrasts
+    em <- try(emmeans(glmm, ~ Type), silent = TRUE)
+    if(inherits(em, "try-error")) {
+      warning(sprintf("emmeans failed for %s_%s", opt, ana))
+      next
+    }
+    pw <- try(pairs(em, adjust = "bonferroni"), silent = TRUE)
+    if(inherits(pw, "try-error")) {
+      warning(sprintf("pairs() failed for %s_%s", opt, ana))
+      next
+    }
+    
+    # convert to data.frame to get exact numeric p-values
+    pw_df <- as.data.frame(pw)
+    # add context columns
+    pw_df <- pw_df %>%
+      mutate(
+        Optimality = opt,
+        Analysis   = ana,
+        Comparison = rownames(pw_df)  # usually "unique - shared" or similar
+      ) %>%
+      select(Optimality, Analysis, Comparison, everything())
+    
+    out_list[[paste(opt, ana, sep = "_")]] <- pw_df
+  }
+  
+  if(length(out_list) == 0) return(tibble()) 
+  res <- bind_rows(out_list, .id = "id")
+  
+  # Add nicely formatted p-values:
+  res <- res %>%
+    mutate(
+      p.value_numeric = as.numeric(p.value),
+      p.value_fmt = ifelse(
+        is.na(p.value_numeric), NA,
+        ifelse(p.value_numeric < 0.001,
+               formatC(p.value_numeric, format = "e", digits = 2),           # scientific for <0.001
+               formatC(p.value_numeric, format = "f", digits = 3))           # 3 decimals otherwise
+    ))
+  
+  return(res)
+}
+
+
+# Table S10
+
+print("Mean, sd, and range of BS without fossils")
+summary_without <- summarize_support(df_without)
+summary_without
+
+results_without <- run_nonparametric_tests(df_without)
+print("Non-parametric Wilcoxon tests: Unique vs Shared BS (without fossils)")
+results_without$pairwise
+
+print("GLMM with Beta distribution (without fossils")
+# Run for Without_fossils
+pairwise_without_df <- run_pairwise_df(df_without, combinations)
+# View results: numeric and formatted p-values
+pairwise_without_df %>%
+  select(Optimality, Analysis, Comparison, estimate, SE, df, p.value_fmt)
+```
+
 ## Q4.2 MOL vs TE (Table 4)
 
 ### Q4.2.1 Extant
@@ -1961,7 +2597,7 @@ summary(mp_beta)
 #### Q4.2.1.2 ML MOL vs ML TE ASC
 
 ```{r}
-# Filter dataset keeping only MP
+# Filter dataset keeping only ML ASC
 df_MLASC <- df_q4[grepl("ML-ASC", df_q4$Optimality), ]
 
 # Exploratory data analysis
@@ -2040,7 +2676,7 @@ summary(ml_asc_beta)
 #### Q4.2.1.3 ML MOL vs ML TE noASC
 
 ```{r}
-# Filter dataset keeping only MP
+# Filter dataset keeping only ML noASC
 df_MLnoASC <- df_q4[grepl("ML-noASC", df_q4$Optimality), ]
 
 # Exploratory data analysis
@@ -2209,7 +2845,7 @@ summary(mp_beta)
 #### Q4.2.2.2 ML MOL vs ML TE ASC
 
 ```{r}
-# Filter dataset keeping only MP
+# Filter dataset keeping only ML ASC
 df_MLASC <- df_q4[grepl("ML-ASC", df_q4$Optimality), ]
 
 # Exploratory data analysis
@@ -2287,7 +2923,7 @@ summary(ml_asc_beta)
 #### Q4.2.2.3 ML MOL vs ML TE noASC
 
 ```{r}
-# Filter dataset keeping only MP
+# Filter dataset keeping only ML noASC
 df_MLnoASC <- df_q4[grepl("ML-noASC", df_q4$Optimality), ]
 
 # Exploratory data analysis
@@ -2362,6 +2998,257 @@ ml_noasc_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
 summary(ml_noasc_beta)
 ```
 
+### Q4.2.3 Reduced
+
+First, we need to load the reduced data set without fossils. Support values of shared clades were identified and organized using the package RNODE. 
+
+```{r}
+# Load data (BS shared clades)
+df_q4_reduced = read.csv("Dataset_R_q4_09-25_shared_extinct.csv")
+
+# Set order of optimality criteria
+df_q4_reduced$Optimality <- factor(df_q4_reduced$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
+df_q4_reduced$SupportDiff = df_q4_reduced$Support_Tree_1 - df_q4_reduced$Support_Tree_2
+
+# Select reduced datasest (those with fossils available, albeit not used here)
+df_q4_reduced <- df_q4_reduced[df_q4_reduced$Dataset %in% c(3, 7, 8, 9, 10, 11, 13, 17, 21, 24, 28, 29, 31, 38, 39, 40, 42, 46, 48, 52, 54, 57), ]
+
+```
+
+#### Q4.2.3.1 MP MOL vs MP TE
+
+```{r}
+# Filter dataset keeping only MP
+df_MP <- df_q4_reduced[grepl("MP", df_q4_reduced$Optimality), ]
+
+# Exploratory data analysis
+print("Mean BS in MP MOL")
+mean(df_MP$Support_Tree_1) # MOL
+print("Standard deviation BS in MP MOL")
+sd(df_MP$Support_Tree_1) # MOL
+print("Min BS in MP MOL")
+min(df_MP$Support_Tree_1) # MOL
+print("Max BS in MP MOL")
+max(df_MP$Support_Tree_1) # MOL
+
+print("Mean BS in MP TE")
+mean(df_MP$Support_Tree_2) # TE
+print("Standard deviation BS in MP TE")
+sd(df_MP$Support_Tree_2) # TE
+print("Min BS in MP TE")
+min(df_MP$Support_Tree_2) # TE
+print("Max BS in MP TE")
+max(df_MP$Support_Tree_2) # TE
+
+print("Total no. shared clades between MOL and TE")
+nrow(df_MP)
+print("No. shared clades with BS MOL == BS TE")
+sum(df_MP$Support_Tree_1 == df_MP$Support_Tree_2) 
+print("No. shared clades with BS MOL > BS TE")
+sum(df_MP$Support_Tree_1 > df_MP$Support_Tree_2)
+print("No. shared clades with BS MOL < BS TE")
+sum(df_MP$Support_Tree_1 < df_MP$Support_Tree_2) 
+
+# Histograms
+par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
+# Histogram MP MOL
+hist(df_MP$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in MP MOL", main="")
+# A
+mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram MP TE
+hist(df_MP$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in MP TE", main="")
+# B
+mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+```
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MP$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MP$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MP$Support_Tree_1),
+                           as.numeric(df_MP$Support_Tree_2),
+                           paired = TRUE)
+
+# Dataset for GLMMs
+df_MP_glmm_f <- data.frame(
+  Node = c(df_MP$Node_Tree_1, df_MP$Node_Tree_2),
+  Approach = c(df_MP$Approach1, df_MP$Approach2),
+  Support = c(df_MP$Support_Tree_1, df_MP$Support_Tree_2),
+  ID = c(df_MP$ID, df_MP$ID)
+)
+
+# GLMM Beta
+# Step 1. Scale Support from 0–100 to 0–1
+df_MP_glmm_f <- df_MP_glmm_f %>%
+  mutate(Support_prop = Support / 100)
+# Beta regression does not allow exact 0 or 1
+n <- nrow(df_MP_glmm_f)
+df_MP_glmm_f <- df_MP_glmm_f %>%
+  mutate(Support_beta = (Support_prop * (n - 1) + 0.5) / n)
+mp_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
+                 family = beta_family(link = "logit"),
+                 data = df_MP_glmm_f)
+summary(mp_beta)
+```
+
+#### Q4.2.3.2 ML MOL vs ML TE ASC
+
+```{r}
+# Filter dataset keeping only ML ASC
+df_MLASC <- df_q4_reduced[grepl("ML-ASC", df_q4_reduced$Optimality), ]
+
+# Exploratory data analysis
+print("Mean BS in ML MOL")
+mean(df_MLASC$Support_Tree_1) # MOL
+print("Standard deviation BS in MP MOL")
+sd(df_MLASC$Support_Tree_1) # MOL
+print("Min BS in ML MOL")
+min(df_MLASC$Support_Tree_1) # MOL
+print("Max BS in ML MOL")
+max(df_MLASC$Support_Tree_1) # MOL
+
+print("Mean BS in ML TE ASC")
+mean(df_MLASC$Support_Tree_2) # TE
+print("Standard deviation BS in ML TE ASC")
+sd(df_MLASC$Support_Tree_2) # TE
+print("Min BS in ML TE ASC")
+min(df_MLASC$Support_Tree_2) # TE
+print("Max BS in ML TE ASC")
+max(df_MLASC$Support_Tree_2) # TE
+
+print("Total no. shared clades between MOL and TE")
+nrow(df_MLASC)
+print("No. shared clades with BS MOL == BS TE")
+sum(df_MLASC$Support_Tree_1 == df_MLASC$Support_Tree_2) 
+print("No. shared clades with BS MOL > BS TE")
+sum(df_MLASC$Support_Tree_1 > df_MLASC$Support_Tree_2)
+print("No. shared clades with BS MOL < BS TE")
+sum(df_MLASC$Support_Tree_1 < df_MLASC$Support_Tree_2) 
+
+# Histograms
+par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
+# Histogram MP MOL
+hist(df_MLASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
+# A
+mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram MP TE
+hist(df_MLASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MKv", main="")
+# B
+mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+```
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MLASC$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MLASC$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MLASC$Support_Tree_1),
+                       as.numeric(df_MLASC$Support_Tree_2),
+                       paired = TRUE)
+
+# Dataset for GLMMs
+df_MLASC_glmm <- data.frame(
+  Node = c(df_MLASC$Node_Tree_1, df_MLASC$Node_Tree_2),
+  Approach = c(df_MLASC$Approach1, df_MLASC$Approach2),
+  Support = c(df_MLASC$Support_Tree_1, df_MLASC$Support_Tree_2),
+  ID = c(df_MLASC$ID, df_MLASC$ID)
+)
+
+# GLMM Beta
+# Step 1. Scale Support from 0–100 to 0–1
+df_MLASC_glmm <- df_MLASC_glmm %>%
+  mutate(Support_prop = Support / 100)
+# Beta regression does not allow exact 0 or 1
+n <- nrow(df_MLASC_glmm)
+df_MLASC_glmm <- df_MLASC_glmm %>%
+  mutate(Support_beta = (Support_prop * (n - 1) + 0.5) / n)
+ml_asc_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
+                 family = beta_family(link = "logit"),
+                 data = df_MLASC_glmm)
+summary(ml_asc_beta)
+```
+
+#### Q4.2.3.3 ML MOL vs ML TE noASC
+
+```{r}
+# Filter dataset keeping only ML no ASC
+df_MLnoASC <- df_q4_reduced[grepl("ML-noASC", df_q4_reduced$Optimality), ]
+
+# Exploratory data analysis
+print("Mean BS in ML MOL")
+mean(df_MLnoASC$Support_Tree_1) # MOL
+print("Standard deviation BS in MP MOL")
+sd(df_MLnoASC$Support_Tree_1) # MOL
+print("Min BS in ML MOL")
+min(df_MLnoASC$Support_Tree_1) # MOL
+print("Max BS in ML MOL")
+max(df_MLnoASC$Support_Tree_1) # MOL
+
+print("Mean BS in ML TE noASC")
+mean(df_MLnoASC$Support_Tree_2) # TE
+print("Standard deviation BS in ML TE noASC")
+sd(df_MLnoASC$Support_Tree_2) # TE
+print("Min BS in ML TE noASC")
+min(df_MLnoASC$Support_Tree_2) # TE
+print("Max BS in ML TE noASC")
+max(df_MLnoASC$Support_Tree_2) # TE
+
+print("Total no. shared clades between MOL and TE")
+nrow(df_MLnoASC)
+print("No. shared clades with BS MOL == BS TE")
+sum(df_MLnoASC$Support_Tree_1 == df_MLnoASC$Support_Tree_2) 
+print("No. shared clades with BS MOL > BS TE")
+sum(df_MLnoASC$Support_Tree_1 > df_MLnoASC$Support_Tree_2)
+print("No. shared clades with BS MOL < BS TE")
+sum(df_MLnoASC$Support_Tree_1 < df_MLnoASC$Support_Tree_2) 
+
+# Histograms
+par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
+# Histogram MP MOL
+hist(df_MLnoASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
+# A
+mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram MP TE
+hist(df_MLnoASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MKv", main="")
+# B
+mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+```
+
+```{r}
+# Shapiro-Wilk test for normality
+shapiro.test(df_MLnoASC$Support_Tree_1) # P < 0.05, non-parametric
+shapiro.test(df_MLnoASC$Support_Tree_2) # P < 0.05, non-parametric
+
+# Perform the Wilcoxon signed-rank test for paired values
+wilcox.test(as.numeric(df_MLnoASC$Support_Tree_1),
+                       as.numeric(df_MLnoASC$Support_Tree_2),
+                       paired = TRUE)
+
+# Dataset for GLMMs
+df_MLnoASC_glmm <- data.frame(
+  Node = c(df_MLnoASC$Node_Tree_1, df_MLnoASC$Node_Tree_2),
+  Approach = c(df_MLnoASC$Approach1, df_MLnoASC$Approach2),
+  Support = c(df_MLnoASC$Support_Tree_1, df_MLnoASC$Support_Tree_2),
+  ID = c(df_MLnoASC$ID, df_MLnoASC$ID)
+)
+
+# GLMM Beta
+# Step 1. Scale Support from 0–100 to 0–1
+df_MLnoASC_glmm <- df_MLnoASC_glmm %>%
+  mutate(Support_prop = Support / 100)
+# Beta regression does not allow exact 0 or 1
+n <- nrow(df_MLnoASC_glmm)
+df_MLnoASC_glmm <- df_MLnoASC_glmm %>%
+  mutate(Support_beta = (Support_prop * (n - 1) + 0.5) / n)
+ml_noasc_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
+                 family = beta_family(link = "logit"),
+                 data = df_MLnoASC_glmm)
+summary(ml_noasc_beta)
+```
+
 ## Q4.3 Plot (Figure 5)
 
 First, we will plot the Figure 5A-C (without fossils).
@@ -2374,7 +3261,7 @@ df_MLnoASC_glmm$comparison = "MLmol_MLteNoAsc"
 
 # Merge all comparisons into the same dataset
 df_plot = bind_rows(df_MP_glmm, df_MLASC_glmm, df_MLnoASC_glmm)
-View(df_plot)
+#View(df_plot)
 
 # Set order of comparisons
 df_plot$comparison <- factor(df_plot$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
@@ -2458,7 +3345,7 @@ df_MLnoASC_glmm_f$comparison = "MLmol_MLteNoAsc"
 
 # Merge all comparisons into the same dataset
 df_plot = bind_rows(df_MP_glmm_f, df_MLASC_glmm_f, df_MLnoASC_glmm_f)
-View(df_plot)
+#View(df_plot)
 
 # Set order of comparisons
 df_plot$comparison <- factor(df_plot$comparison, levels = c("MPmol_MPte", "MLmol_MLteAsc", "MLmol_MLteNoAsc"))
@@ -2550,6 +3437,323 @@ MPlogistic <- df_q5[df_q5$optimality == "MP", ]
 MLASClogistic <- df_q5[df_q5$optimality == "MLASC", ]
 # Select ML no ASC
 MLnoASClogistic <- df_q5[df_q5$optimality == "MLnoASC", ]
+```
+
+### Q5.1.1 Data exploration (Table S8)
+
+```{r}
+#############################
+# EXPLORATORY DATA ANALYSES #
+#############################
+
+# A) MP
+# Total number of MOL clades
+nrow(MPlogistic)
+# Shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion shared/total
+mean(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion uniqueMOL/total
+mean(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MPlogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MPlogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+# B) ML ASC
+# Total number of MOL clades
+nrow(MLASClogistic)
+# Shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion shared/total
+mean(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MLASClogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MLASClogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+
+# C) ML noASC
+# Total number of MOL clades
+nrow(MLnoASClogistic)
+# Shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion shared/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+```
+
+### Q5.1.2 Logistic regressions (Table 5)
+
+```{r}
+
+#######################
+# LOGISTIC REGRESSION #
+#######################
+
+# A) MP
+# Perform logistic regression
+mp_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MPlogistic, family = binomial)
+# Print a summary of the model
+summary(mp_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mp_logistic_result)
+# Interpretation
+exp(mp_logistic_result$coefficients[[2]]) # If coefficient is 0.09 and exp(0.09) is 1.1, then each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 10%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MPlogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#339999", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# B) ML ASC
+# Perform logistic regression
+mlasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlasc_logistic_result)
+# Interpretation
+exp(mlasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#6f77b4", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# C) ML noASC
+# Perform logistic regression
+mlnoasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLnoASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlnoasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlnoasc_logistic_result)
+# Interpretation
+exp(mlnoasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#cccccc", size = 1.2) +  # Logistic regression curve
+  labs(x = "\nBootstrap of MOL clade", y = "Probability of occurrence in the TE tree\n") +
+  theme_minimal()
+```
+
+## Q5.2 Extinct
+
+```{r}
+# Load data
+df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_09-25_extinct.csv")
+# Only keep >50% BS
+df_q5 <- df_q5[df_q5$support_tree1 >= 50, ]
+
+# Select MP 
+MPlogistic <- df_q5[df_q5$optimality == "MP", ]
+# Select ML ASC
+MLASClogistic <- df_q5[df_q5$optimality == "MLASC", ]
+# Select ML no ASC
+MLnoASClogistic <- df_q5[df_q5$optimality == "MLnoASC", ]
+```
+
+### Q5.2.1 Data exploration (Table S9)
+
+```{r}
+#############################
+# EXPLORATORY DATA ANALYSES #
+#############################
+
+# A) MP
+# Total number of MOL clades
+nrow(MPlogistic)
+# Shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MPlogistic, occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion shared/total
+mean(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MPlogistic, occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion uniqueMOL/total
+mean(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MPlogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MPlogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MPlogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+# B) ML ASC
+# Total number of MOL clades
+nrow(MLASClogistic)
+# Shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLASClogistic, occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion shared/total
+mean(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLASClogistic, occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MLASClogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MLASClogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+
+# C) ML noASC
+# Total number of MOL clades
+nrow(MLnoASClogistic)
+# Shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1)) # Number of shared clades
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion shared/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
+# Unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
+nrow(subset(MLnoASClogistic, occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion uniqueMOL/total
+mean(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
+sd(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
+range(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
+# MOL clades with BS <60 present in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 60 & occurrence_tree2 == 1)) # Number of MOL clades with BS <60 that occur in TE
+nrow(subset(MLnoASClogistic, support_tree1 < 60 & occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion of MOL clades with BS <60 that occur in TE
+# MOL clades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion of MOL lades with BS >90 absent in TE
+nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
+
+```
+
+### Q5.2.2 Logistic regressions (Table 5)
+
+```{r}
+#######################
+# LOGISTIC REGRESSION #
+#######################
+
+# A) MP
+# Perform logistic regression
+mp_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MPlogistic, family = binomial)
+# Print a summary of the model
+summary(mp_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mp_logistic_result)
+# Interpretation
+exp(mp_logistic_result$coefficients[[2]]) # If coefficient is 0.09 and exp(0.09) is 1.1, then each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 10%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MPlogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#339999", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# B) ML ASC
+# Perform logistic regression
+mlasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlasc_logistic_result)
+# Interpretation
+exp(mlasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#6f77b4", size = 1.2) +  # Logistic regression curve
+  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
+  theme_minimal()
+
+# C) ML noASC
+# Perform logistic regression
+mlnoasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLnoASClogistic, family = binomial)
+# Print a summary of the model
+summary(mlnoasc_logistic_result)
+# Calculate 95% confidence intervals for the coefficients
+confint(mlnoasc_logistic_result)
+# Interpretation
+exp(mlnoasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
+
+# Plot the logistic regression curve with ggplot2
+ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
+  geom_point(alpha = 0.6) +  # Plot the data points
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
+              color = "#cccccc", size = 1.2) +  # Logistic regression curve
+  labs(x = "\nBootstrap of MOL clade", y = "Probability of occurrence in the TE tree\n") +
+  theme_minimal()
+```
+
+## Q5.3 Reduced
+
+```{r}
+# Load data
+df_q5_reduced = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_09-25.csv")
+# Only keep >50% BS
+df_q5_reduced <- df_q5_reduced[df_q5_reduced$support_tree1 >= 50, ]
+# Select reduced datasest (those with fossils available, albeit not used here)
+df_q5_reduced <- df_q5_reduced[df_q5_reduced$Dataset %in% c(3, 7, 8, 9, 10, 11, 13, 17, 21, 24, 28, 29, 31, 38, 39, 40, 42, 46, 48, 52, 54, 57), ]
+
+# Select MP 
+MPlogistic <- df_q5_reduced[df_q5_reduced$optimality == "MP", ]
+# Select ML ASC
+MLASClogistic <- df_q5_reduced[df_q5_reduced$optimality == "MLASC", ]
+# Select ML no ASC
+MLnoASClogistic <- df_q5_reduced[df_q5_reduced$optimality == "MLnoASC", ]
 ```
 
 ### Q5.1.1 Data exploration (Table S8)
@@ -2693,161 +3897,3 @@ ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
   labs(x = "\nBootstrap of MOL clade", y = "Probability of occurrence in the TE tree\n") +
   theme_minimal()
 ```
-
-## Q5.2 Extinct
-
-```{r}
-# Load data
-df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_09-25_extinct.csv")
-# Only keep >50% BS
-df_q5 <- df_q5[df_q5$support_tree1 >= 50, ]
-
-# Select MP 
-MPlogistic <- df_q5[df_q5$optimality == "MP", ]
-# Select ML ASC
-MLASClogistic <- df_q5[df_q5$optimality == "MLASC", ]
-# Select ML no ASC
-MLnoASClogistic <- df_q5[df_q5$optimality == "MLnoASC", ]
-```
-
-### Q5.2.1 Data exploration (Table S9)
-
-```{r}
-#############################
-# EXPLORATORY DATA ANALYSES #
-#############################
-
-# A) MP
-# Total number of MOL clades
-nrow(MPlogistic)
-# Shared clades
-nrow(subset(MPlogistic, occurrence_tree2 == 1)) # Number of shared clades
-nrow(subset(MPlogistic, occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion shared/total
-mean(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
-sd(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
-range(subset(MPlogistic, occurrence_tree2 == 1)$support_tree1) # BS range
-# Unique clades for MOL
-nrow(subset(MPlogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
-nrow(subset(MPlogistic, occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion uniqueMOL/total
-mean(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
-sd(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
-range(subset(MPlogistic, occurrence_tree2 == 0)$support_tree1) # BS range
-# MOL clades with BS <75 present in TE
-nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
-nrow(subset(MPlogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MPlogistic) # Proportion of MOL clades with BS <75 that occur in TE
-# MOL clades with BS >90 absent in TE
-nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
-nrow(subset(MPlogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MPlogistic) # Proportion of MOL lades with BS >90 absent in TE
-nrow(subset(MPlogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
-
-# B) ML ASC
-# Total number of MOL clades
-nrow(MLASClogistic)
-# Shared clades
-nrow(subset(MLASClogistic, occurrence_tree2 == 1)) # Number of shared clades
-nrow(subset(MLASClogistic, occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion shared/total
-mean(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
-sd(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
-range(subset(MLASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
-# Unique clades for MOL
-nrow(subset(MLASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
-nrow(subset(MLASClogistic, occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion uniqueMOL/total
-mean(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
-sd(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
-range(subset(MLASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
-# MOL clades with BS <75 present in TE
-nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
-nrow(subset(MLASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
-# MOL clades with BS >90 absent in TE
-nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
-nrow(subset(MLASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLASClogistic) # Proportion of MOL lades with BS >90 absent in TE
-nrow(subset(MLASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
-
-
-# C) ML noASC
-# Total number of MOL clades
-nrow(MLnoASClogistic)
-# Shared clades
-nrow(subset(MLnoASClogistic, occurrence_tree2 == 1)) # Number of shared clades
-nrow(subset(MLnoASClogistic, occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion shared/total
-mean(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS mean
-sd(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS sd
-range(subset(MLnoASClogistic, occurrence_tree2 == 1)$support_tree1) # BS range
-# Unique clades for MOL
-nrow(subset(MLnoASClogistic, occurrence_tree2 == 0)) # Number of unique clades for MOL
-nrow(subset(MLnoASClogistic, occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion uniqueMOL/total
-mean(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS mean
-sd(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS sd
-range(subset(MLnoASClogistic, occurrence_tree2 == 0)$support_tree1) # BS range
-# MOL clades with BS <75 present in TE
-nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1)) # Number of MOL clades with BS <75 that occur in TE
-nrow(subset(MLnoASClogistic, support_tree1 < 75 & occurrence_tree2 == 1))/nrow(MLnoASClogistic) # Proportion of MOL clades with BS <75 that occur in TE
-# MOL clades with BS >90 absent in TE
-nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0)) # Number of MOL lades with BS >90 absent in TE
-nrow(subset(MLnoASClogistic, support_tree1 > 90 & occurrence_tree2 == 0))/nrow(MLnoASClogistic) # Proportion of MOL lades with BS >90 absent in TE
-nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MOL clades with BS = 100 absent in TE
-
-```
-
-### Q5.2.2 Logistic regressions (Table 5)
-
-```{r}
-#######################
-# LOGISTIC REGRESSION #
-#######################
-
-# A) MP
-# Perform logistic regression
-mp_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MPlogistic, family = binomial)
-# Print a summary of the model
-summary(mp_logistic_result)
-# Calculate 95% confidence intervals for the coefficients
-confint(mp_logistic_result)
-# Interpretation
-exp(mp_logistic_result$coefficients[[2]]) # If coefficient is 0.09 and exp(0.09) is 1.1, then each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 10%
-
-# Plot the logistic regression curve with ggplot2
-ggplot(MPlogistic, aes(x = support_tree1, y = occurrence_tree2)) +
-  geom_point(alpha = 0.6) +  # Plot the data points
-  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
-              color = "#339999", size = 1.2) +  # Logistic regression curve
-  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
-  theme_minimal()
-
-# B) ML ASC
-# Perform logistic regression
-mlasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLASClogistic, family = binomial)
-# Print a summary of the model
-summary(mlasc_logistic_result)
-# Calculate 95% confidence intervals for the coefficients
-confint(mlasc_logistic_result)
-# Interpretation
-exp(mlasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
-
-# Plot the logistic regression curve with ggplot2
-ggplot(MLASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
-  geom_point(alpha = 0.6) +  # Plot the data points
-  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
-              color = "#6f77b4", size = 1.2) +  # Logistic regression curve
-  labs(x = "Bootstrap of MOL clade", y = "Probability of occurrence in the TE tree") +
-  theme_minimal()
-
-# C) ML noASC
-# Perform logistic regression
-mlnoasc_logistic_result <- glm(occurrence_tree2 ~ support_tree1, data = MLnoASClogistic, family = binomial)
-# Print a summary of the model
-summary(mlnoasc_logistic_result)
-# Calculate 95% confidence intervals for the coefficients
-confint(mlnoasc_logistic_result)
-# Interpretation
-exp(mlnoasc_logistic_result$coefficients[[2]]) # If coefficient is 0.06 and exp(0.09) is 1.06, then the each unit of 1% bootstrap in MOL clade increases the chance of the occurrence of this clade in TE by 6%
-
-# Plot the logistic regression curve with ggplot2
-ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
-  geom_point(alpha = 0.6) +  # Plot the data points
-  geom_smooth(method = "glm", method.args = list(family = "binomial"), 
-              color = "#cccccc", size = 1.2) +  # Logistic regression curve
-  labs(x = "\nBootstrap of MOL clade", y = "Probability of occurrence in the TE tree\n") +
-  theme_minimal()
-```
-
