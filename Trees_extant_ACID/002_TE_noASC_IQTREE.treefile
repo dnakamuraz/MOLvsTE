@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(((Basiliscus_galeritus:0.0821063782,(Basiliscus_plumifrons:0.0851984121,Basiliscus_vittatus:0.0891082112)94:0.0293859858)98:0.0279573109,((Corytophanes_cristatus:0.0625767506,Corytophanes_percarinatus:0.0440371535)100:0.0870668681,Laemanctus_longipes:0.1089687071)100:0.0399592593)100:0.0949675172,((Elgaria_panamintina:0.5780398042,Tropidurus_etheridgei:0.2774730098)59:0.0228259884,Sauromalus_obesus:0.1528667523)80:0.0342256759,Polychrus_acutirostris:0.3104341130);
-end ;

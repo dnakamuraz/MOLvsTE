@@ -18,8 +18,4 @@ This repository is organized as follows:
 
 - Trees_extant: MOL + TE trees from MP and ML analyses, including only terminals with molecular data
 
-- Trees_fossils: TE trees from MP and ML analyses including morphology-only terminals
-
-- Trees_extant_ACID: Extant trees formatted for ACID calculation in TNT
-
-- Trees_fossils_ACID: Fossil trees formatted for ACID calculation in TNT
+- Trees_fossils: TE trees from MP and ML analyses including phenomic-only terminals

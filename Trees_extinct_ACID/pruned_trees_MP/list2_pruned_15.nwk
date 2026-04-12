@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Deinopis,(((Acusilas,Argiope_argentata,Chrysometa,Nephila_clavata,Nephila_clavipes,Nephila_inaurata,Nephila_pilipes,Nephila_plumipes,Nephila_senegalensis,Araneus,(Nephila_fenestrata,(Cyclosa,(Araniella,Deliochus))),(Argiope_aurantia,Azilia,Caerostris),(Clitaetra_clathrata,Nephila_komaci),((Clitaetra_perroti,Clitaetra_simoni),(Nephila_constricta,Nephila_edulis)),(Meta,((Epeirotypus,Herennia_agnarssoni),Leucauge)),Glenognatha,(Herennia_deelemanae,Herennia_tone),(Herennia_etruscilla,Herennia_papuana),(Herennia_gagamba,Herennia_multipuncta),Linyphia,(Nephila_ardentipes,Nephila_antipodiana)),(Clitaetra_thisbe,(Clitaetra_episinoides,Clitaetra_irenae))),(Dolichognatha,Metellina)));
-end ;

@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-((((((Amia_calva:0.1333844728,Lepisosteus_osseus:0.1373080397)94:0.0438510424,(Hiodon_alosoides:0.1768450996,Elops_saurus:0.2076103373)96:0.1782829694)100:0.0831069546,Acipenser_fulvescens:0.1395389824)19:0.0430071745,(Erpetoichthys_calabaricus:0.0123937521,Polypterus_senegalus:0.0119586223)82:0.3175270656)70:0.2412608702,Latimeria_chalumnae:0.3275612496)53:0.318138174,Callorhinchus_milii:0.2829350092,Leucoraja_erinacea:0.2828460899);
-end ;

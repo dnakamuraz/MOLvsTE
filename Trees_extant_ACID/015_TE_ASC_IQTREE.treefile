@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Aptenodytes_forsteri1:0.0096434730,Aptenodytes_patagonicus1:0.0070792038,(((Pygoscelis_antarctica1:0.0214581292,Pygoscelis_papua1:0.0216229743)100:0.0163706247,Pygoscelis_adeliae1:0.0302251453)100:0.0239220927,((Megadyptes_antipodes1:0.0199519110,(((Eudyptes_chrysolophus1:0.0011624406,Eudyptes_schlegeli1:0.0030134483)100:0.0087397681,((Eudyptes_pachyrhynchus1:0.0034602274,Eudyptes_robustus1:0.0047590042)100:0.0058601215,((Eudyptes_chrysocome1:0.0023855033,Eudyptes_filholi1:0.0009163542)64:0.0024825332,Eudyptes_moseleyi1:0.0040040775)99:0.0071349250)48:0.0017567200)66:0.0021268604,Eudyptes_sclateri1:0.0075998527)100:0.0153464182)100:0.0215033547,(Eudyptula_minor1:0.0397108000,((Spheniscus_demersus1:0.0046750564,Spheniscus_magellanicus1:0.0058640276)87:0.0023289297,(Spheniscus_humboldti1:0.0085942578,Spheniscus_mendiculus1:0.0046885554)95:0.0022815371)100:0.0321305515)94:0.0082508223)100:0.0215860201)100:0.0448330105);
-end ;

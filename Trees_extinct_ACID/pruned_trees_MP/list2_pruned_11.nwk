@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Amphicorina_mobilis,(Sabella_spallanzanii,((Fabricia_stellaris,Novafabricia_brunnea,(Augeneriella_hummelincki,Pseudoaugeneriella_bansei,(Fabricinuda_pseudopalpa,Fabricinuda_sp._Australia,Fabricinuda_trilobata)),((Echinofabricia_alata,Echinofabricia_goodhartzorum),(Manayunkia_aestuarina,Manayunkia_athalassia)),(Fabriciola_baltica,Fabriciola_liguronis),(Novafabricia_infratorquata,Novafabricia_sp._Australia),Novafabricia_labrus,(Pseudofabriciola_australiensis,Pseudofabriciola_quasiincisura),(Rubifabriciola_flammula,Rubifabriciola_markginsbergi,Rubifabriciola_sp._USA)),(Romanchella_quadricostalis,(Salmacina_sp.,Serpula_vermicularis)))));
-end ;

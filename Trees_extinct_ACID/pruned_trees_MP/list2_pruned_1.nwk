@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Equus_caballus,(Tapirus_terrestris,(Sus_barbatus,(Balaenoptera_edeni,Tursiops_truncatus),Camelus_dromedarius,Hippopotamus_amphibius,(Ovis_aries,Tragulus_javanicus))));
-end ;

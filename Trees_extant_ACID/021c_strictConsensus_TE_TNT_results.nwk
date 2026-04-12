@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Chamaeleo ,(Physignathus_cocincinus ,((Leiosaurus_catamarcensis ,Leiocephalus_barahonensis ),(((Heloderma_suspectum ,(Elgaria_multicarinata ,Xenosaurus_platyceps )),(Lanthanotus_borneensis ,Varanus_acanthurus )),(Liotyphlops_albirostris ,(Typhlops_jamaicensis ,Rena ),((Anilius_scytale ,(Trachyboa_boulengeri ,Tropidophis_haetianus )),((Uropeltis_melanogaster ,Cylindrophis_ruffus ),(((Calabaria_reinhardtii ,((Eryx_colubrinus ,(Epicrates_striatus ,Boa_constrictor )),(Lichanura_trivirgata ,Exiliboa_placata ))),(Casarea_dussumieri ,(Acrochordus_granulatus ,(Xenodermus_javanicus ,(Pareas_hamptoni ,((Daboia_russelli ,Bothrops_asper ),((Lycophidion_capense ,Micrurus_fulvius ),(Afronatrix_anoscopus ,Lampropeltis_getula )))))))),(Xenopeltis_unicolor ,(Loxocemus_bicolor ,(Python_molurus ,Aspidites_melanocephalus )))))))))));
-end ;

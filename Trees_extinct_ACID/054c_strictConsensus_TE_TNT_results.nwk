@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Proteopithecus ,(Saguinus ,Xenothrix ,Lagonimico ,Nuciruptor ,Proteropithecia ,Catopithecus ,Dolichocebus ,Branisella ,Tremacebus ,Cebupithecia ,Chilecebus ,Perupithecus ,Parvimico ,(((Alouatta ,Stirtonia ),(Brachyteles ,(Ateles ,Lagothrix ))),(Antillothrix ,Paralouatta )),(Aotus ,(Cebus ,(Panamacebus ,(Saimiri ,Neosaimiri )))),(Pithecia ,(Cacajao ,Chiropotes )),(Callicebus ,Acrecebus ),(Leontopithecus ,(Callimico ,(Callithrix ,Cebuella ))),(Aegyptopithecus ,(Hylobates ,(Miopithecus ,Presbytis ))),(Aotus_dindensis ,Mohanamico ),(Mazzonicebus ,(Soriacebus ,Canaanimico )),(Apidium ,Simonsius ),(Homunculus ,Carlocebus )));
-end ;

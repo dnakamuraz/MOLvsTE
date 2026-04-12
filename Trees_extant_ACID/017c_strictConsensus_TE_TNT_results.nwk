@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Paraneoptera ,(Coleo_Polyphaga ,((Mecoptera ,(Chrysopidae ,Raphidioptera )),((((Runaria ,Blasticotoma ),(((((((Tenthredo ,Aglaostigma ),(Dolerus ,(Taxonus ,(Monophadnoides ,Metallus )))),(Selandria ,Strongylogaster )),(Hoplocampa ,(Nematinus ,(Cladius ,Nematus )))),(Monoctenus ,(Gilpinia ,Diprion ))),(Athalia ,(Corynis ,(Cimbicinae ,Abia )))),((Decameria ,(Acordulecera ,(Lophyrotoma ,(Perga ,Phylacteophaga )))),(Arge ,Sterictiphora )))),((Megalodontesc ,(Neurotoma ,((Onycholyda ,Pamphilius ),(Cephalcia ,Acantholyda )))),(((Syntexis ,(Tremex ,(Sirex ,(Xeris ,Urocerus )))),(Hartigia ,(Cephus ,Calameuta ))),(Xiphydria ,(((Megalyra ,Cynipoidea ),(StephanidaeA ,Ichneumonidae )),(Trigonalidae ,((ApoideaA ,Vespidae ),(Orussus ,Evanioidea )))))))),(Xyela ,Macroxyela )))));
-end ;

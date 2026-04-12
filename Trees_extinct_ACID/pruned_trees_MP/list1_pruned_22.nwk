@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Brookesia,(Chameleo_calyptratus,(((((((Anolis_sagrei,(Anolis_carolinensis,Anolis_olssoni_ricordi)),(Leiocephalus_carinatus,(Leiocephalus_barahonensis,Leiocephalus_personatus))),((((Chalarodon_madagascariensis,Oplurus),(Urostrophus_vautieri,(Leiosaurus_catamarcensis,Pristidactylus_torquatus))),(Enyalioides,Morunasaurus_annularis)),(((Liolaemus_bellii_pictus,Liolaemus_magellanicus),(Phymaturus_palluma,Phymaturus_somuncurensis)),(Polychrus_acutirostris,Polychrus_marmoratus)))),(((Laemanctus,(Basiliscus_basiliscus,Corytophanes_cristatus)),(Uranoscodon_superciliosus,(Microlophus,(Plica,Stenocercus)))),(Crotaphytus_collaris,Gambelia_wislizenii))),(Brachylophus_fasciatus,(Dipsosaurus_dorsalis,Sauromalus_ater))),((Petrosaurus,(Sceloporus,Uta_stansburiana)),(Phrynosoma_platyrhinos,Uma_scoparia))),(Leiolepis_belliana,(Physignathus_cocincinus,(Hydrosaurus,(Trapelus,(Calotes_emma,Draco_sp))))))));
-end ;

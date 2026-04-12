@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(((((Aegotheles_cristatus:0.0302185310,(((Aerodramus_vanikorensis:0.0235101418,Streptoprocne_zonaris:0.0165740757)100:0.0058967935,Hemiprocne_mystacea:0.0210276933)100:0.0184503577,Colibri_coruscans:0.0538625396)100:0.0072668815)100:0.0054201102,(Batrachostomus_septimus:0.0385285903,Podargus_strigoides:0.0170013638)100:0.0266331764)100:0.0010729986,(Nyctibius_grandis:0.0297128383,Steatornis_caripensis:0.0353658352)67:0.0008098576)100:0.0008104683,Eurostopodus_mystacalis:0.0388928476)100:0.0027482189,Anseranas_semipalmata:0.0648969081,Columba_livia:0.0496783939);
-end ;

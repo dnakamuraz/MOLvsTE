@@ -1,11 +1,11 @@
 ---
 title: "Supporting Information 3"
 author: "Daniel Y.M. Nakamura, Ward C. Wheeler, Taran Grant"
-date: "2025-09-14"
+date: "2026-03-29"
 output: html_document
 ---
 
-To test the assumption that phenomic partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including phenomic-only terminals, 14 including fossils) and evaluated the impact of phenomic evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following six questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of phenomic characters? (3) Do the effects of phenomic evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does phenomic evidence contribute differently to the TE optimality score under ML and MP analyses? (5) Does phenomic evidence affect the bootstrap values of clades shared by DNA and TE trees? (6) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
+To test the assumption that phenomic partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including phenomic-only terminals, 14 including fossils) and evaluated the impact of phenomic evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following six questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of phenomic characters? (3) Do the effects of phenomic evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does phenomic evidence affect the bootstrap values of clades shared by DNA and TE trees? (5) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
 
 # PRE-AMBLE
 
@@ -27,6 +27,7 @@ library(ggpubr)
 library(ggridges)
 library(glmmTMB)
 library(gridExtra)
+library(patchwork)
 library(phytools)
 library(RNODE)
 library(rstatix)
@@ -43,13 +44,21 @@ Dataset with MOL-TE topological distances were calculated in script 1.
 ```{r}
 # Load data
 df <- read.csv("Dataset_R_q123_08-25.csv")
+extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
+# Append the extant datasets that do not appear among extinct
+df_extinct <- df[df$Type == "Extinct" | 
+                  (df$Type == "Extant" & !(df$Dataset %in% extinct_datasets)), ]
 
 print("EXTANT: Number of datasets (extant) impacted by the addition of phenomic evidence")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
-print("MP MOL vs MP TE (number)")
-sum(df_extant$MP_MOLvsTE_NormalizedRF > 0) 
-print("MP MOL vs MP TE (proportion)")
-sum(df_extant$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_extant) 
+print("MP MOL vs MP TE (number min)")
+sum(df_extant$MP_MOLvsTE_NormalizedMinRF > 0) 
+print("MP MOL vs MP TE (proportion min)")
+sum(df_extant$MP_MOLvsTE_NormalizedMinRF > 0) / nrow(df_extant) 
+print("MP MOL vs MP TE (number strict)")
+sum(df_extant$MP_MOLvsTE_NormalizedRF_strictConsensus > 0) 
+print("MP MOL vs MP TE (proportion strict)")
+sum(df_extant$MP_MOLvsTE_NormalizedRF_strictConsensus > 0) / nrow(df_extant) 
 print("ML MOL vs ML TE ASC (number)")
 sum(df_extant$ML_MOLvsTEASC_NormalizedRF > 0) 
 print("ML MOL vs ML TE ASC (proportion)")
@@ -60,11 +69,14 @@ print("ML MOL vs ML TE noASC (proportion)")
 sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extant) 
 
 print("EXTINCT: Number of datasets (extinct) impacted by the addition of phenomic evidence")
-df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
-print("MP MOL vs MP TE (number)")
-sum(df_extinct$MP_MOLvsTE_NormalizedRF > 0) 
-print("MP MOL vs MP TE (proportion)")
-sum(df_extinct$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_extinct) 
+print("MP MOL vs MP TE (number min)")
+sum(df_extinct$MP_MOLvsTE_NormalizedMinRF > 0) 
+print("MP MOL vs MP TE (proportion min)")
+sum(df_extinct$MP_MOLvsTE_NormalizedMinRF > 0) / nrow(df_extinct) 
+print("MP MOL vs MP TE (number strict)")
+sum(df_extinct$MP_MOLvsTE_NormalizedRF_strictConsensus > 0) 
+print("MP MOL vs MP TE (proportion strict)")
+sum(df_extinct$MP_MOLvsTE_NormalizedRF_strictConsensus > 0) / nrow(df_extinct) 
 print("ML MOL vs ML TE ASC (number)")
 sum(df_extinct$ML_MOLvsTEASC_NormalizedRF > 0) 
 print("ML MOL vs ML TE ASC (proportion)")
@@ -73,22 +85,6 @@ print("ML MOL vs ML TE noASC")
 sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) 
 print("ML MOL vs ML TE noASC (proportion)")
 sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extinct) 
-
-print("EXTANT: Number of datasets (extant keeping the same datasets from extinct) impacted by the addition of phenomic evidence")
-df_filtered <- df[df$Dataset %in% df_extinct$Dataset, ]
-df_filtered <- df_filtered %>% filter(grepl("Extant", Type)) # keep only extant datasets
-print("MP MOL vs MP TE (number)")
-sum(df_filtered$MP_MOLvsTE_NormalizedRF > 0) 
-print("MP MOL vs MP TE (proportion)")
-sum(df_filtered$MP_MOLvsTE_NormalizedRF > 0) / nrow(df_filtered) 
-print("ML MOL vs ML TE ASC (number)")
-sum(df_filtered$ML_MOLvsTEASC_NormalizedRF > 0) 
-print("ML MOL vs ML TE ASC (proportion)")
-sum(df_filtered$ML_MOLvsTEASC_NormalizedRF > 0) / nrow(df_filtered) 
-print("ML MOL vs ML TE noASC")
-sum(df_filtered$ML_MOLvsTEnoASC_NormalizedRF > 0) 
-print("ML MOL vs ML TE noASC (proportion)")
-sum(df_filtered$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_filtered) 
 ```
 
 Considering extant taxa only (n = 57), the phenomic evidence impacted topologies in 87.7% (50/57) of the datasets in MP and ML (MKv with bias correction) and 85.9% (49/57) in ML (MK without bias correction). Considering both extant and extinct taxa (n = 22), the phenomic evidence impacted topologies in 95.5% (21/22) of the datasets and 81.8% (18/22) in ML (both in MKv and MK). Considering a reduced dataset of extant taxa (only extant taxa for these 22 datasets where extinct taxa are available), the phenomic evidence impacted topologies in 90.1% (20/22) of the datasets in MP and ML (both in MKv and MK).
@@ -2149,7 +2145,7 @@ plots = grid.arrange(plot_q3_rf + theme(plot.margin = margin(.01,1,1,.01)),
              plot_q3_cid_extinct + theme(plot.margin = margin(.001,1,1,.01)),
              plot_q3_spr + theme(plot.margin = margin(.001,1,1,.01)),
              plot_q3_spr_extinct + theme(plot.margin = margin(.001,1,1,.01)),
-             nrow=2, ncol=2)
+             nrow=3, ncol=2)
 
 # Plot 2x1
 tiff("Figures/fig4_boxplots_strictConsensus.tiff", width = 7, height = 6, units = "in", res = 300)
@@ -2413,166 +2409,1783 @@ aggregate(value ~ group, data = df_long, function(x) c(
 
 In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses.
 
-### Q3.3.1 Extant
+### Q3.3.1 Extant (Figure 5 and S5)
 
 ```{r}
 # Load data for extant taxa
 df <- read.csv("Dataset_R_q123_08-25.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
-# Exploratory data analyses
-print("Number of times that %MORPH/TE is higher in MP than ML ASC")
-sum(df_extant$MP_MORPH.TE_Score > df_extant$ML_MORPH.TeASC_Score)
-print("Number of times that %MORPH/TE is lower in MP than ML ASC")
-sum(df_extant$MP_MORPH.TE_Score < df_extant$ML_MORPH.TeASC_Score)
+# Option 1. PHEcost / TEcost
+op1_mp = (df_extant$MP_MORPHonTE_Score) / (df_extant$MP_TE_Score)
+op1_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score) / (df_extant$ML_TNT_TEnoASC_Score)
+op1_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score) / (df_extant$ML_TNT_TEasc_Score)
 
-print("Number of times that %MORPH/TE is higher in MP than ML noASC")
-sum(df_extant$MP_MORPH.TE_Score > df_extant$ML_MORPH.TEnoASC_Score)
-print("Number of times that %MORPH/TE is lower in MP than ML noASC")
-sum(df_extant$MP_MORPH.TE_Score < df_extant$ML_MORPH.TEnoASC_Score)
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op1_mp > op1_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op1_mp < op1_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op1_mp == op1_ml_mk)
 
-print("Stats MP MORPH/TE")
-mean(df_extant$MP_MORPH.TE_Score)
-sd(df_extant$MP_MORPH.TE_Score)
-min(df_extant$MP_MORPH.TE_Score)
-max(df_extant$MP_MORPH.TE_Score)
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op1_mp > op1_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op1_mp < op1_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op1_mp == op1_ml_mkv)
 
-print("Stats ML MKV MORPH/TE")
-mean(df_extant$ML_MORPH.TeASC_Score)
-sd(df_extant$ML_MORPH.TeASC_Score)
-min(df_extant$ML_MORPH.TeASC_Score)
-max(df_extant$ML_MORPH.TeASC_Score)
-
-print("Stats ML MK MORPH/TE")
-mean(df_extant$ML_MORPH.TEnoASC_Score)
-sd(df_extant$ML_MORPH.TEnoASC_Score)
-min(df_extant$ML_MORPH.TEnoASC_Score)
-max(df_extant$ML_MORPH.TEnoASC_Score)
+print("Stats MP")
+mean(op1_mp)
+sd(op1_mp)
+min(op1_mp)
+max(op1_mp)
+print("Stats ML MK")
+mean(op1_ml_mk)
+sd(op1_ml_mk)
+min(op1_ml_mk)
+max(op1_ml_mk)
+print("Stats ML MKv")
+mean(op1_ml_mkv)
+sd(op1_ml_mkv)
+min(op1_ml_mkv)
+max(op1_ml_mkv)
 
 # Normality tests
-shapiro.test(df_extant$MP_MORPH.TE_Score) # p < 0.05, non-parametric
-shapiro.test(df_extant$ML_MORPH.TeASC_Score) # p < 0.05, non-parametric
-shapiro.test(df_extant$ML_MORPH.TEnoASC_Score) # p < 0.05, non-parametric
+shapiro.test(op1_mp) # p < 0.05, non-parametric
+shapiro.test(op1_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op1_ml_mkv) # p < 0.05, non-parametric
 
 # Friedman test (non-parametric, multiple groups, paired values)
-q3_fri = data.frame(df_extant$MP_MORPH.TE_Score, df_extant$ML_MORPH.TeASC_Score, df_extant$ML_MORPH.TEnoASC_Score)
-friedman.test(as.matrix(q3_fri))
+op1_q3_fri = data.frame(op1_mp, op1_ml_mk, op1_ml_mkv)
+friedman.test(as.matrix(op1_q3_fri))
 
 # Wilcoxon: pairwise comparisons for paired values
-pairwise.wilcox.test(x=unlist(q3_fri),
-                     g=factor(rep(names(q3_fri), each = nrow(q3_fri))),
+pairwise.wilcox.test(x=unlist(op1_q3_fri),
+                     g=factor(base::rep(names(op1_q3_fri), each = nrow(op1_q3_fri))),
                      paired=TRUE,
                      p.adjust.method="bonferroni")
 
-# Figure
-values <- c(df_extant$MP_MORPH.TE_Score, df_extant$ML_MORPH.TeASC_Score, df_extant$ML_MORPH.TEnoASC_Score)
-group <- c(rep("MP", length(df_extant$MP_MORPH.TE_Score)),
-             rep("ML MKV", length(df_extant$ML_MORPH.TeASC_Score)),
-             rep("ML MK", length(df_extant$ML_MORPH.TEnoASC_Score)))
-block = rep(1:length(df_extant$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
-df_nemenyi <- data.frame(value = values, group = group, block=block)
-df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML MKV", "ML MK"))
-custom_palette <- c("MP" = "#339999", "ML MKV" = "#6f77b4", "ML MK" = "#cccccc")
+# Figure S5
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mkv)
+n_higher_mkv <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mkv)
+n_equal_mkv  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mk)
+n_higher_mk <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mk)
+n_equal_mk  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mk)
+# Figure S5
+cols <- c("op1_mp" = "#339999", "op1_ml_mkv" = "#6f77b4", "op1_ml_mk" = "#cccccc")
+# Add row ID
+op1_q3_fri$row_id <- 1:nrow(op1_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op1_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op1_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op1_ml_mkv < op1_mp ~ "darkred",
+      op1_ml_mkv > op1_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op1_mp > op1_ml_mk ~ "darkred",
+      op1_mp < op1_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op1_q3_fri %>%
+  pivot_longer(cols = c(op1_ml_mkv, op1_mp, op1_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op1_ml_mkv", "op1_mp", "op1_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op1_ml_mkv" ~ 1 + jitter_1,
+    group == "op1_mp"     ~ 2 + jitter_2,
+    group == "op1_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op1_plot = ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op1_ml_mkv, yend = op1_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op1_mp, yend = op1_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ "\n")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ "\n"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
 
-contribution_extant = ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
-  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
-  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
-  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
-  labs(x = "", y = "% Phenomic/TE optimality score\n") +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
-  scale_color_manual(values = custom_palette)
+op1_plot
 ```
+
+
+```{r}
+# Option 2. 1 / TEcost
+op2_mp = 1 / (df_extant$MP_TE_Score)
+op2_ml_mk = 1 / (df_extant$ML_TNT_TEnoASC_Score)
+op2_ml_mkv = 1 / (df_extant$ML_TNT_TEasc_Score)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op2_mp > op2_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op2_mp < op2_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op2_mp == op2_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op2_mp > op2_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op2_mp < op2_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op2_mp == op2_ml_mkv)
+
+print("Stats MP")
+mean(op2_mp)
+sd(op2_mp)
+min(op2_mp)
+max(op2_mp)
+print("Stats ML MK")
+mean(op2_ml_mk)
+sd(op2_ml_mk)
+min(op2_ml_mk)
+max(op2_ml_mk)
+print("Stats ML MKv")
+mean(op2_ml_mkv)
+sd(op2_ml_mkv)
+min(op2_ml_mkv)
+max(op2_ml_mkv)
+
+# Normality tests
+shapiro.test(op2_mp) # p < 0.05, non-parametric
+shapiro.test(op2_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op2_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op2_q3_fri = data.frame(op2_mp, op2_ml_mk, op2_ml_mkv)
+friedman.test(as.matrix(op2_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op2_q3_fri),
+                     g=factor(base::rep(names(op2_q3_fri), each = nrow(op2_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Figure S5
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op2_q3_fri$op2_mp < op2_q3_fri$op2_ml_mkv)
+n_higher_mkv <- sum(op2_q3_fri$op2_mp > op2_q3_fri$op2_ml_mkv)
+n_equal_mkv  <- sum(op2_q3_fri$op2_mp == op2_q3_fri$op2_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op2_q3_fri$op2_mp < op2_q3_fri$op2_ml_mk)
+n_higher_mk <- sum(op2_q3_fri$op2_mp > op2_q3_fri$op2_ml_mk)
+n_equal_mk  <- sum(op2_q3_fri$op2_mp == op2_q3_fri$op2_ml_mk)
+# Figure S5
+cols <- c("op2_mp" = "#339999", "op2_ml_mkv" = "#6f77b4", "op2_ml_mk" = "#cccccc")
+# Add row ID
+op2_q3_fri$row_id <- 1:nrow(op2_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op2_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op2_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op2_ml_mkv < op2_mp ~ "darkred",
+      op2_ml_mkv > op2_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op2_mp > op2_ml_mk ~ "darkred",
+      op2_mp < op2_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op2_q3_fri %>%
+  pivot_longer(cols = c(op2_ml_mkv, op2_mp, op2_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op2_ml_mkv", "op2_mp", "op2_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op2_ml_mkv" ~ 1 + jitter_1,
+    group == "op2_mp"     ~ 2 + jitter_2,
+    group == "op2_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op2_plot = ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op2_ml_mkv, yend = op2_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op2_mp, yend = op2_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("1" ~ "/" ~ "TE"["cost"] ~ "\n")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("1" ~ "/" ~ "TE"["cost"] ~ "\n"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op2_plot
+```
+
+```{r}
+# Option 3. (PHEcost - PHEhomoplasy) / (TEcost - TEhomoplasy)
+op3_mp = (df_extant$MP_MORPHonTE_Score - df_extant$MP_MORPHonTE_homoplasy) / (df_extant$MP_TE_Score - df_extant$MP_TE_homoplasy)
+op3_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score - df_extant$ML_TNT_MORPHonTEnoASC_homoplasies) / (df_extant$ML_TNT_TEnoASC_Score - df_extant$ML_TNT_TEnoASC_homoplasies)
+op3_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score - df_extant$ML_TNT_MORPHonTEasc_homoplasies) / (df_extant$ML_TNT_TEasc_Score - df_extant$ML_TNT_TEnoASC_homoplasies)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op3_mp > op3_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op3_mp < op3_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op3_mp == op3_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op3_mp > op3_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op3_mp < op3_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op3_mp == op3_ml_mkv)
+
+print("Stats MP")
+mean(op3_mp)
+sd(op3_mp)
+min(op3_mp)
+max(op3_mp)
+print("Stats ML MK")
+mean(op3_ml_mk)
+sd(op3_ml_mk)
+min(op3_ml_mk)
+max(op3_ml_mk)
+print("Stats ML MKv")
+mean(op3_ml_mkv)
+sd(op3_ml_mkv)
+min(op3_ml_mkv)
+max(op3_ml_mkv)
+
+# Normality tests
+shapiro.test(op3_mp) # p < 0.05, non-parametric
+shapiro.test(op3_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op3_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op3_q3_fri = data.frame(op3_mp, op3_ml_mk, op3_ml_mkv)
+friedman.test(as.matrix(op3_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op3_q3_fri),
+                     g=factor(base::rep(names(op3_q3_fri), each = nrow(op3_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op3_q3_fri$op3_mp < op3_q3_fri$op3_ml_mkv)
+n_higher_mkv <- sum(op3_q3_fri$op3_mp > op3_q3_fri$op3_ml_mkv)
+n_equal_mkv  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op3_q3_fri$op3_mp < op3_q3_fri$op3_ml_mk)
+n_higher_mk <- sum(op3_q3_fri$op3_mp > op3_q3_fri$op3_ml_mk)
+n_equal_mk  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mk)
+# Figure S5
+cols <- c("op3_mp" = "#339999", "op3_ml_mkv" = "#6f77b4", "op3_ml_mk" = "#cccccc")
+# Add row ID
+op3_q3_fri$row_id <- 1:nrow(op3_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op3_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op3_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op3_ml_mkv < op3_mp ~ "darkred",
+      op3_ml_mkv > op3_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op3_mp > op3_ml_mk ~ "darkred",
+      op3_mp < op3_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op3_q3_fri %>%
+  pivot_longer(cols = c(op3_ml_mkv, op3_mp, op3_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op3_ml_mkv", "op3_mp", "op3_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op3_ml_mkv" ~ 1 + jitter_1,
+    group == "op3_mp"     ~ 2 + jitter_2,
+    group == "op3_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op3_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op3_ml_mkv, yend = op3_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op3_mp, yend = op3_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "-" ~ "PHE"["homoplasy"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "-" ~ "TE"["homoplasy"] ~ ")")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("(PHE"["cost"] ~ "-" ~ "PHE"["homoplasy"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "-" ~ "TE"["homoplasy"] ~ ")"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op3_plot
+```
+
+```{r}
+# Option 4. (PHEcost / TEcost) / PHEhomoplasy
+op4_mp = (df_extant$MP_MORPHonTE_Score / df_extant$MP_TE_Score) / df_extant$MP_MORPHonTE_homoplasy
+op4_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score / df_extant$ML_TNT_TEnoASC_Score) / df_extant$ML_TNT_MORPHonTEnoASC_homoplasies
+op4_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score / df_extant$ML_TNT_TEasc_Score) / df_extant$ML_TNT_MORPHonTEasc_homoplasies
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op4_mp > op4_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op4_mp < op4_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op4_mp == op4_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op4_mp > op4_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op4_mp < op4_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op4_mp == op4_ml_mkv)
+
+print("Stats MP")
+mean(op4_mp)
+sd(op4_mp)
+min(op4_mp)
+max(op4_mp)
+print("Stats ML MK")
+mean(op4_ml_mk)
+sd(op4_ml_mk)
+min(op4_ml_mk)
+max(op4_ml_mk)
+print("Stats ML MKv")
+mean(op4_ml_mkv)
+sd(op4_ml_mkv)
+min(op4_ml_mkv)
+max(op4_ml_mkv)
+
+# Normality tests
+shapiro.test(op4_mp) # p < 0.05, non-parametric
+shapiro.test(op4_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op4_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op4_q3_fri = data.frame(op4_mp, op4_ml_mk, op4_ml_mkv)
+friedman.test(as.matrix(op4_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op4_q3_fri),
+                     g=factor(base::rep(names(op4_q3_fri), each = nrow(op4_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mkv)
+n_higher_mkv <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mkv)
+n_equal_mkv  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mk)
+n_higher_mk <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mk)
+n_equal_mk  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mk)
+# Figure S5
+cols <- c("op4_mp" = "#339999", "op4_ml_mkv" = "#6f77b4", "op4_ml_mk" = "#cccccc")
+# Add row ID
+op4_q3_fri$row_id <- 1:nrow(op4_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op4_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op4_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op4_ml_mkv < op4_mp ~ "darkred",
+      op4_ml_mkv > op4_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op4_mp > op4_ml_mk ~ "darkred",
+      op4_mp < op4_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op4_q3_fri %>%
+  pivot_longer(cols = c(op4_ml_mkv, op4_mp, op4_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op4_ml_mkv", "op4_mp", "op4_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op4_ml_mkv" ~ 1 + jitter_1,
+    group == "op4_mp"     ~ 2 + jitter_2,
+    group == "op4_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op4_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op4_ml_mkv, yend = op4_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op4_mp, yend = op4_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"])) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"]),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op4_plot
+```
+
+
+```{r}
+# Option 5. (PHEcost x PHEci) / (TEcost x TEci)
+op5_mp = (df_extant$MP_MORPHonTE_Score * df_extant$MP_MORPHonTE_CI) / (df_extant$MP_TE_Score * df_extant$MP_TE_CI) 
+op5_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score * df_extant$ML_TNT_MORPHonTEnoASC_CI) / (df_extant$ML_TNT_TEnoASC_Score * df_extant$ML_TNT_TEnoASC_CI)
+op5_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score * df_extant$ML_TNT_MORPHonTEasc_CI) / (df_extant$ML_TNT_TEasc_Score * df_extant$ML_TNT_TEasc_CI)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op5_mp > op5_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op5_mp < op5_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op5_mp == op5_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op5_mp > op5_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op5_mp < op5_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op5_mp == op5_ml_mkv)
+
+print("Stats MP")
+mean(op5_mp)
+sd(op5_mp)
+min(op5_mp)
+max(op5_mp)
+print("Stats ML MK")
+mean(op5_ml_mk)
+sd(op5_ml_mk)
+min(op5_ml_mk)
+max(op5_ml_mk)
+print("Stats ML MKv")
+mean(op5_ml_mkv)
+sd(op5_ml_mkv)
+min(op5_ml_mkv)
+max(op5_ml_mkv)
+
+# Normality tests
+shapiro.test(op5_mp) # p < 0.05, non-parametric
+shapiro.test(op5_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op5_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op5_q3_fri = data.frame(op5_mp, op5_ml_mk, op5_ml_mkv)
+friedman.test(as.matrix(op5_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op5_q3_fri),
+                     g=factor(base::rep(names(op5_q3_fri), each = nrow(op5_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op5_q3_fri$op5_mp < op5_q3_fri$op5_ml_mkv)
+n_higher_mkv <- sum(op5_q3_fri$op5_mp > op5_q3_fri$op5_ml_mkv)
+n_equal_mkv  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op5_q3_fri$op5_mp < op5_q3_fri$op5_ml_mk)
+n_higher_mk <- sum(op5_q3_fri$op5_mp > op5_q3_fri$op5_ml_mk)
+n_equal_mk  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mk)
+# Figure S5
+cols <- c("op5_mp" = "#339999", "op5_ml_mkv" = "#6f77b4", "op5_ml_mk" = "#cccccc")
+# Add row ID
+op5_q3_fri$row_id <- 1:nrow(op5_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op5_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op5_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op5_ml_mkv < op5_mp ~ "darkred",
+      op5_ml_mkv > op5_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op5_mp > op5_ml_mk ~ "darkred",
+      op5_mp < op5_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op5_q3_fri %>%
+  pivot_longer(cols = c(op5_ml_mkv, op5_mp, op5_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op5_ml_mkv", "op5_mp", "op5_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op5_ml_mkv" ~ 1 + jitter_1,
+    group == "op5_mp"     ~ 2 + jitter_2,
+    group == "op5_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op5_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op5_ml_mkv, yend = op5_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op5_mp, yend = op5_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "x" ~ "PHE"["CI"] ~ ")" ~ "/" ~ "(TE"["cost"]) ~ "x" ~ "TE"["CI"]~ ")") +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(  y       = expression("(PHE"["cost"] ~ "x" ~ "PHE"["CI"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "x" ~ "TE"["CI"] ~ ")"),
+         caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op5_plot
+```
+
+```{r}
+# Option 6. (PHEcost x PHEri) / (TEcost x TEri)
+op6_mp = (df_extant$MP_MORPHonTE_Score * df_extant$MP_MORPHonTE_RI) / (df_extant$MP_TE_Score * df_extant$MP_TE_RI) 
+op6_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score * df_extant$ML_TNT_MORPHonTEnoASC_RI) / (df_extant$ML_TNT_TEnoASC_Score * df_extant$ML_TNT_TEnoASC_RI)
+op6_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score * df_extant$ML_TNT_MORPHonTEasc_RI) / (df_extant$ML_TNT_TEasc_Score * df_extant$ML_TNT_TEasc_RI)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op6_mp > op6_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op6_mp < op6_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op6_mp == op6_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op6_mp > op6_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op6_mp < op6_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op6_mp == op6_ml_mkv)
+
+print("Stats MP")
+mean(op6_mp)
+sd(op6_mp)
+min(op6_mp)
+max(op6_mp)
+print("Stats ML MK")
+mean(op6_ml_mk)
+sd(op6_ml_mk)
+min(op6_ml_mk)
+max(op6_ml_mk)
+print("Stats ML MKv")
+mean(op6_ml_mkv)
+sd(op6_ml_mkv)
+min(op6_ml_mkv)
+max(op6_ml_mkv)
+
+# Normality tests
+shapiro.test(op6_mp) # p < 0.05, non-parametric
+shapiro.test(op6_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op6_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op6_q3_fri = data.frame(op6_mp, op6_ml_mk, op6_ml_mkv)
+friedman.test(as.matrix(op6_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op6_q3_fri),
+                     g=factor(base::rep(names(op6_q3_fri), each = nrow(op6_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op6_q3_fri$op6_mp < op6_q3_fri$op6_ml_mkv)
+n_higher_mkv <- sum(op6_q3_fri$op6_mp > op6_q3_fri$op6_ml_mkv)
+n_equal_mkv  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op6_q3_fri$op6_mp < op6_q3_fri$op6_ml_mk)
+n_higher_mk <- sum(op6_q3_fri$op6_mp > op6_q3_fri$op6_ml_mk)
+n_equal_mk  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mk)
+# Figure S5
+cols <- c("op6_mp" = "#339999", "op6_ml_mkv" = "#6f77b4", "op6_ml_mk" = "#cccccc")
+# Add row ID
+op6_q3_fri$row_id <- 1:nrow(op6_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op6_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op6_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op6_ml_mkv < op6_mp ~ "darkred",
+      op6_ml_mkv > op6_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op6_mp > op6_ml_mk ~ "darkred",
+      op6_mp < op6_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op6_q3_fri %>%
+  pivot_longer(cols = c(op6_ml_mkv, op6_mp, op6_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op6_ml_mkv", "op6_mp", "op6_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op6_ml_mkv" ~ 1 + jitter_1,
+    group == "op6_mp"     ~ 2 + jitter_2,
+    group == "op6_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op6_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op6_ml_mkv, yend = op6_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op6_mp, yend = op6_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "x" ~ "PHE"["RI"] ~ ")" ~ "/" ~ "(TE"["cost"]) ~ "x" ~ "TE"["RI"]~ ")") +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(  y       = expression("(PHE"["cost"] ~ "x" ~ "PHE"["RI"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "x" ~ "TE"["RI"] ~ ")"),
+         caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op6_plot
+```
+
+```{r}
+# Figure 5: Only options 1 and 6
+
+# Combine plots with labels
+combined <- (op1_plot | op6_plot) +
+  plot_annotation(tag_levels = "A")
+combined
+
+# Save as jpg
+ggsave("Figures/fig5_extant_plots.jpg", combined, width = 13, height = 6, dpi = 300)
+```
+
+```{r}
+# Figure S5: Only options 3, 4 and 5
+
+# Combine plots with labels
+combined <- (op3_plot | op4_plot | op5_plot) +
+  plot_annotation(tag_levels = "A")
+combined
+
+# Save as jpg
+ggsave("Figures/figS5_extant_plots.jpg", combined, width = 18, height = 6, dpi = 300)
+```
+
 
 ### Q3.3.2 Extant + extinct
 
 ```{r}
-# Load data for extant taxa
+# Load data
 df <- read.csv("Dataset_R_q123_08-25.csv")
-df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+#df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
+# Keep only extinct
+extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
+# Append the extant datasets that do not appear among extinct
+df_extinct <- df[df$Type == "Extinct" | 
+                  (df$Type == "Extant" & !(df$Dataset %in% extinct_datasets)), ]
 
-# Exploratory data analyses
-print("Number of times that %MORPH/TE is higher in MP than ML ASC")
-sum(df_extinct$MP_MORPH.TE_Score > df_extinct$ML_MORPH.TeASC_Score)
-print("Number of times that %MORPH/TE is lower in MP than ML ASC")
-sum(df_extinct$MP_MORPH.TE_Score < df_extinct$ML_MORPH.TeASC_Score)
+# Option 1. PHEcost / TEcost
+op1_mp = (df_extinct$MP_MORPHonTE_Score) / (df_extinct$MP_TE_Score)
+op1_ml_mk = (df_extinct$ML_TNT_MORPHonTEnoASC_score) / (df_extinct$ML_TNT_TEnoASC_Score)
+op1_ml_mkv = (df_extinct$ML_TNT_MORPHonTEasc_score) / (df_extinct$ML_TNT_TEasc_Score)
 
-print("Number of times that %MORPH/TE is higher in MP than ML noASC")
-sum(df_extinct$MP_MORPH.TE_Score > df_extinct$ML_MORPH.TEnoASC_Score)
-print("Number of times that %MORPH/TE is lower in MP than ML noASC")
-sum(df_extinct$MP_MORPH.TE_Score < df_extinct$ML_MORPH.TEnoASC_Score)
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op1_mp > op1_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op1_mp < op1_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op1_mp == op1_ml_mk)
 
-print("Stats MP MORPH/TE")
-mean(df_extinct$MP_MORPH.TE_Score)
-sd(df_extinct$MP_MORPH.TE_Score)
-min(df_extinct$MP_MORPH.TE_Score)
-max(df_extinct$MP_MORPH.TE_Score)
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op1_mp > op1_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op1_mp < op1_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op1_mp == op1_ml_mkv)
 
-print("Stats ML MKV MORPH/TE")
-mean(df_extinct$ML_MORPH.TeASC_Score)
-sd(df_extinct$ML_MORPH.TeASC_Score)
-min(df_extinct$ML_MORPH.TeASC_Score)
-max(df_extinct$ML_MORPH.TeASC_Score)
-
-print("Stats ML MK MORPH/TE")
-mean(df_extinct$ML_MORPH.TEnoASC_Score)
-sd(df_extinct$ML_MORPH.TEnoASC_Score)
-min(df_extinct$ML_MORPH.TEnoASC_Score)
-max(df_extinct$ML_MORPH.TEnoASC_Score)
+print("Stats MP")
+mean(op1_mp)
+sd(op1_mp)
+min(op1_mp)
+max(op1_mp)
+print("Stats ML MK")
+mean(op1_ml_mk)
+sd(op1_ml_mk)
+min(op1_ml_mk)
+max(op1_ml_mk)
+print("Stats ML MKv")
+mean(op1_ml_mkv)
+sd(op1_ml_mkv)
+min(op1_ml_mkv)
+max(op1_ml_mkv)
 
 # Normality tests
-shapiro.test(df_extinct$MP_MORPH.TE_Score) # p < 0.05, non-parametric
-shapiro.test(df_extinct$ML_MORPH.TeASC_Score) # p > 0.05, parametric
-shapiro.test(df_extinct$ML_MORPH.TEnoASC_Score) # p > 0.05, parametric
+shapiro.test(op1_mp) # p < 0.05, non-parametric
+shapiro.test(op1_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op1_ml_mkv) # p < 0.05, non-parametric
 
 # Friedman test (non-parametric, multiple groups, paired values)
-q3_fri = data.frame(df_extinct$MP_MORPH.TE_Score, df_extinct$ML_MORPH.TeASC_Score, df_extinct$ML_MORPH.TEnoASC_Score)
-friedman.test(as.matrix(q3_fri))
+op1_q3_fri = data.frame(op1_mp, op1_ml_mk, op1_ml_mkv)
+friedman.test(as.matrix(op1_q3_fri))
 
 # Wilcoxon: pairwise comparisons for paired values
-pairwise.wilcox.test(x=unlist(q3_fri),
-                     g=factor(rep(names(q3_fri), each = nrow(q3_fri))),
+pairwise.wilcox.test(x=unlist(op1_q3_fri),
+                     g=factor(base::rep(names(op1_q3_fri), each = nrow(op1_q3_fri))),
                      paired=TRUE,
                      p.adjust.method="bonferroni")
 
-# Figure
-values <- c(df_extinct$MP_MORPH.TE_Score, df_extinct$ML_MORPH.TeASC_Score, df_extinct$ML_MORPH.TEnoASC_Score)
-group <- c(rep("MP", length(df_extinct$MP_MORPH.TE_Score)),
-             rep("ML MKV", length(df_extinct$ML_MORPH.TeASC_Score)),
-             rep("ML MK", length(df_extinct$ML_MORPH.TEnoASC_Score)))
-block = rep(1:length(df_extinct$MP_MORPH.TE_Score), 3)  # Indices (same length as vectors)
-df_nemenyi <- data.frame(value = values, group = group, block=block)
-df_nemenyi$group <- factor(df_nemenyi$group, levels = c("MP", "ML MKV", "ML MK"))
-custom_palette <- c("MP" = "#339999", "ML MKV" = "#6f77b4", "ML MK" = "#cccccc")
+# Figure S5
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mkv)
+n_higher_mkv <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mkv)
+n_equal_mkv  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mk)
+n_higher_mk <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mk)
+n_equal_mk  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mk)
+# Figure S5
+cols <- c("op1_mp" = "#339999", "op1_ml_mkv" = "#6f77b4", "op1_ml_mk" = "#cccccc")
+# Add row ID
+op1_q3_fri$row_id <- 1:nrow(op1_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op1_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op1_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op1_ml_mkv < op1_mp ~ "darkred",
+      op1_ml_mkv > op1_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op1_mp > op1_ml_mk ~ "darkred",
+      op1_mp < op1_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op1_q3_fri %>%
+  pivot_longer(cols = c(op1_ml_mkv, op1_mp, op1_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op1_ml_mkv", "op1_mp", "op1_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op1_ml_mkv" ~ 1 + jitter_1,
+    group == "op1_mp"     ~ 2 + jitter_2,
+    group == "op1_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op1_plot = ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op1_ml_mkv, yend = op1_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op1_mp, yend = op1_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ "\n")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ "\n"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
 
-contribution_extinct = ggplot(df_nemenyi, aes(x = group, y = value, group = block)) +
-  #geom_boxplot(outlier.shape = NA) +  # Create boxplot without default outliers
-  geom_line(aes(group = block), color = "black", alpha = 0.1) +  # Link paired values
-  geom_point(aes(color = group), alpha = .4, width = 0.2) +  # Add transparent dots
-  labs(x = "", y = "% Phenomic/TE optimality score\n") +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(), legend.position = "bottom", legend.title = element_blank()) +  # Hide legend if not needed
-  scale_color_manual(values = custom_palette)
+op1_plot
 ```
-
-### Q3.3.3 Plot (Figure S5)
 
 ```{r}
-s5= plot_grid(contribution_extant, 
-          contribution_extinct, 
-          labels = c("A", "B"),   # adds panel labels
-          ncol = 1)               # A on top of B
-# Save to JPG at 300 dpi
-ggsave("Figures/figS5_contributionPhenomic.jpg", s5, dpi = 300,
-       width = 6, height = 8, units = "in")  # adjust size
+# Option 2. 1 / TEcost
+op2_mp = 1 / (df_extinct$MP_TE_Score)
+op2_ml_mk = 1 / (df_extinct$ML_TNT_TEnoASC_Score)
+op2_ml_mkv = 1 / (df_extinct$ML_TNT_TEasc_Score)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op2_mp > op2_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op2_mp < op2_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op2_mp == op2_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op2_mp > op2_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op2_mp < op2_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op2_mp == op2_ml_mkv)
+
+print("Stats MP")
+mean(op2_mp)
+sd(op2_mp)
+min(op2_mp)
+max(op2_mp)
+print("Stats ML MK")
+mean(op2_ml_mk)
+sd(op2_ml_mk)
+min(op2_ml_mk)
+max(op2_ml_mk)
+print("Stats ML MKv")
+mean(op2_ml_mkv)
+sd(op2_ml_mkv)
+min(op2_ml_mkv)
+max(op2_ml_mkv)
+
+# Normality tests
+shapiro.test(op2_mp) # p < 0.05, non-parametric
+shapiro.test(op2_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op2_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op2_q3_fri = data.frame(op2_mp, op2_ml_mk, op2_ml_mkv)
+friedman.test(as.matrix(op2_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op2_q3_fri),
+                     g=factor(base::rep(names(op2_q3_fri), each = nrow(op2_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Figure S5
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op2_q3_fri$op2_mp < op2_q3_fri$op2_ml_mkv)
+n_higher_mkv <- sum(op2_q3_fri$op2_mp > op2_q3_fri$op2_ml_mkv)
+n_equal_mkv  <- sum(op2_q3_fri$op2_mp == op2_q3_fri$op2_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op2_q3_fri$op2_mp < op2_q3_fri$op2_ml_mk)
+n_higher_mk <- sum(op2_q3_fri$op2_mp > op2_q3_fri$op2_ml_mk)
+n_equal_mk  <- sum(op2_q3_fri$op2_mp == op2_q3_fri$op2_ml_mk)
+# Figure S5
+cols <- c("op2_mp" = "#339999", "op2_ml_mkv" = "#6f77b4", "op2_ml_mk" = "#cccccc")
+# Add row ID
+op2_q3_fri$row_id <- 1:nrow(op2_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op2_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op2_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op2_ml_mkv < op2_mp ~ "darkred",
+      op2_ml_mkv > op2_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op2_mp > op2_ml_mk ~ "darkred",
+      op2_mp < op2_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op2_q3_fri %>%
+  pivot_longer(cols = c(op2_ml_mkv, op2_mp, op2_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op2_ml_mkv", "op2_mp", "op2_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op2_ml_mkv" ~ 1 + jitter_1,
+    group == "op2_mp"     ~ 2 + jitter_2,
+    group == "op2_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op2_plot = ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op2_ml_mkv, yend = op2_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op2_mp, yend = op2_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("1" ~ "/" ~ "TE"["cost"] ~ "\n")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("1" ~ "/" ~ "TE"["cost"] ~ "\n"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op2_plot
 ```
 
+```{r}
+# Option 3. (PHEcost - PHEhomoplasy) / (TEcost - TEhomoplasy)
+op3_mp = (df_extinct$MP_MORPHonTE_Score - df_extinct$MP_MORPHonTE_homoplasy) / (df_extinct$MP_TE_Score - df_extinct$MP_TE_homoplasy)
+op3_ml_mk = (df_extinct$ML_TNT_MORPHonTEnoASC_score - df_extinct$ML_TNT_MORPHonTEnoASC_homoplasies) / (df_extinct$ML_TNT_TEnoASC_Score - df_extinct$ML_TNT_TEnoASC_homoplasies)
+op3_ml_mkv = (df_extinct$ML_TNT_MORPHonTEasc_score - df_extinct$ML_TNT_MORPHonTEasc_homoplasies) / (df_extinct$ML_TNT_TEasc_Score - df_extinct$ML_TNT_TEnoASC_homoplasies)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op3_mp > op3_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op3_mp < op3_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op3_mp == op3_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op3_mp > op3_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op3_mp < op3_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op3_mp == op3_ml_mkv)
+
+print("Stats MP")
+mean(op3_mp)
+sd(op3_mp)
+min(op3_mp)
+max(op3_mp)
+print("Stats ML MK")
+mean(op3_ml_mk)
+sd(op3_ml_mk)
+min(op3_ml_mk)
+max(op3_ml_mk)
+print("Stats ML MKv")
+mean(op3_ml_mkv)
+sd(op3_ml_mkv)
+min(op3_ml_mkv)
+max(op3_ml_mkv)
+
+# Normality tests
+shapiro.test(op3_mp) # p < 0.05, non-parametric
+shapiro.test(op3_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op3_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op3_q3_fri = data.frame(op3_mp, op3_ml_mk, op3_ml_mkv)
+friedman.test(as.matrix(op3_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op3_q3_fri),
+                     g=factor(base::rep(names(op3_q3_fri), each = nrow(op3_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op3_q3_fri$op3_mp < op3_q3_fri$op3_ml_mkv)
+n_higher_mkv <- sum(op3_q3_fri$op3_mp > op3_q3_fri$op3_ml_mkv)
+n_equal_mkv  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op3_q3_fri$op3_mp < op3_q3_fri$op3_ml_mk)
+n_higher_mk <- sum(op3_q3_fri$op3_mp > op3_q3_fri$op3_ml_mk)
+n_equal_mk  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mk)
+# Figure S5
+cols <- c("op3_mp" = "#339999", "op3_ml_mkv" = "#6f77b4", "op3_ml_mk" = "#cccccc")
+# Add row ID
+op3_q3_fri$row_id <- 1:nrow(op3_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op3_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op3_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op3_ml_mkv < op3_mp ~ "darkred",
+      op3_ml_mkv > op3_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op3_mp > op3_ml_mk ~ "darkred",
+      op3_mp < op3_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op3_q3_fri %>%
+  pivot_longer(cols = c(op3_ml_mkv, op3_mp, op3_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op3_ml_mkv", "op3_mp", "op3_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op3_ml_mkv" ~ 1 + jitter_1,
+    group == "op3_mp"     ~ 2 + jitter_2,
+    group == "op3_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op3_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op3_ml_mkv, yend = op3_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op3_mp, yend = op3_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "-" ~ "PHE"["homoplasy"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "-" ~ "TE"["homoplasy"] ~ ")")) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("(PHE"["cost"] ~ "-" ~ "PHE"["homoplasy"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "-" ~ "TE"["homoplasy"] ~ ")"),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op3_plot
+```
+
+```{r}
+# Option 4. (PHEcost / TEcost) / PHEhomoplasy
+op4_mp = (df_extinct$MP_MORPHonTE_Score / df_extinct$MP_TE_Score) / df_extinct$MP_MORPHonTE_homoplasy
+op4_ml_mk = (df_extinct$ML_TNT_MORPHonTEnoASC_score / df_extinct$ML_TNT_TEnoASC_Score) / df_extinct$ML_TNT_MORPHonTEnoASC_homoplasies
+op4_ml_mkv = (df_extinct$ML_TNT_MORPHonTEasc_score / df_extinct$ML_TNT_TEasc_Score) / df_extinct$ML_TNT_MORPHonTEasc_homoplasies
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op4_mp > op4_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op4_mp < op4_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op4_mp == op4_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op4_mp > op4_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op4_mp < op4_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op4_mp == op4_ml_mkv)
+
+print("Stats MP")
+mean(op4_mp)
+sd(op4_mp)
+min(op4_mp)
+max(op4_mp)
+print("Stats ML MK")
+mean(op4_ml_mk)
+sd(op4_ml_mk)
+min(op4_ml_mk)
+max(op4_ml_mk)
+print("Stats ML MKv")
+mean(op4_ml_mkv)
+sd(op4_ml_mkv)
+min(op4_ml_mkv)
+max(op4_ml_mkv)
+
+# Normality tests
+shapiro.test(op4_mp) # p < 0.05, non-parametric
+shapiro.test(op4_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op4_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op4_q3_fri = data.frame(op4_mp, op4_ml_mk, op4_ml_mkv)
+friedman.test(as.matrix(op4_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op4_q3_fri),
+                     g=factor(base::rep(names(op4_q3_fri), each = nrow(op4_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mkv)
+n_higher_mkv <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mkv)
+n_equal_mkv  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mk)
+n_higher_mk <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mk)
+n_equal_mk  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mk)
+# Figure S5
+cols <- c("op4_mp" = "#339999", "op4_ml_mkv" = "#6f77b4", "op4_ml_mk" = "#cccccc")
+# Add row ID
+op4_q3_fri$row_id <- 1:nrow(op4_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op4_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op4_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op4_ml_mkv < op4_mp ~ "darkred",
+      op4_ml_mkv > op4_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op4_mp > op4_ml_mk ~ "darkred",
+      op4_mp < op4_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op4_q3_fri %>%
+  pivot_longer(cols = c(op4_ml_mkv, op4_mp, op4_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op4_ml_mkv", "op4_mp", "op4_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op4_ml_mkv" ~ 1 + jitter_1,
+    group == "op4_mp"     ~ 2 + jitter_2,
+    group == "op4_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op4_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op4_ml_mkv, yend = op4_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op4_mp, yend = op4_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"])) +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(
+    y       = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"]),
+    caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op4_plot
+```
+
+
+```{r}
+# Option 5. (PHEcost x PHEci) / (TEcost x TEci)
+op5_mp = (df_extinct$MP_MORPHonTE_Score * df_extinct$MP_MORPHonTE_CI) / (df_extinct$MP_TE_Score * df_extinct$MP_TE_CI) 
+op5_ml_mk = (df_extinct$ML_TNT_MORPHonTEnoASC_score * df_extinct$ML_TNT_MORPHonTEnoASC_CI) / (df_extinct$ML_TNT_TEnoASC_Score * df_extinct$ML_TNT_TEnoASC_CI)
+op5_ml_mkv = (df_extinct$ML_TNT_MORPHonTEasc_score * df_extinct$ML_TNT_MORPHonTEasc_CI) / (df_extinct$ML_TNT_TEasc_Score * df_extinct$ML_TNT_TEasc_CI)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op5_mp > op5_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op5_mp < op5_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op5_mp == op5_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op5_mp > op5_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op5_mp < op5_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op5_mp == op5_ml_mkv)
+
+print("Stats MP")
+mean(op5_mp)
+sd(op5_mp)
+min(op5_mp)
+max(op5_mp)
+print("Stats ML MK")
+mean(op5_ml_mk)
+sd(op5_ml_mk)
+min(op5_ml_mk)
+max(op5_ml_mk)
+print("Stats ML MKv")
+mean(op5_ml_mkv)
+sd(op5_ml_mkv)
+min(op5_ml_mkv)
+max(op5_ml_mkv)
+
+# Normality tests
+shapiro.test(op5_mp) # p < 0.05, non-parametric
+shapiro.test(op5_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op5_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op5_q3_fri <- data.frame(op5_mp, op5_ml_mk, op5_ml_mkv) %>%
+  filter(is.finite(op5_mp) & is.finite(op5_ml_mk) & is.finite(op5_ml_mkv))
+friedman.test(as.matrix(op5_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op5_q3_fri),
+                     g=factor(base::rep(names(op5_q3_fri), each = nrow(op5_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op5_q3_fri$op5_mp < op5_q3_fri$op5_ml_mkv)
+n_higher_mkv <- sum(op5_q3_fri$op5_mp > op5_q3_fri$op5_ml_mkv)
+n_equal_mkv  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op5_q3_fri$op5_mp < op5_q3_fri$op5_ml_mk)
+n_higher_mk <- sum(op5_q3_fri$op5_mp > op5_q3_fri$op5_ml_mk)
+n_equal_mk  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mk)
+# Figure S5
+cols <- c("op5_mp" = "#339999", "op5_ml_mkv" = "#6f77b4", "op5_ml_mk" = "#cccccc")
+# Add row ID
+op5_q3_fri$row_id <- 1:nrow(op5_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op5_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op5_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op5_ml_mkv < op5_mp ~ "darkred",
+      op5_ml_mkv > op5_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op5_mp > op5_ml_mk ~ "darkred",
+      op5_mp < op5_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op5_q3_fri %>%
+  pivot_longer(cols = c(op5_ml_mkv, op5_mp, op5_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op5_ml_mkv", "op5_mp", "op5_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op5_ml_mkv" ~ 1 + jitter_1,
+    group == "op5_mp"     ~ 2 + jitter_2,
+    group == "op5_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op5_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op5_ml_mkv, yend = op5_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op5_mp, yend = op5_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "x" ~ "PHE"["CI"] ~ ")" ~ "/" ~ "(TE"["cost"]) ~ "x" ~ "TE"["CI"]~ ")") +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(  y       = expression("(PHE"["cost"] ~ "x" ~ "PHE"["CI"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "x" ~ "TE"["CI"] ~ ")"),
+         caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op5_plot
+```
+
+```{r}
+# Option 6. (PHEcost x PHEri) / (TEcost x TEri)
+op6_mp = (df_extinct$MP_MORPHonTE_Score * df_extinct$MP_MORPHonTE_RI) / (df_extinct$MP_TE_Score * df_extinct$MP_TE_RI) 
+op6_ml_mk = (df_extinct$ML_TNT_MORPHonTEnoASC_score * df_extinct$ML_TNT_MORPHonTEnoASC_RI) / (df_extinct$ML_TNT_TEnoASC_Score * df_extinct$ML_TNT_TEnoASC_RI)
+op6_ml_mkv = (df_extinct$ML_TNT_MORPHonTEasc_score * df_extinct$ML_TNT_MORPHonTEasc_RI) / (df_extinct$ML_TNT_TEasc_Score * df_extinct$ML_TNT_TEasc_RI)
+
+print("Number of times that contribution of PHE is higher in MP than ML MK")
+sum(op6_mp > op6_ml_mk)
+print("Number of times that contribution of PHE is lower in MP than ML MK")
+sum(op6_mp < op6_ml_mk)
+print("Number of times that contribution of PHE is equal in MP than ML MK")
+sum(op6_mp == op6_ml_mk)
+
+print("Number of times that contribution of PHE is higher in MP than ML MKv")
+sum(op6_mp > op6_ml_mkv)
+print("Number of times that contribution of PHE is lower in MP than ML MKv")
+sum(op6_mp < op6_ml_mkv)
+print("Number of times that contribution of PHE is equal in MP than ML MKv")
+sum(op6_mp == op6_ml_mkv)
+
+print("Stats MP")
+mean(op6_mp)
+sd(op6_mp)
+min(op6_mp)
+max(op6_mp)
+print("Stats ML MK")
+mean(op6_ml_mk)
+sd(op6_ml_mk)
+min(op6_ml_mk)
+max(op6_ml_mk)
+print("Stats ML MKv")
+mean(op6_ml_mkv)
+sd(op6_ml_mkv)
+min(op6_ml_mkv)
+max(op6_ml_mkv)
+
+# Normality tests
+shapiro.test(op6_mp) # p < 0.05, non-parametric
+shapiro.test(op6_ml_mk) # p < 0.05, non-parametric
+shapiro.test(op6_ml_mkv) # p < 0.05, non-parametric
+
+# Friedman test (non-parametric, multiple groups, paired values)
+op6_q3_fri <- data.frame(op6_mp, op6_ml_mk, op6_ml_mkv) %>%
+  filter(is.finite(op6_mp) & is.finite(op6_ml_mk) & is.finite(op6_ml_mkv))
+friedman.test(as.matrix(op6_q3_fri))
+
+# Wilcoxon: pairwise comparisons for paired values
+pairwise.wilcox.test(x=unlist(op6_q3_fri),
+                     g=factor(base::rep(names(op6_q3_fri), each = nrow(op6_q3_fri))),
+                     paired=TRUE,
+                     p.adjust.method="bonferroni")
+
+# Compute counts (MP vs ML MKv)
+n_lower_mkv <- sum(op6_q3_fri$op6_mp < op6_q3_fri$op6_ml_mkv)
+n_higher_mkv <- sum(op6_q3_fri$op6_mp > op6_q3_fri$op6_ml_mkv)
+n_equal_mkv  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mkv)
+# Compute counts (MP vs ML MK)
+n_lower_mk <- sum(op6_q3_fri$op6_mp < op6_q3_fri$op6_ml_mk)
+n_higher_mk <- sum(op6_q3_fri$op6_mp > op6_q3_fri$op6_ml_mk)
+n_equal_mk  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mk)
+# Figure S5
+cols <- c("op6_mp" = "#339999", "op6_ml_mkv" = "#6f77b4", "op6_ml_mk" = "#cccccc")
+# Add row ID
+op6_q3_fri$row_id <- 1:nrow(op6_q3_fri)
+# Pre-compute jitter offsets (same seed) — smaller jitter
+set.seed(42)
+n <- nrow(op6_q3_fri)
+jitter_offsets <- data.frame(
+  row_id   = 1:n,
+  jitter_1 = runif(n, -0.03, 0.03),
+  jitter_2 = runif(n, -0.03, 0.03),
+  jitter_3 = runif(n, -0.03, 0.03)
+)
+# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
+df_jitter <- op6_q3_fri %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(
+    x1 = 1 + jitter_1,  # ML MKv
+    x2 = 2 + jitter_2,  # MP
+    x3 = 3 + jitter_3,  # ML MK
+    seg1_color = case_when(
+      op6_ml_mkv < op6_mp ~ "darkred",
+      op6_ml_mkv > op6_mp ~ "blue",
+      TRUE                ~ "gray"
+    ),
+    seg2_color = case_when(
+      op6_mp > op6_ml_mk ~ "darkred",
+      op6_mp < op6_ml_mk ~ "blue",
+      TRUE               ~ "gray"
+    )
+  )
+# Convert to long format — new level order
+df_long <- op6_q3_fri %>%
+  pivot_longer(cols = c(op6_ml_mkv, op6_mp, op6_ml_mk),
+               names_to  = "group",
+               values_to = "value") %>%
+  mutate(group = factor(group, levels = c("op6_ml_mkv", "op6_mp", "op6_ml_mk"))) %>%
+  left_join(jitter_offsets, by = "row_id") %>%
+  mutate(x_jittered = case_when(
+    group == "op6_ml_mkv" ~ 1 + jitter_1,
+    group == "op6_mp"     ~ 2 + jitter_2,
+    group == "op6_ml_mk"  ~ 3 + jitter_3
+  ))
+# Plot
+op6_plot=ggplot() +
+  geom_boxplot(data = df_long,
+               aes(x = as.numeric(group), y = value, fill = group),
+               alpha = 0.5, outlier.shape = NA,
+               color = "gray40", linewidth = 0.5, width = 0.5) +
+  # Segments: ML MKv -> MP
+  geom_segment(data = df_jitter,
+               aes(x = x1, xend = x2, y = op6_ml_mkv, yend = op6_mp, color = seg1_color),
+               linewidth = 0.4, alpha = 0.2) +
+  # Segments: MP -> ML MK
+  geom_segment(data = df_jitter,
+               aes(x = x2, xend = x3, y = op6_mp, yend = op6_ml_mk, color = seg2_color),
+               linewidth = 0.4, alpha = 0.2) +
+  geom_point(data = df_long,
+             aes(x = x_jittered, y = value, color = group),
+             size = 2, alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  scale_color_manual(values = c(cols,
+                                "darkred"  = "darkred",
+                                "blue" = "blue",
+                                "gray" = "gray70")) +
+  theme_classic() +
+  theme(legend.position = "none",
+        axis.title.x    = element_blank()) +
+  labs(y = expression("(PHE"["cost"] ~ "x" ~ "PHE"["RI"] ~ ")" ~ "/" ~ "(TE"["cost"]) ~ "x" ~ "TE"["RI"]~ ")") +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("ML MKv", "MP", "ML MK"))+
+  labs(  y       = expression("(PHE"["cost"] ~ "x" ~ "PHE"["RI"] ~ ")" ~ "/" ~ "(TE"["cost"] ~ "x" ~ "TE"["RI"] ~ ")"),
+         caption = paste0(
+      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
+      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
+    )
+  ) +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
+
+op6_plot
+```
+
+```{r}
+# Combine plots with labels
+combined <- (op1_plot | op2_plot | op3_plot) /
+            (op4_plot | op5_plot | op6_plot) +
+  plot_annotation(tag_levels = "A")
+combined
+
+# Save as jpg
+ggsave("Figures/figs5_extinct_plots.jpg", combined, width = 13, height = 8, dpi = 300)
+```
 
 # Q4. How do bootstrap values of shared clades differ between MOL and TE trees? 
 
 ## Q4.1 Unique vs Shared 
 
-### Q4.2 With and without fossils (Table 1 and S7, Figure 6)
+### Q4.2 With and without fossils (Table 1 and S7, Figure 7)
 
 Before testing the differences of BS values in shared clades between MOL and TE trees, let's explore the differences of BS values between shared and unique clades.
 
@@ -2802,7 +4415,7 @@ figure <- ggarrange(
   font.label = list(size = 14)
 )
 figure
-ggsave("Figures/Fig6_BS_uniqueVSshared.jpg", plot = figure, width = 6, height = 6, units = "in", dpi = 300)
+ggsave("Figures/Fig7_BS_uniqueVSshared.jpg", plot = figure, width = 6, height = 6, units = "in", dpi = 300)
 ```
 
 We can statistically test whether bootstrap values differ between shared and unique clades, considering Type (categorical predictor: unique vs shared), Sampling (categorical predictor: Without_fossils vs With_fossils), Optimality (categorical predictor: MP vs ML_ASC vs ML_noASC), Analysis (categorical predictor: MOL vs TE). We will use both traditional non-parametric tests and GLMs.
@@ -4060,7 +5673,7 @@ ml_noasc_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
 summary(ml_noasc_beta)
 ```
 
-## Q4.3 Plot (Figure 5)
+## Q4.3 Plot (Figure 6)
 
 First, we will plot the Figure 5A-C (without fossils).
 
@@ -4135,7 +5748,7 @@ plot_grob <- ggplotGrob(legend)
 legend_grob <- gtable::gtable_filter(plot_grob, "guide-box")
 
 # Plot 2x2
-jpeg("Figures/Fig5ABC.jpg", width = 2000, height = 1600, res = 300)
+jpeg("Figures/Fig6ABC.jpg", width = 2000, height = 1600, res = 300)
 grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_asc + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_noasc + theme(plot.margin = margin(1,1,1,.01)),
@@ -4219,7 +5832,7 @@ plot_grob <- ggplotGrob(legend)
 legend_grob <- gtable::gtable_filter(plot_grob, "guide-box")
 
 # Plot 2x2
-jpeg("Figures/Fig5DEF.jpg", width = 2000, height = 1600, res = 300)
+jpeg("Figures/Fig6DEF.jpg", width = 2000, height = 1600, res = 300)
 grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_asc + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_noasc + theme(plot.margin = margin(1,1,1,.01)),

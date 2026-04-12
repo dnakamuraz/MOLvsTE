@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Callorhinchus_milii ,(Leucoraja_erinacea ,(Latimeria_chalumnae ,((Erpetoichthys_calabaricus ,Polypterus_senegalus ),(Acipenser_fulvescens ,((Lepisosteus_osseus ,Amia_calva ),(Hiodon_alosoides ,Elops_saurus )))))));
-end ;

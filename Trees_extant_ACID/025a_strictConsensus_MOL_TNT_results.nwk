@@ -1,5 +1,0 @@
-#NEXUS
-begin trees ;
-tree tagged_tree = [&U]
-(Sus_scrofa ,(Bos_taurus ,(Hippopotamidae ,(((Lipotes_vexillifer ,(((Leucopleurus_acutus ,(Orcinus_orca ,((Delphinus ,Tursiops_truncatus ),(Orcaella_brevirostris ,(Pseudorca_crassidens ,(Globicephala ,Grampus_griseus )))))),(Monodontidae ,(Phocoena_phocoena ,Phocoenoides_dalli ))),(Inia_geoffrensis ,Pontoporia_blainvillei ))),(Platanista ,(Mesoplodon ,Tasmacetus_shepherdi ,Ziphius_cavirostris ,Berardius ))),(Physeter_macrocephalus ,Kogia ),(Balaenidae ,(Caperea_marginata ,(Eschrichtius_robustus ,(Megaptera_novaeangliae ,Balaenoptera_physalus ))))))));
-end ;
