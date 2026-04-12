@@ -1,3 +1,7 @@
 *.R linguist-language=R
 *.Rmd linguist-language=R
 *.Rd linguist-language=R
+*.html linguist-vendored
+*.csv linguist-vendored
+*.jpg linguist-vendored
+*.tiff linguist-vendored
