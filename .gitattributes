@@ -5,3 +5,8 @@
 *.csv linguist-vendored
 *.jpg linguist-vendored
 *.tiff linguist-vendored
+*.contree linguist-vendored
+*.treefile linguist-vendored
+*.nwk linguist-vendored
+*.out linguist-vendored
+*.tnt linguist-vendored
