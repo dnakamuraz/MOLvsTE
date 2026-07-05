@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Osmundastrum_cinnamomeum ,((Diplopterygium_glaucum ,(Lygodium_japonicum ,(((Adiantum_capillus_veneris ,Myriopteris_lindheimeri )0,(Pteridium_aquilinum ,(Woodwardia_unigemmatata ,(Cyrtomium_devexiscapulae ,Cyrtomium_falcatum )0)0)0)0,(Alsophila_spinulosa ,Marsilea_crenata )0)0)0)0,((Danaea_sellowiana ,(Christensenia_aesculifolia ,((Marattia_laxa ,(Angiopteris_angustifolia ,Angiopteris_evecta )0)0,(Ptisana_novoguineensis ,(Eupodium_kaulfussii ,Marattia_cicutifolia )0)0)0)0)0,(((Ginkgo_biloba ,(Cycas_panzhihuaensis ,(Cycas_revoluta ,Cycas_taitungensis )0)0)0,(Equisetum_arvense ,Equisetum_hyemale )0)0,(Psilotum_nudum ,(Mankyua_chejuensis ,Ophioglossum_californicum )0)0)0)0)0);
+
+end ; 

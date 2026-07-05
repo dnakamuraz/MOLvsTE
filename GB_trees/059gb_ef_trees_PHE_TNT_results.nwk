@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Osmundastrum_cinnamomeum ,(Angiopteris_angustifolia ,Angiopteris_evecta ,Christensenia_aesculifolia ,Danaea_sellowiana ,Eupodium_kaulfussii ,Marattia_cicutifolia ,Marattia_laxa ,Pteridium_aquilinum ,Ptisana_novoguineensis ,Woodwardia_unigemmatata )28?);
+
+end ; 

@@ -1,13 +1,13 @@
 ---
-title: "Supporting Information 2"
+title: "Supporting Information 4"
 author: "Daniel Y.M. Nakamura, Ward C. Wheeler, Taran Grant"
-date: "2026-04-15"
+date: "2026-06-15"
 output: html_document
 ---
 
-To test the assumption that phenomic partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including phenomic-only terminals, 14 including fossils) and evaluated the impact of phenomic evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following six questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of phenomic characters? (3) Do the effects of phenomic evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does phenomic evidence affect the bootstrap values of clades shared by DNA and TE trees? (5) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
+To test the assumption that morphological partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including morphology-only terminals, 14 including fossils) and evaluated the impact of morphological evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of morphological characters? (3) Do the effects of morphological evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does morphological evidence affect the bootstrap values of clades shared by DNA and TE trees? (5) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
 
-# PRE-AMBLE
+# PREAMBLE
 
 ```{r setup, include=FALSE}
 # Set the working directory 
@@ -37,7 +37,7 @@ library(TreeDist)
 library(viridis)
 ```
 
-# Q1. Are topologies impacted by the addition of phenomic evidence?
+# Q1. Are topologies impacted by the addition of morphological evidence?
 
 Dataset with MOL-TE topological distances were calculated in script 1.
 
@@ -49,7 +49,7 @@ extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
 df_extinct <- df[df$Type == "Extinct" | 
                   (df$Type == "Extant" & !(df$Dataset %in% extinct_datasets)), ]
 
-print("EXTANT: Number of datasets (extant) impacted by the addition of phenomic evidence")
+print("EXTANT: Number of datasets (extant) impacted by the addition of morphological evidence")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 print("MP MOL vs MP TE (number min)")
 sum(df_extant$MP_MOLvsTE_NormalizedMinRF > 0) 
@@ -68,7 +68,7 @@ sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0)
 print("ML MOL vs ML TE noASC (proportion)")
 sum(df_extant$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extant) 
 
-print("EXTINCT: Number of datasets (extinct) impacted by the addition of phenomic evidence")
+print("EXTINCT: Number of datasets (extinct) impacted by the addition of morphological evidence")
 print("MP MOL vs MP TE (number min)")
 sum(df_extinct$MP_MOLvsTE_NormalizedMinRF > 0) 
 print("MP MOL vs MP TE (proportion min)")
@@ -359,7 +359,7 @@ q1c_spr <- wilcox.test(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedSPR), mu =
 q1c_spr
 ```
 
-In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the phenomic evidence tends to impact topologies in empirical studies.
+In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the morphological evidence tends to impact topologies in empirical studies.
 
 ### Q1.2.2 Extant + extinct (Table S5)
 
@@ -713,11 +713,11 @@ dev.off()
 ```
 
 
-# Q2.Are MOL-TE incongruences associated with the proportion of phenomic characters? 
+# Q2.Are MOL-TE incongruences associated with the proportion of morphological characters? 
 
 ## Q2.1 Spearman correlations
 
-To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
+To test if the proportion of morphological characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
 
 ### Q2.1.1 Extant (Table 2)
 
@@ -769,7 +769,7 @@ plot_mp_spr_min = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_Normal
   geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
   theme_minimal()+
-  labs(y = NULL, x = "\n% Phenomic characters")
+  labs(y = NULL, x = "\n% Morphological characters")
 ```
 
 ```{r, warning=F}
@@ -798,7 +798,7 @@ plot_mlasc_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_Norm
   geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
   theme_minimal()+
-  labs(y = "Normalized SPR\n", x = "\n% Phenomic characters")
+  labs(y = "Normalized SPR\n", x = "\n% Morphological characters")
 ```
 
 ```{r, warning=F}
@@ -827,12 +827,12 @@ plot_mlno_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_Nor
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
   stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
   theme_minimal()+
-  labs(y = NULL, x = "\n% Phenomic characters")
+  labs(y = NULL, x = "\n% Morphological characters")
 ```
 
 ### Q2.1.2 Extant + extinct (Table 2)
 
-To test if the proportion of phenomic characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
+To test if the proportion of morphological characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
 
 ```{r, warning=F}
 # Load data
@@ -927,7 +927,7 @@ plot_mlno_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEno
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
   #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
-  labs(x = "\n% Phenomic characters", y = "Normalized RF\n")  # Remove x and y axis titles
+  labs(x = "\n% Morphological characters", y = "Normalized RF\n")  # Remove x and y axis titles
 
 print("CID: ML MOL vs ML TE (noASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
@@ -936,7 +936,7 @@ plot_mlno_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEn
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
  # stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
   theme_minimal()+
-  labs(x = "\n% Phenomic characters", y = "Normalized CID\n")  # Remove x and y axis titles
+  labs(x = "\n% Morphological characters", y = "Normalized CID\n")  # Remove x and y axis titles
 
 print("SPR: ML MOL vs ML TE (noASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedSPR, method = "spearman")
@@ -945,7 +945,7 @@ plot_mlno_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEn
   geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
  # stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
   theme_minimal()+
-  labs(x = "\n% Phenomic characters", y = "Normalized SPR\n")
+  labs(x = "\n% Morphological characters", y = "Normalized SPR\n")
 ```
 
 ## Q2.2 Figures
@@ -1055,7 +1055,7 @@ grid.arrange(
 dev.off()
 ```
 
-# Q3. Is the addition of phenomic evidence equally impactful on ML and MP topologies?
+# Q3. Is the addition of morphological evidence equally impactful on ML and MP topologies?
 
 ## Q3.1 MOL-TE incongruences ~ Optimality criteria
 
@@ -1568,7 +1568,7 @@ pairwise.wilcox.test(x=unlist(q3_cid_fri),
                      p.adjust.method="bonferroni")
 ```
 
-Now we will prepare the data including both datasets with and without phenomic-only terminals.
+Now we will prepare the data including both datasets with and without morphology-only terminals.
 
 ```{r}
 # Load data
@@ -1773,7 +1773,7 @@ dev.off()
 
 ## Q3.2 Number of polytomies
 
-One importance difference, however, is the fact that trees were always binary in ML trees, whereas the addition of phenomic evidence can maintain, increase or decrease resolution of MP trees.
+One importance difference, however, is the fact that trees were always binary in ML trees, whereas the addition of morphological evidence can maintain, increase or decrease resolution of MP trees.
 
 ### Q3.2.1 Extant
 
@@ -1986,9 +1986,9 @@ p <- ggplot(df_long, aes(x = group, y = value, group = row_id)) +
 
   scale_x_discrete(
     labels = c(
-      "MP_nPolytomiesMOL" = "DNA (without phenomic-only taxa)",
-      "MP_nPolytomiesTE" = "TE (without phenomic-only taxa)",
-      "MP_nPolytomiesTE_Extinct" = "TE (with phenomic-only taxa)"
+      "MP_nPolytomiesMOL" = "DNA (without morphology-only taxa)",
+      "MP_nPolytomiesTE" = "TE (without morphology-only taxa)",
+      "MP_nPolytomiesTE_Extinct" = "TE (with morphology-only taxa)"
     )
   ) +
   theme_minimal() +
@@ -2017,9 +2017,9 @@ aggregate(value ~ group, data = df_long, function(x) c(
 ```
 
 
-## Q3.3 Contribution of phenomic evidence to the TE optimality score
+## Q3.3 Contribution of morphological evidence to the TE optimality score
 
-In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of phenomic evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the phenomic partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses.
+In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of morphological evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the morphological partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses.
 
 ### Q3.3.1 Extant (Figure 5 and S5)
 

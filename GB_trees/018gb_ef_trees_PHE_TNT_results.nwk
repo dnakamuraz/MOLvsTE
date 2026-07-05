@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Physeter_catodon ,((Balaena_mysticetus ,Eubalaena_spp. )14,(Caperea_marginata ,(Eschrichtius_robustus ,(Megaptera_novaeangliae ,((Balaenoptera_acutorostrata ,Balaenoptera_bonaerensis )3,(Balaenoptera_omurai ,(Balaenoptera_borealis ,(Balaenoptera_musculus ,Balaenoptera_physalus )1)1)1)8)17)8)9)135?);
+
+end ; 

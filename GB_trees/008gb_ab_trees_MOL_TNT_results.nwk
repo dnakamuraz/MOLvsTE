@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Hypsiprymnodon ,((Pseudocheirus_peregrinus ,(Phalanger_interpositus ,Trichosurus_vulpecula )134)31,(((Simosthenurus_occidentalis ,Lagostrophus_fasciatus )35,(((((Wallabia_bicolor ,(Protemnodon_anak ,((Macropus_eugenii_ ,Macropus_rufogriseus )2,(Macropus_fuliginosus ,Macropus_robustus )1)1)5)19,(Lagorchestes_conspicillatus ,Lagorchestes_hirsutus )66)19,(Onychogalea_unguifera ,Setonix_brachyurus )20)10,(Thylogale_billardierii ,((Dendrolagus_lumholtzi ,Dendrolagus_dorianus )62,(Petrogale_xanthopus ,Petrogale_brachyotis )52)38)11)18,(Dorcopsulus_vanheurni ,Dorcopsis_hageni )133)96)35,((Aepyprymnus_rufescens ,(Bettongia_lesueuri ,Bettongia_penicillata )186)63,(Potorous_longipes ,Potorous_tridactylus )72)36)144)0);
+
+end ; 

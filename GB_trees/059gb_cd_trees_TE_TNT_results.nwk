@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Osmundastrum_cinnamomeum ,(((Danaea_sellowiana ,(Christensenia_aesculifolia ,((Marattia_laxa ,(Angiopteris_angustifolia ,Angiopteris_evecta )380)19,(Ptisana_novoguineensis ,(Eupodium_kaulfussii ,Marattia_cicutifolia )500?)88)39)200)500?,(((Ginkgo_biloba ,(Cycas_panzhihuaensis ,(Cycas_revoluta ,Cycas_taitungensis )13)500?)500?,(Equisetum_arvense ,Equisetum_hyemale )500?)118,(Psilotum_nudum ,(Mankyua_chejuensis ,Ophioglossum_californicum )500?)275)75)460,(Diplopterygium_glaucum ,(Lygodium_japonicum ,(((Pteridium_aquilinum ,(Woodwardia_unigemmatata ,(Cyrtomium_devexiscapulae ,Cyrtomium_falcatum )500?)500?)135,(Adiantum_capillus_veneris ,Myriopteris_lindheimeri )500?)500?,(Alsophila_spinulosa ,Marsilea_crenata )35)307)92)185)500?);
+
+end ; 

@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(Hypsiprymnodon_moschatus ,(Phalanger_interpositus ,Trichosurus_vulpecula ,Simosthenurus_occidentalis ,Protemnodon_anak ,Dendrolagus_lumholtzi ,Dorcopsulus_vanheurni ,Lagorchestes_conspicillatus ,Macropus_eugenii ,Petrogale_xanthopus ,Aepyprymnus_rufescens ,Bettongia_lesUeuri ,Bettongia_penicillata ,Dendrolagus_dorianus ,Dorcopsis_hageni ,Lagorchestes_hirsutus ,Lagostrophus_fasciatus ,Macropus_fuliginosus ,Macropus_robustus ,Macropus_rufogriseus ,Onychogalea_unguifera ,Petrogale_brachyotis ,Potorous_longipes ,Potorous_tridactylus ,Thylogale_billardierii ,Wallabia_bicolor ,Setonix_brachyurus ,Pseudocheirus_peregrinus )67?);
+
+end ; 

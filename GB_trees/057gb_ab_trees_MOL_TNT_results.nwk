@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tagged_tree = [&U] 
+(gonorynchus_sp2 ,(((((((hyostomus_panamensis ,(ameirus_natalis2 ,((pangasius_cfpangasius2 ,(arius_felis ,plotosus_lineatus )112)6,(auchenoglanis_occidentalis ,(malapterurus_stiassnyae ,synodontis_filamentosus )54)45)19)356)682,(hoplias_microlepis ,((astynax_aeneus ,ctenolucius_beani )44,(hepsetus_odoe2 ,(brycinus_macrolepidotus ,bryconaethiops_yseuxi )437)148)4)367)20,(citharinus_gibbosus ,(xenocharax_crassus ,(nannaethiops_unitaeniatus ,(distichodus_hypostomatus ,distichodus_maculatus )274)506)473)956)15,(apteronotus_albifrons ,(sternopygus_macrurus ,(brachyhypopomus_occidentalis3 ,(gymnotus_carapo ,gymnotus_cylindricus )1121)94)33)1054)871,(moxostoma_poecilurum ,(danRer7 ,(cyrpinella_venusta ,puntiopiles_falcifer2 )15)183)1133)637,(thryssa_hamiltonii2 ,(chirocentrus_dorab2 ,dorosoma_pentense )50)1584)129,(chanos_chanos2 ,(parakneria_abbreviata ,phraectolaemus_ansorgii2 )751)472)9516?);
+
+end ; 

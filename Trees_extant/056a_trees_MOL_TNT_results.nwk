@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Diadematidae ,((Araeosoma ,Caenopedina ),((Arbacia_lixula ,(Stomopneustes_variolaris ,(Echinometridae ,Strongylocentrotus ))),((Brissidae ,Echinocardium ),(Clypeaster_rosaceus ,(Echinocyamus ,(Mellita ,(Dendraster_excentricus ,Echinarachnius_parma ))))))));
+
+end ; 

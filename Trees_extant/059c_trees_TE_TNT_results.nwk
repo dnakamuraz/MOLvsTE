@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Osmundastrum_cinnamomeum ,(((Danaea_sellowiana ,(Christensenia_aesculifolia ,((Marattia_laxa ,(Angiopteris_angustifolia ,Angiopteris_evecta )),(Ptisana_novoguineensis ,(Eupodium_kaulfussii ,Marattia_cicutifolia ))))),(((Ginkgo_biloba ,(Cycas_panzhihuaensis ,(Cycas_revoluta ,Cycas_taitungensis ))),(Equisetum_arvense ,Equisetum_hyemale )),(Psilotum_nudum ,(Mankyua_chejuensis ,Ophioglossum_californicum )))),(Diplopterygium_glaucum ,(Lygodium_japonicum ,(((Pteridium_aquilinum ,(Woodwardia_unigemmatata ,(Cyrtomium_devexiscapulae ,Cyrtomium_falcatum ))),(Adiantum_capillus_veneris ,Myriopteris_lindheimeri )),(Alsophila_spinulosa ,Marsilea_crenata ))))));
+
+end ; 

@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(OG_Fungi ,(OG_Choano ,(((PL1_Placozoa ,((BI1_Deut ,BI2_Prot ),(CN1_Hydrozoa ,CN2_Scyphozoa ))),(PO1_Porifera ,PO2_Porifera )),(CT1_Ctenophora ,CT2_Ctenophora ))));
+
+end ; 
