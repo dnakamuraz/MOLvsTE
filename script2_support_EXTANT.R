@@ -110,13 +110,13 @@ for (prefix in prefixes) {
 }
 
 # Check number of datasets
-length(mp_mol_cons) # 57
-length(mp_mol_bs) # 57
-length(mp_te_cons) # 57
-length(mp_te_bs) # 57
-length(ml_mol) # 57
-length(ml_te_asc) # 57
-length(ml_te_noasc) # 57
+length(mp_mol_cons) # 63
+length(mp_mol_bs) # 63
+length(mp_te_cons) # 63
+length(mp_te_bs) # 63
+length(ml_mol) # 63
+length(ml_te_asc) # 63
+length(ml_te_noasc) # 63
 
 ########################################
 # DATASET: BOOTSTRAP OF SHARED CLADES  #
@@ -275,7 +275,7 @@ combined_df$Support_Tree_2 <- as.numeric(as.character(combined_df$Support_Tree_2
 combined_df <- combined_df[combined_df$Support_Tree_1 >= 50 &
                              combined_df$Support_Tree_2 >= 50, ]
 # Write to CSV file
-write.csv(combined_df, file = "Dataset_R_q4_09-25_shared.csv", row.names = FALSE)
+write.csv(combined_df, file = "Dataset_R_q4_07-26_shared.csv", row.names = FALSE)
 
 ###################
 # BS UNIQUE NODES #
@@ -361,7 +361,7 @@ ML_noASC_unique_df <- ML_noASC_unique_df %>% mutate(Support = as.numeric(Support
 all_unique_df <- bind_rows(MP_unique_df, ML_ASC_unique_df, ML_noASC_unique_df)
 View(all_unique_df)
 # Save as CSV
-write.csv(all_unique_df, "./Dataset_R_q4_09-25_unique.csv", row.names = FALSE)
+write.csv(all_unique_df, "./Dataset_R_q4_07-26_unique.csv", row.names = FALSE)
 
 
 

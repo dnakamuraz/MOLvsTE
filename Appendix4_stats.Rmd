@@ -5,7 +5,7 @@ date: "2026-06-15"
 output: html_document
 ---
 
-To test the assumption that morphological partitions would be swamped by genomic partitions, we compiled a diverse array of 57 published datasets (22 including morphology-only terminals, 14 including fossils) and evaluated the impact of morphological evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following questions: (1) Do DNA-only (DNA) and total-evidence (TE) topologies differ? (2) Are distances between DNA and TE topologies related to the proportion of morphological characters? (3) Do the effects of morphological evidence differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does morphological evidence affect the bootstrap values of clades shared by DNA and TE trees? (5) Do bootstrap values of DNA clades predict the occurrence of those clades in TE trees? 
+To test the assumption that morphological partitions would be swamped by genomic partitions, we compiled a diverse array of 63 published datasets and evaluated the impact of morphological evidence in both maximum likelihood (ML) and maximum parsimony (MP) analyses. Specifically, we addressed the following questions: (1) Do MOL and TE topologies differ? (2) Are distances between MOL and TE topologies related to the proportion of morphological characters? (3) Do the effects of morphological evidence on topology and optimality scores differ between maximum likelihood (ML) and maximum parsimony (MP) analyses? (4) Does morphological evidence affect the support values of clades shared by MOL and TE trees? (5) Do support values of MOL clades predict the occurrence of those clades in TE trees? 
 
 # PREAMBLE
 
@@ -27,15 +27,184 @@ library(ggpubr)
 library(ggridges)
 library(glmmTMB)
 library(gridExtra)
+library(lme4)
+library(lmerTest)
 library(patchwork)
 library(phytools)
 library(RNODE)
 library(rstatix)
+library(scales)
 library(tidyr)
 library(tidyverse)
 library(TreeDist)
 library(viridis)
 ```
+
+# Exploratory analyses
+
+## Distributions of characters (Figure S1)
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_07-26.csv")
+
+# Panel A
+p1 <- ggplot(df, aes(x = nMolCharacters)) +
+  geom_histogram(binwidth = 100, color = "black", fill = "steelblue") +
+  labs(
+    x = "Number of molecular characters",
+    y = "Count"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel B
+p2 <- ggplot(df, aes(x = nMorphCharacters)) +
+  geom_histogram(binwidth = 100, color = "black", fill = "steelblue") +
+  labs(
+    x = "Number of morphological characters",
+    y = "Count"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel C
+p3 <- ggplot(df, aes(x = X.Morph.Total)) +
+  geom_histogram(
+    bins = 30,
+    color = "black",
+    fill = "steelblue"
+  ) +
+  scale_x_continuous(labels = label_scientific()) +
+  labs(
+    x = "Proportion of morphological characters",
+    y = "Count"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel D
+p4 <- ggplot(df, aes(x = nTEterminals)) +
+  geom_histogram(binwidth = 30, color = "black", fill = "steelblue") +
+  labs(
+    x = "Number of terminals",
+    y = "Count"
+  ) +
+  theme_classic(base_size = 14)
+
+# Combine panels
+fig <- (p1 | p2) /
+       (p3 | p4) +
+  plot_annotation(tag_levels = "a") &
+  theme(
+    plot.tag = element_text(size = 16, face = "bold"),
+    plot.tag.position = c(0.02, 0.98)
+  )
+
+# Save as JPEG (300 dpi)
+ggsave(
+  "Figures/S1_histograms.jpg",
+  fig,
+  width = 8,
+  height = 8,
+  units = "in",
+  dpi = 300
+)
+```
+
+## Year x Size (Figure 9)
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_07-26.csv")
+
+# Panel A
+# Fit model
+lm_exp <- lm(log(nMolCharacters) ~ Year, data = df)
+# Prediction grid
+newdat <- data.frame(
+  Year = seq(min(df$Year), max(df$Year), length.out = 200)
+)
+# Predictions with 95% confidence intervals
+pred <- predict(lm_exp, newdata = newdat, interval = "confidence")
+newdat$fit <- exp(pred[, "fit"])
+newdat$lwr <- exp(pred[, "lwr"])
+newdat$upr <- exp(pred[, "upr"])
+# Plot
+p1 <- ggplot() +
+  geom_point(
+    data = df,
+    aes(Year, nMolCharacters),
+    size = 2.5,
+    alpha = 0.8,
+    color = "steelblue"
+  ) +
+  geom_ribbon(
+    data = newdat,
+    aes(x = Year, ymin = lwr, ymax = upr),
+    fill = "grey70",
+    alpha = 0.4
+  ) +
+  geom_line(
+    data = newdat,
+    aes(x = Year, y = fit),
+    color = "black",
+    linewidth = 0.8
+  ) +
+  labs(
+    x = "Year",
+    y = "No. molecular characters"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel B
+p2 <- ggplot(df, aes(x = Year, y = nMorphCharacters)) +
+  geom_point(size = 2.5, alpha = 0.8, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "black", linewidth = 0.8) +
+  labs(
+    x = "Year",
+    y = "No. morphological characters"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel C
+p3 <- ggplot(df, aes(x = Year, y = X.Morph.Total)) +
+  geom_point(size = 2.5, alpha = 0.8, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "black", linewidth = 0.8) +
+  scale_y_continuous(labels = label_scientific()) +
+  labs(
+    x = "Year",
+    y = "% Morphological characters"
+  ) +
+  theme_classic(base_size = 14)
+
+# Panel D
+p4 <- ggplot(df, aes(x = Year, y = nTEterminals)) +
+  geom_point(size = 2.5, alpha = 0.8, color = "steelblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "black", linewidth = 0.8) +
+  labs(
+    x = "Year",
+    y = "No. terminals"
+  ) +
+  theme_classic(base_size = 14)
+
+# Combine panels
+fig <- (p1 | p2) /
+       (p3 | p4) +
+  plot_annotation(tag_levels = "a") &
+  theme(
+    plot.tag = element_text(size = 16, face = "plain"),
+    plot.tag.position = c(0.02, 0.98)
+  )
+
+# Save figure
+ggsave(
+  "Figures/Fig9_yearXsize.jpg",
+  fig,
+  width = 8,
+  height = 8,
+  units = "in",
+  dpi = 300
+)
+```
+
 
 # Q1. Are topologies impacted by the addition of morphological evidence?
 
@@ -43,7 +212,7 @@ Dataset with MOL-TE topological distances were calculated in script 1.
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
 # Append the extant datasets that do not appear among extinct
 df_extinct <- df[df$Type == "Extinct" | 
@@ -89,9 +258,9 @@ sum(df_extinct$ML_MOLvsTEnoASC_NormalizedRF > 0) / nrow(df_extinct)
 
 ## Q1.1 Data exploration
 
-### Q1.1.1 Extant (Table 1)
+### Q1.1.1 Extant (Table 2)
 
-Considering extant taxa (n = 57; see Table 1):
+Considering extant taxa (n = 63; see Table 2):
 
 ```{r}
 print("1.a MP MOL vs MP TE")
@@ -189,12 +358,12 @@ sd(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedSPR))
 range(as.numeric(df_extant$ML_MOLvsTEnoASC_NormalizedSPR))
 ```
 
-### Q1.1.2 Extant + Extinct (Table 1)
+### Q1.1.2 Extant + Extinct (Table 2)
 
-Considering both extant and extinct taxa (n = 57):
+Considering both extant and extinct taxa (n = 63):
 
 ```{r}
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -299,7 +468,7 @@ range(as.numeric(df_extinct$ML_MOLvsTEnoASC_NormalizedSPR))
 
 ## Q1.2 Statistical tests
 
-### Q1.2.1 Extant (Table S4)
+### Q1.2.1 Extant (Table S3)
 
 To test if MOL-TE incongruences are significantly different from zero, we can check if the distribution of observed values are significantly different from zero. 
 
@@ -361,12 +530,12 @@ q1c_spr
 
 In all cases, the median of normalized RF, CID, and SPR values in MP and ML are significantly different from zero. Thus, MOL-TE incongruences different from zero indicate that the morphological evidence tends to impact topologies in empirical studies.
 
-### Q1.2.2 Extant + extinct (Table S5)
+### Q1.2.2 Extant + extinct (Table S4)
 
 Now, let's test the same for the data sets including fossils.
 
 ```{r}
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -427,11 +596,11 @@ q1c_spr
 
 ## Q1.3 Figures
 
-### Q1.3.1 Extant (Figure S1)
+### Q1.3.1 Extant (Figure S3)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 # Create a dataframe
@@ -556,7 +725,7 @@ legend <- ggplot(legend_df, aes(x = comparison, y = value, color = comparison)) 
 
 legend_grob <- cowplot::get_legend(legend)
 
-tiff("Figures/figS1_density.tiff", width = 6, height = 10, units = "in", res = 300)
+tiff("Figures/figS3_density.tiff", width = 6, height = 10, units = "in", res = 300)
 grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_cid + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_spr + theme(plot.margin = margin(.01,1,1,.01)),
@@ -567,11 +736,11 @@ grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
 dev.off()
 ```
 
-### Q1.3.2 Extant + Extinct (Figure S2)
+### Q1.3.2 Extant + Extinct (Figure S4)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -701,7 +870,7 @@ legend <- ggplot(legend_df, aes(x = comparison, y = value, color = comparison)) 
 
 legend_grob <- cowplot::get_legend(legend)
 
-tiff("Figures/figS2_density.tiff", width = 6, height = 10, units = "in", res = 300)
+tiff("Figures/figS4_density.tiff", width = 6, height = 10, units = "in", res = 300)
 grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_cid + theme(plot.margin = margin(.01,1,1,.01)),
                          s1_spr + theme(plot.margin = margin(.01,1,1,.01)),
@@ -712,6 +881,114 @@ grid.arrange(arrangeGrob(s1_rf + theme(plot.margin = margin(.01,1,1,.01)),
 dev.off()
 ```
 
+### Q1.3.3 Proportion of affected clades (Figure S5)
+
+```{r}
+# Load data
+df <- read.csv("Dataset_R_q123_07-26.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+#df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
+# Keep only extinct
+extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
+# Append the extant datasets that do not appear among extinct
+df_extinct <- df[df$Type == "Extinct" | 
+                  (df$Type == "Extant" & !(df$Dataset %in% extinct_datasets)), ]
+
+# Format data
+df_plot <- tibble(
+  Method = c(
+    rep("MP", 2 * nrow(df_extant)),
+    rep("ML (Mk)", 2 * nrow(df_extant)),
+    rep("ML (MkV)", 2 * nrow(df_extant))
+  ),
+  Dataset = c(
+    rep(c("MOL", "TE"), each = nrow(df_extant)),
+    rep(c("MOL", "TE"), each = nrow(df_extant)),
+    rep(c("MOL", "TE"), each = nrow(df_extant))
+  ),
+  Proportion = c(
+    df_extant$MP_nUniqueCladesMOL / df_extant$MP_MOL_nClades,
+    df_extant$MP_nUniqueCladesTE / df_extant$MP_TE_nClades,
+
+    df_extant$ML_MOLvsTEnoASC_nUniqueCladesMOL /
+      df_extant$ML_MOL_nClades,
+    df_extant$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC /
+      df_extant$ML_TE_noASC_nClades,
+
+    df_extant$ML_MOLvsTEASC_nUniqueCladesMOL /
+      df_extant$ML_MOL_nClades,
+    df_extant$ML_MOLvsTEASC_nUniqueCladesTEASC /
+      df_extant$ML_TE_ASC_nClades
+  )
+) |>
+  filter(!is.na(Proportion))
+
+
+# MP
+df_extant$MP_nUniqueCladesMOL / df_extant$MP_MOL_nClades
+df_extant$MP_nUniqueCladesTE / df_extant$MP_TE_nClades
+
+# ML MK
+df_extant$ML_MOLvsTEnoASC_nUniqueCladesMOL / df_extant$ML_MOL_nClades
+df_extant$ML_MOLvsTEnoASC_nUniqueCladesTEnoASC / df_extant$ML_TE_noASC_nClades
+
+# ML MKv
+df_extant$ML_MOLvsTEASC_nUniqueCladesMOL / df_extant$ML_MOL_nClades
+df_extant$ML_MOLvsTEASC_nUniqueCladesTEASC / df_extant$ML_TE_ASC_nClades
+
+# Wilcoxon
+pvals <- df_plot %>%
+  group_by(Method, Dataset) %>%
+  summarise(
+    p = wilcox.test(Proportion, mu = 0)$p.value,
+    .groups = "drop"
+  ) %>%
+  mutate(
+    label = paste0("P = ", format.pval(p, digits = 3, eps = 1e-16))
+  )
+
+# Figure S5
+fig <- ggplot(df_plot, aes(x = Proportion)) +
+  geom_density(
+    fill = "steelblue",
+    color = "black",
+    alpha = 0.5,
+    linewidth = 1
+  ) +
+  facet_grid(Dataset ~ Method) +
+  geom_text(
+    data = pvals,
+    aes(
+      x = Inf,
+      y = Inf,
+      label = label
+    ),
+    inherit.aes = FALSE,
+    hjust = 1.05,
+    vjust = 1.5,
+    size = 4
+  ) +
+  coord_cartesian(xlim = c(0, 1)) +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.2)) +
+  labs(
+    x = "Proportion of unique clades",
+    y = "Density"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_text(face = "plain")
+  )
+
+ggsave(
+  filename = "Figures/FigS5_uniqueClades_density.jpg",
+  plot = fig,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 300
+)
+```
 
 # Q2.Are MOL-TE incongruences associated with the proportion of morphological characters? 
 
@@ -719,19 +996,19 @@ dev.off()
 
 To test if the proportion of morphological characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
 
-### Q2.1.1 Extant (Table 2)
+### Q2.1.1 Extant (Table 3)
 
 ```{r, warning=F}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 print("Minimum RF: MP MOL vs MP TE")
 cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedMinRF, method = "spearman")
 plot_mp_rf_min = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = NULL)
 
@@ -739,8 +1016,8 @@ print("Strict RF: MP MOL vs MP TE")
 cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedRF_strictConsensus, method = "spearman")
 plot_mp_rf_strict = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF_strictConsensus)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = NULL)
 
@@ -748,8 +1025,8 @@ print("Minimum CID: MP MOL vs MP TE")
 cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedMinCID, method = "spearman")
 plot_mp_cid_min = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.375) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = NULL)
 
@@ -757,8 +1034,8 @@ print("Strict CID: MP MOL vs MP TE")
 cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedCID_strictConsensus, method = "spearman")
 plot_mp_cid_strict = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID_strictConsensus)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = NULL)
 
@@ -766,8 +1043,8 @@ print("Minimum SPR: MP MOL vs MP TE")
 cor.test(df_extant$X.Morph.Total, df_extant$MP_MOLvsTE_NormalizedMinSPR, method = "spearman")
 plot_mp_spr_min = ggplot(df_extant, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.33) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = "\n% Morphological characters")
 ```
@@ -777,8 +1054,8 @@ print("RF: ML MOL vs ML TE (ASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
 plot_mlasc_rf = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = "Normalized RF\n") # Remove x and y axis titles
 
@@ -786,8 +1063,8 @@ print("CID: ML MOL vs ML TE (ASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
 plot_mlasc_cid = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.515) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = "Normalized CID\n")  # Remove x and y axis titles
   
@@ -795,8 +1072,8 @@ print("SPR: ML MOL vs ML TE (ASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEASC_NormalizedSPR, method = "spearman")
 plot_mlasc_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.334) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized SPR\n", x = "\n% Morphological characters")
 ```
@@ -806,8 +1083,8 @@ print("RF: ML MOL vs ML TE (noASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
 plot_mlno_rf = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
@@ -815,8 +1092,8 @@ print("CID: ML MOL vs ML TE (noASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
 plot_mlno_cid = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.525) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = NULL)  # Remove x and y axis titles
 
@@ -824,19 +1101,19 @@ print("SPR: ML MOL vs ML TE (noASC)")
 cor.test(df_extant$X.Morph.Total, df_extant$ML_MOLvsTEnoASC_NormalizedSPR, method = "spearman")
 plot_mlno_spr = ggplot(df_extant, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.42) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = NULL, x = "\n% Morphological characters")
 ```
 
-### Q2.1.2 Extant + extinct (Table 2)
+### Q2.1.2 Extant + extinct (Table 3)
 
 To test if the proportion of morphological characters is associated with the topological metrics of MOL-TE incongruences, we used a non-parametric Spearman's Rank Correlation test. The rho values measure the association between two variables based on their rank orders: a rho of +1 indicates a perfect monotonic increasing relationship; a rho of -1 indicates a perfect monotonic decreasing relationship; a rho of zero indicates a no monotonic relationship.
 
 ```{r, warning=F}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -848,8 +1125,8 @@ print("Minimum RF: MP MOL vs MP TE")
 cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedMinRF, method = "spearman")
 plot_mp_rf_min_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.6) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized RF\n", x = NULL)
 
@@ -857,8 +1134,8 @@ print("Strict RF: MP MOL vs MP TE")
 cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedRF_strictConsensus, method = "spearman")
 plot_mp_rf_strict_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedRF_strictConsensus)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.88) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized RF\n", x = NULL)
 
@@ -866,8 +1143,8 @@ print("Minimum CID: MP MOL vs MP TE")
 cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedMinCID, method = "spearman")
 plot_mp_cid_min_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+   stat_cor(method = "spearman", label.x = 0.075, label.y = 0.4) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized CID\n", x = NULL)
 
@@ -875,8 +1152,8 @@ print("Strict CID: MP MOL vs MP TE")
 cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedCID_strictConsensus, method = "spearman")
 plot_mp_cid_strict_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedCID_strictConsensus)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.6) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#335100", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.88) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized CID\n", x = NULL)
 
@@ -884,8 +1161,8 @@ print("Minimum SPR: MP MOL vs MP TE")
 cor.test(df_extinct$X.Morph.Total, df_extinct$MP_MOLvsTE_NormalizedMinSPR, method = "spearman")
 plot_mp_spr_min_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = MP_MOLvsTE_NormalizedMinSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.08, label.y = 0.33) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#339999", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.35) +  # add Spearman correlation value
   theme_minimal()+
   labs(y = "Normalized SPR\n", x = NULL)
 ```
@@ -895,8 +1172,8 @@ print("RF: ML MOL vs ML TE (ASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedRF, method = "spearman")
 plot_mlasc_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = "Normalized RF\n") # Remove x and y axis titles
 
@@ -904,8 +1181,8 @@ print("CID: ML MOL vs ML TE (ASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedCID, method = "spearman")
 plot_mlasc_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
- # stat_cor(method = "spearman", label.x = 0.09, label.y = 0.515) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.515) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = "Normalized CID\n")  # Remove x and y axis titles
   
@@ -913,8 +1190,8 @@ print("SPR: ML MOL vs ML TE (ASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEASC_NormalizedSPR, method = "spearman")
 plot_mlasc_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEASC_NormalizedSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.334) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#6f77b4", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.334) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = NULL, y = "Normalized SPR\n")
 ```
@@ -924,8 +1201,8 @@ print("RF: ML MOL vs ML TE (noASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedRF, method = "spearman")
 plot_mlno_rf_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedRF)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
-  #stat_cor(method = "spearman", label.x = 0.09, label.y = 0.73) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.73) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = "\n% Morphological characters", y = "Normalized RF\n")  # Remove x and y axis titles
 
@@ -933,8 +1210,8 @@ print("CID: ML MOL vs ML TE (noASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedCID, method = "spearman")
 plot_mlno_cid_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedCID)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
- # stat_cor(method = "spearman", label.x = 0.09, label.y = 0.525) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.525) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = "\n% Morphological characters", y = "Normalized CID\n")  # Remove x and y axis titles
 
@@ -942,8 +1219,8 @@ print("SPR: ML MOL vs ML TE (noASC)")
 cor.test(df_extinct$X.Morph.Total, df_extinct$ML_MOLvsTEnoASC_NormalizedSPR, method = "spearman")
 plot_mlno_spr_fossil = ggplot(df_extinct, aes(x = X.Morph.Total, y = ML_MOLvsTEnoASC_NormalizedSPR)) +
   geom_point() +  # scatter plot
-  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = FALSE) +  # regression line (lm) for the trend
- # stat_cor(method = "spearman", label.x = 0.085, label.y = 0.42) +  # add Spearman correlation value
+  geom_smooth(method = "lm", formula = y ~ x, color = "#cccccc", se = T) +  # regression line (lm) for the trend
+  stat_cor(method = "spearman", label.x = 0.075, label.y = 0.42) +  # add Spearman correlation value
   theme_minimal()+
   labs(x = "\n% Morphological characters", y = "Normalized SPR\n")
 ```
@@ -990,9 +1267,19 @@ grid.arrange(
 dev.off()
 ```
 
-### Q2.2.2 Extant + extinct (Figure S3)
+### Q2.2.2 Extant + extinct (Figure S6)
 
 ```{r}
+custom_palette <- c("MPmol_MPte_min" = "#339999",
+                    "MPmol_MPte_strict" = "#335100",
+                    "MLmol_MLteAsc" = "#6f77b4",
+                    "MLmol_MLteNoAsc" = "#cccccc")
+custom_labels <- c(
+  "MPmol_MPte_min" = "MP-MOL vs MP-TE (min)",
+  "MPmol_MPte_strict" = "MP-MOL vs MP-TE (strict consensus)",
+  "MLmol_MLteAsc" = "ML-MOL vs ML-TE (MKv)",
+  "MLmol_MLteNoAsc" = "ML-MOL vs ML-TE (MK)"
+)
 # Extract the legend as a separate ggplot object
 legend_df <- data.frame(
   comparison = factor(
@@ -1043,7 +1330,7 @@ panel_grid <- arrangeGrob(
 )
 
 # Write
-tiff("Figures/figS3_proportion_fossils.tiff", width = 16, height = 10, units = "in", res = 300)
+tiff("Figures/figS6_proportion_fossils.tiff", width = 16, height = 10, units = "in", res = 300)
 grid.arrange(
   arrangeGrob(
     panel_grid,
@@ -1055,17 +1342,172 @@ grid.arrange(
 dev.off()
 ```
 
+### Q2.2.3 %Morphology-only taxa vs RF/CID/SPR (Figure S7)
+
+```{r}
+# Proportion of fossils vs RF/CID/SPR distances
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(ggpubr)
+
+# 1. Map your custom palette to the Method strings used in the dataframe
+custom_palette <- c(
+  "ML Mkv"    = "#6f77b4", # MLmol_MLteAsc
+  "ML Mk"     = "#cccccc", # MLmol_MLteNoAsc
+  "MP (min)"  = "#339999", # MPmol_MPte_min
+  "MP strict" = "#335100"  # MPmol_MPte_strict
+)
+
+# Proportion of fossils vs RF/CID/SPR distances
+
+# Load data
+df <- read.csv("Dataset_R_q123_07-26.csv")
+df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
+
+# Create new column
+df_extinct$percentageFossils <- df_extinct$nUniqueMorphTerminals / df_extinct$nTEterminals
+
+# Convert to long format
+df_long <- bind_rows(
+  
+  # RF
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$MP_MOLvsTE_NormalizedMinRF, Method = "MP (min)", Metric = "RF"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$MP_MOLvsTE_NormalizedRF_strictConsensus, Method = "MP strict", Metric = "RF"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEnoASC_NormalizedRF, Method = "ML Mk", Metric = "RF"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEASC_NormalizedRF, Method = "ML Mkv", Metric = "RF"),
+  
+  # CID
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$MP_MOLvsTE_NormalizedMinCID, Method = "MP (min)", Metric = "CID"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$MP_MOLvsTE_NormalizedCID_strictConsensus, Method = "MP strict", Metric = "CID"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEnoASC_NormalizedCID, Method = "ML Mk", Metric = "CID"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEASC_NormalizedCID, Method = "ML Mkv", Metric = "CID"),
+  
+  # SPR
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$MP_MOLvsTE_NormalizedMinSPR, Method = "MP (min)", Metric = "SPR"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEnoASC_NormalizedSPR, Method = "ML Mk", Metric = "SPR"),
+  tibble(percentageFossils = df_extinct$percentageFossils, Distance = df_extinct$ML_MOLvsTEASC_NormalizedSPR, Method = "ML Mkv", Metric = "SPR")
+  
+) %>%
+  drop_na(Distance, percentageFossils)
+
+# Updated make_panel function
+make_panel <- function(metric, method, ylim=NULL, 
+                       show_x=FALSE, show_y=FALSE, show_title=FALSE){
+  
+  d <- filter(df_long, Metric==metric, Method==method)
+  
+  p <- ggplot(d, aes(x = percentageFossils, y = Distance)) +
+    geom_point(color = custom_palette[[method]], size=2, alpha=0.7) +
+    geom_smooth(method="lm", se=TRUE, color="black") +
+    # Move P-value and R2 to the upper right corner (hjust=1 prevents clipping)
+    stat_cor(method="spearman", label.x.npc = 0.95, label.y.npc = 0.98, hjust = 1, size = 3) +
+    coord_cartesian(xlim=c(0,1), ylim=ylim) +
+    labs(
+      x = if(show_x) "% Morphology-only terminals" else NULL,
+      y = if(show_y) paste("Normalized", metric) else NULL
+    ) +
+    theme_bw(base_size=12) +
+    ggtitle(if(show_title) method else NULL) +
+    theme(
+      plot.title = element_text(hjust=.5, size=12, face="bold"),
+      axis.title.x = if(show_x) element_text(size=12) else element_blank(),
+      axis.title.y = if(show_y) element_text(size=12) else element_blank()
+    )
+  
+  if(!show_x) p <- p + theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  if(!show_y) p <- p + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+  
+  p
+}
+
+###########################################################
+# Blank panel (MP strict × SPR)
+###########################################################
+
+# Empty subset panel for the missing SPR data, keeps X-axis aligned on bottom row
+blank_panel <- make_panel("SPR", "MP strict", ylim=c(0,1), 
+                          show_x=TRUE, show_y=FALSE, show_title=FALSE) +
+               theme(panel.border = element_rect(fill=NA, color="grey50"))
+
+
+###########################################################
+# Row 1 : RF (Columns: ML Mkv, ML Mk, MP (min), MP strict)
+###########################################################
+
+p11 <- make_panel("RF", "ML Mkv",
+                  ylim=range(filter(df_long, Metric=="RF", Method=="ML Mkv")$Distance, na.rm=TRUE),
+                  show_y=TRUE, show_title=TRUE)
+
+p12 <- make_panel("RF", "ML Mk",
+                  ylim=range(filter(df_long, Metric=="RF", Method=="ML Mk")$Distance, na.rm=TRUE),
+                  show_title=TRUE)
+
+p13 <- make_panel("RF", "MP (min)", 
+                  ylim=range(filter(df_long, Metric=="RF", Method=="MP (min)")$Distance, na.rm=TRUE),
+                  show_title=TRUE)
+
+p14 <- make_panel("RF", "MP strict",
+                  ylim=range(filter(df_long, Metric=="RF", Method=="MP strict")$Distance, na.rm=TRUE),
+                  show_title=TRUE)
+
+
+###########################################################
+# Row 2 : CID (Columns: ML Mkv, ML Mk, MP (min), MP strict)
+###########################################################
+
+p21 <- make_panel("CID", "ML Mkv",    ylim=c(0,0.30), show_y=TRUE)
+p22 <- make_panel("CID", "ML Mk",     ylim=c(0,0.30))
+p23 <- make_panel("CID", "MP (min)",  ylim=c(0,0.35))
+p24 <- make_panel("CID", "MP strict", ylim=c(0,1.05))
+
+
+###########################################################
+# Row 3 : SPR (Columns: ML Mkv, ML Mk, MP (min), MP strict)
+###########################################################
+
+p31 <- make_panel("SPR", "ML Mkv",   ylim=c(0,0.30), show_x=TRUE, show_y=TRUE)
+p32 <- make_panel("SPR", "ML Mk",    ylim=c(0,0.35), show_x=TRUE)
+p33 <- make_panel("SPR", "MP (min)", ylim=c(0,0.35), show_x=TRUE)
+p34 <- blank_panel # Blank panel placed in Col 4 for MP strict
+
+
+###########################################################
+# Assemble
+###########################################################
+
+fig_fossils_top <- 
+  (p11 | p12 | p13 | p14) / 
+  (p21 | p22 | p23 | p24) / 
+  (p31 | p32 | p33 | p34) + 
+  plot_annotation(
+    title="",
+    theme=theme(plot.title=element_text(hjust=.5))
+  )
+
+ggsave(
+  filename = "Figures/FigS7_Fossils_vs_Distance.jpg", 
+  plot = fig_fossils_top, 
+  width = 12, 
+  height = 9, 
+  units = "in", 
+  dpi = 300
+)
+```
+
 # Q3. Is the addition of morphological evidence equally impactful on ML and MP topologies?
 
 ## Q3.1 MOL-TE incongruences ~ Optimality criteria
 
 To test whether the MOL-TE incongruences are different between ML and MP, we first need to change the structure of the dataframe.
 
-### Q3.1.1 Extant (Table 3)
+### Q3.1.1 Extant (Table 4)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 # Create an empty data frame for RF
@@ -1127,7 +1569,6 @@ Then, we statistically test whether MOL-TE incongruences (operationally measured
 
 - The Wilcoxon signed-rank test is a nonparametric test used to compare the ordinal or continuous values between 2 groups (e.g. as posthoc analysis of Friedman tests). As assumptions, this test does not require normality and observations can be dependent. First, all values are ranked. The number of times that a value from one group precedes a value from the other is computed, generating the U statistic (the number of pairwise wins of one group over the other). Next, U is standardized to a normal distribution to obtain the p-value.
 
-
 ```{r, warning=FALSE}
 print("RF")
 shapiro.test(q3_rf$value) # p < 0.05, non-parametric
@@ -1169,11 +1610,11 @@ pairwise.wilcox.test(x=unlist(q3_spr_fri),
                      p.adjust.method="bonferroni")
 ```
 
-### Q3.1.2 Extant + extinct (Table 3)
+### Q3.1.2 Extant + extinct (Table 4)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -1474,7 +1915,7 @@ In this approach, SPR distances are not calculated due to the polytomies.
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 # Create an empty data frame for RF
@@ -1572,7 +2013,7 @@ Now we will prepare the data including both datasets with and without morphology
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -1771,6 +2212,131 @@ cowplot::plot_grid(
 dev.off()
 ```
 
+### Q3.1.5 Statistical interaction with size (Table S5)
+
+The goal of this analysis is assessing a possible statistical interaction between proportion of morphological characters and RF/CID/SPR distances between MOL and TE trees across optimality criteria.
+
+```{r}
+df <- read.csv("Dataset_R_q123_07-26.csv")
+df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+
+# Format dataframe
+df <- df_extant
+df_long <- bind_rows(
+  data.frame(
+    Dataset = df_extant$Dataset,
+    Morph = df_extant$X.Morph.Total,
+    Criterion = "MP_min",
+    RF  = df_extant$MP_MOLvsTE_NormalizedMinRF,
+    CID = df_extant$MP_MOLvsTE_NormalizedMinCID,
+    SPR = df_extant$MP_MOLvsTE_NormalizedMinSPR
+  ),
+  data.frame(
+    Dataset = df_extant$Dataset,
+    Morph = df_extant$X.Morph.Total,
+    Criterion = "MP_strict",
+    RF  = df_extant$MP_MOLvsTE_NormalizedRF_strictConsensus,
+    CID = df_extant$MP_MOLvsTE_NormalizedCID_strictConsensus,
+    SPR = NA
+  ),
+  data.frame(
+    Dataset = df_extant$Dataset,
+    Morph = df_extant$X.Morph.Total,
+    Criterion = "ML_MK",
+    RF  = df_extant$ML_MOLvsTEnoASC_NormalizedRF,
+    CID = df_extant$ML_MOLvsTEnoASC_NormalizedCID,
+    SPR = df_extant$ML_MOLvsTEnoASC_NormalizedSPR
+  ),
+  data.frame(
+    Dataset = df_extant$Dataset,
+    Morph = df_extant$X.Morph.Total,
+    Criterion = "ML_MKv",
+    RF  = df_extant$ML_MOLvsTEASC_NormalizedRF,
+    CID = df_extant$ML_MOLvsTEASC_NormalizedCID,
+    SPR = df_extant$ML_MOLvsTEASC_NormalizedSPR
+  )
+)
+df_long$Criterion <- factor(df_long$Criterion)
+```
+
+```{r}
+# Models RF ~ Criterion and %MorphoCharacters
+# With interaction
+m_RF <- lmer(
+    RF ~ Morph * Criterion + (1 | Dataset),
+    data = df_long
+)
+# Without interaction
+m_RF0 <- lmer(
+    RF ~ Morph + Criterion + (1 | Dataset),
+    data = df_long
+)
+
+# Model selection
+print("Model selection considering RF as response variable")
+anova(m_RF0, m_RF)
+
+# Best model
+print("Best model considering RF as response variable")
+summary(m_RF0)
+
+# Pairwise comparisons
+print("Pairwise comparisons considering RF as response variable")
+emmeans(m_RF0, pairwise ~ Criterion, adjust = "tukey")
+```
+
+```{r}
+# Models CID ~ Criterion and %MorphoCharacters
+# With interaction
+m_CID <- lmer(
+    CID ~ Morph * Criterion + (1 | Dataset),
+    data = df_long
+)
+# Without interaction
+m_CID0 <- lmer(
+    CID ~ Morph + Criterion + (1 | Dataset),
+    data = df_long
+)
+
+# Model selection
+print("Model selection considering CID as response variable")
+anova(m_CID0, m_CID)
+
+# Best model
+print("Best model considering CID as response variable")
+summary(m_CID0)
+
+# Pairwise comparisons
+print("Pairwise comparisons considering CID as response variable")
+emmeans(m_CID0, pairwise ~ Criterion, adjust = "tukey")
+```
+
+```{r}
+# Models SPR ~ Criterion and %MorphoCharacters
+# With interaction
+m_SPR <- lmer(
+    SPR ~ Morph * Criterion + (1 | Dataset),
+    data = df_long
+)
+# Without interaction
+m_SPR0 <- lmer(
+    SPR ~ Morph + Criterion + (1 | Dataset),
+    data = df_long
+)
+
+# Model selection
+print("Model selection considering SPR as response variable")
+anova(m_SPR0, m_SPR)
+
+# Best model
+print("Best model considering SPR as response variable")
+summary(m_SPR0)
+
+# Pairwise comparisons
+print("Pairwise comparisons considering SPR as response variable")
+emmeans(m_SPR0, pairwise ~ Criterion, adjust = "tukey")
+```
+
 ## Q3.2 Number of polytomies
 
 One importance difference, however, is the fact that trees were always binary in ML trees, whereas the addition of morphological evidence can maintain, increase or decrease resolution of MP trees.
@@ -1779,7 +2345,7 @@ One importance difference, however, is the fact that trees were always binary in
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
 
 print("MP: Number of datasets in which the number of politomies is higher in TE than MOL")
@@ -1811,7 +2377,7 @@ max(df_extant$MP_nPolytomiesTE)
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extant datasets
 
 print("MP: Number of datasets in which the number of politomies is higher in TE than MOL")
@@ -1839,13 +2405,13 @@ print("MP TE: Max no. polytomies")
 max(df_extinct$MP_nPolytomiesTE)
 ```
 
-### Q3.2.3 Statistical tests (Figure S4; Table S6)
+### Q3.2.3 Statistical tests (Figure S8; Table S6)
 
 Is the difference between MOL and TE resolution higher when fossils are incorporated? 
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 # 1. Filter rows where Dataset is duplicated
 df_filtered <- df %>%
   filter(Dataset %in% Dataset[duplicated(Dataset)])
@@ -1869,7 +2435,7 @@ df_wide <- df_wide %>% select(-Type)
 df_reduced <- df_wide %>%
   select(-MP_nPolytomiesMOL_Extinct)
 
-# 5. Exploratory (Table S5)
+# 5. Exploratory (Table S6)
 print("Median of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
 median(df_reduced$MP_nPolytomiesTE - df_reduced$MP_nPolytomiesMOL)
 print("SD of paired differences in number of polytomies between MP MOL and MP TE (without fossils")
@@ -1897,7 +2463,7 @@ min(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
 print("Max of paired differences in number of polytomies between MP TE (without fossils) and MP TE (with fossils")
 max(df_reduced$MP_nPolytomiesTE_Extinct - df_reduced$MP_nPolytomiesTE)
 
-# 6. Statistical inference (Table S5)
+# 6. Statistical inference (Table S6)
 df_friedman <- df_wide %>% 
   select(MP_nPolytomiesMOL, MP_nPolytomiesTE, MP_nPolytomiesTE_Extinct)
 # Friedman test
@@ -1918,7 +2484,7 @@ pairwise.wilcox.test(df_long$value, df_long$group,
                      paired = TRUE, 
                      p.adjust.method = "bonferroni")
 
-# 7. FIGURE S4
+# 7. FIGURE S8
 # Add row ID for pairing
 df_plot <- df_wide %>%
   mutate(row_id = row_number())
@@ -2001,7 +2567,7 @@ p <- ggplot(df_long, aes(x = group, y = value, group = row_id)) +
   )
 p
 # Save the plot as JPG, 300 dpi
-ggsave(filename = "Figures/figS4_polytomies_MP.jpg", 
+ggsave(filename = "Figures/figS8_polytomies_MP.jpg", 
        plot = p, 
        width = 8, height = 5,      # size in inches
        dpi = 300,                   # resolution
@@ -2021,12 +2587,13 @@ aggregate(value ~ group, data = df_long, function(x) c(
 
 In addition to testing whether MOL-TE incongruences differ between optimaliy criteria, we can explore the impact of morphological evidence to optimality scores between optimality criteria. Specifically, it is possible that the MKv model can constrain the contribution of the morphological partition to the TE optimality score in ML, whereas the same does not occur in MP analyses. As such, we need to test whether the proportion of optimality scores between MORPH and TE is higher in MP than ML analyses.
 
-### Q3.3.1 Extant (Figure 5 and S5)
+### Q3.3.1 Extant (Figure 5 and S9)
 
 ```{r}
 # Load data for extant taxa
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 df_extant <- df %>% filter(grepl("Extant", Type)) # keep only extant datasets
+df_extant <- df_extant[!is.na(df_extant$ML_TNT_MORPHonTEnoASC_score), ]
 
 # Option 1. PHEcost / TEcost
 op1_mp = (df_extant$MP_MORPHonTE_Score) / (df_extant$MP_TE_Score)
@@ -2078,7 +2645,7 @@ pairwise.wilcox.test(x=unlist(op1_q3_fri),
                      paired=TRUE,
                      p.adjust.method="bonferroni")
 
-# Figure S5
+# Figure S9
 # Compute counts (MP vs ML MKv)
 n_lower_mkv <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mkv)
 n_higher_mkv <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mkv)
@@ -2087,7 +2654,7 @@ n_equal_mkv  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mkv)
 n_lower_mk <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mk)
 n_higher_mk <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mk)
 n_equal_mk  <- sum(op1_q3_fri$op1_mp == op1_q3_fri$op1_ml_mk)
-# Figure S5
+# Figure S9
 cols <- c("op1_mp" = "#339999", "op1_ml_mkv" = "#6f77b4", "op1_ml_mk" = "#cccccc")
 # Add row ID
 op1_q3_fri$row_id <- 1:nrow(op1_q3_fri)
@@ -2168,6 +2735,15 @@ op1_plot = ggplot() +
   theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
 
 op1_plot
+
+ggsave(
+  filename = "Figures/fig5_basicIndex.jpg",
+  plot = op1_plot,
+  width = 6,
+  height = 5,
+  units = "in",
+  dpi = 300
+)
 ```
 
 
@@ -2231,7 +2807,7 @@ n_equal_mkv  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mkv)
 n_lower_mk <- sum(op3_q3_fri$op3_mp < op3_q3_fri$op3_ml_mk)
 n_higher_mk <- sum(op3_q3_fri$op3_mp > op3_q3_fri$op3_ml_mk)
 n_equal_mk  <- sum(op3_q3_fri$op3_mp == op3_q3_fri$op3_ml_mk)
-# Figure S5
+# Figure S9
 cols <- c("op3_mp" = "#339999", "op3_ml_mkv" = "#6f77b4", "op3_ml_mk" = "#cccccc")
 # Add row ID
 op3_q3_fri$row_id <- 1:nrow(op3_q3_fri)
@@ -2314,148 +2890,6 @@ op3_plot=ggplot() +
 op3_plot
 ```
 
-```{r}
-# Option 4. (PHEcost / TEcost) / PHEhomoplasy
-op4_mp = (df_extant$MP_MORPHonTE_Score / df_extant$MP_TE_Score) / df_extant$MP_MORPHonTE_homoplasy
-op4_ml_mk = (df_extant$ML_TNT_MORPHonTEnoASC_score / df_extant$ML_TNT_TEnoASC_Score) / df_extant$ML_TNT_MORPHonTEnoASC_homoplasies
-op4_ml_mkv = (df_extant$ML_TNT_MORPHonTEasc_score / df_extant$ML_TNT_TEasc_Score) / df_extant$ML_TNT_MORPHonTEasc_homoplasies
-
-print("Number of times that contribution of PHE is higher in MP than ML MK")
-sum(op4_mp > op4_ml_mk)
-print("Number of times that contribution of PHE is lower in MP than ML MK")
-sum(op4_mp < op4_ml_mk)
-print("Number of times that contribution of PHE is equal in MP than ML MK")
-sum(op4_mp == op4_ml_mk)
-
-print("Number of times that contribution of PHE is higher in MP than ML MKv")
-sum(op4_mp > op4_ml_mkv)
-print("Number of times that contribution of PHE is lower in MP than ML MKv")
-sum(op4_mp < op4_ml_mkv)
-print("Number of times that contribution of PHE is equal in MP than ML MKv")
-sum(op4_mp == op4_ml_mkv)
-
-print("Stats MP")
-mean(op4_mp)
-sd(op4_mp)
-min(op4_mp)
-max(op4_mp)
-print("Stats ML MK")
-mean(op4_ml_mk)
-sd(op4_ml_mk)
-min(op4_ml_mk)
-max(op4_ml_mk)
-print("Stats ML MKv")
-mean(op4_ml_mkv)
-sd(op4_ml_mkv)
-min(op4_ml_mkv)
-max(op4_ml_mkv)
-
-# Normality tests
-shapiro.test(op4_mp) # p < 0.05, non-parametric
-shapiro.test(op4_ml_mk) # p < 0.05, non-parametric
-shapiro.test(op4_ml_mkv) # p < 0.05, non-parametric
-
-# Friedman test (non-parametric, multiple groups, paired values)
-op4_q3_fri = data.frame(op4_mp, op4_ml_mk, op4_ml_mkv)
-friedman.test(as.matrix(op4_q3_fri))
-
-# Wilcoxon: pairwise comparisons for paired values
-pairwise.wilcox.test(x=unlist(op4_q3_fri),
-                     g=factor(base::rep(names(op4_q3_fri), each = nrow(op4_q3_fri))),
-                     paired=TRUE,
-                     p.adjust.method="bonferroni")
-
-# Compute counts (MP vs ML MKv)
-n_lower_mkv <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mkv)
-n_higher_mkv <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mkv)
-n_equal_mkv  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mkv)
-# Compute counts (MP vs ML MK)
-n_lower_mk <- sum(op4_q3_fri$op4_mp < op4_q3_fri$op4_ml_mk)
-n_higher_mk <- sum(op4_q3_fri$op4_mp > op4_q3_fri$op4_ml_mk)
-n_equal_mk  <- sum(op4_q3_fri$op4_mp == op4_q3_fri$op4_ml_mk)
-# Figure S5
-cols <- c("op4_mp" = "#339999", "op4_ml_mkv" = "#6f77b4", "op4_ml_mk" = "#cccccc")
-# Add row ID
-op4_q3_fri$row_id <- 1:nrow(op4_q3_fri)
-# Pre-compute jitter offsets (same seed) — smaller jitter
-set.seed(42)
-n <- nrow(op4_q3_fri)
-jitter_offsets <- data.frame(
-  row_id   = 1:n,
-  jitter_1 = runif(n, -0.03, 0.03),
-  jitter_2 = runif(n, -0.03, 0.03),
-  jitter_3 = runif(n, -0.03, 0.03)
-)
-# Merge offsets — new order: ML MKv, MP, ML MK (positions 1, 2, 3)
-df_jitter <- op4_q3_fri %>%
-  left_join(jitter_offsets, by = "row_id") %>%
-  mutate(
-    x1 = 1 + jitter_1,  # ML MKv
-    x2 = 2 + jitter_2,  # MP
-    x3 = 3 + jitter_3,  # ML MK
-    seg1_color = case_when(
-      op4_ml_mkv < op4_mp ~ "darkred",
-      op4_ml_mkv > op4_mp ~ "blue",
-      TRUE                ~ "gray"
-    ),
-    seg2_color = case_when(
-      op4_mp > op4_ml_mk ~ "darkred",
-      op4_mp < op4_ml_mk ~ "blue",
-      TRUE               ~ "gray"
-    )
-  )
-# Convert to long format — new level order
-df_long <- op4_q3_fri %>%
-  pivot_longer(cols = c(op4_ml_mkv, op4_mp, op4_ml_mk),
-               names_to  = "group",
-               values_to = "value") %>%
-  mutate(group = factor(group, levels = c("op4_ml_mkv", "op4_mp", "op4_ml_mk"))) %>%
-  left_join(jitter_offsets, by = "row_id") %>%
-  mutate(x_jittered = case_when(
-    group == "op4_ml_mkv" ~ 1 + jitter_1,
-    group == "op4_mp"     ~ 2 + jitter_2,
-    group == "op4_ml_mk"  ~ 3 + jitter_3
-  ))
-# Plot
-op4_plot=ggplot() +
-  geom_boxplot(data = df_long,
-               aes(x = as.numeric(group), y = value, fill = group),
-               alpha = 0.5, outlier.shape = NA,
-               color = "gray40", linewidth = 0.5, width = 0.5) +
-  # Segments: ML MKv -> MP
-  geom_segment(data = df_jitter,
-               aes(x = x1, xend = x2, y = op4_ml_mkv, yend = op4_mp, color = seg1_color),
-               linewidth = 0.4, alpha = 0.2) +
-  # Segments: MP -> ML MK
-  geom_segment(data = df_jitter,
-               aes(x = x2, xend = x3, y = op4_mp, yend = op4_ml_mk, color = seg2_color),
-               linewidth = 0.4, alpha = 0.2) +
-  geom_point(data = df_long,
-             aes(x = x_jittered, y = value, color = group),
-             size = 2, alpha = 0.2) +
-  scale_fill_manual(values = cols) +
-  scale_color_manual(values = c(cols,
-                                "darkred"  = "darkred",
-                                "blue" = "blue",
-                                "gray" = "gray70")) +
-  theme_classic() +
-  theme(legend.position = "none",
-        axis.title.x    = element_blank()) +
-  labs(y = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"])) +
-  scale_x_continuous(breaks = 1:3,
-                     labels = c("ML MKv", "MP", "ML MK"))+
-  labs(
-    y       = expression("(PHE"["cost"] ~ "/" ~ "TE"["cost"] ~ ")" ~ "/" ~ "PHE"["homoplasy"]),
-    caption = paste0(
-      "MP vs ML MKv — lower in MP: ", n_lower_mkv, "  higher in MP: ", n_higher_mkv, "  equal: ", n_equal_mkv, "\n",
-      "MP vs ML MK  — lower in MP: ", n_lower_mk,  "  higher in MP: ", n_higher_mk,  "  equal: ", n_equal_mk
-    )
-  ) +
-  theme(plot.caption = element_text(hjust = 0.5, size = 10, color = "gray40"))
-
-op4_plot
-```
-
 
 ```{r}
 # Option 5. (PHEcost x PHEci) / (TEcost x TEci)
@@ -2516,7 +2950,7 @@ n_equal_mkv  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mkv)
 n_lower_mk <- sum(op5_q3_fri$op5_mp < op5_q3_fri$op5_ml_mk)
 n_higher_mk <- sum(op5_q3_fri$op5_mp > op5_q3_fri$op5_ml_mk)
 n_equal_mk  <- sum(op5_q3_fri$op5_mp == op5_q3_fri$op5_ml_mk)
-# Figure S5
+# Figure S9
 cols <- c("op5_mp" = "#339999", "op5_ml_mkv" = "#6f77b4", "op5_ml_mk" = "#cccccc")
 # Add row ID
 op5_q3_fri$row_id <- 1:nrow(op5_q3_fri)
@@ -2657,7 +3091,7 @@ n_equal_mkv  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mkv)
 n_lower_mk <- sum(op6_q3_fri$op6_mp < op6_q3_fri$op6_ml_mk)
 n_higher_mk <- sum(op6_q3_fri$op6_mp > op6_q3_fri$op6_ml_mk)
 n_equal_mk  <- sum(op6_q3_fri$op6_mp == op6_q3_fri$op6_ml_mk)
-# Figure S5
+# Figure S9
 cols <- c("op6_mp" = "#339999", "op6_ml_mkv" = "#6f77b4", "op6_ml_mk" = "#cccccc")
 # Add row ID
 op6_q3_fri$row_id <- 1:nrow(op6_q3_fri)
@@ -2740,27 +3174,15 @@ op6_plot
 ```
 
 ```{r}
-# Figure 5: Only options 1 and 6
+# Figure S9: Only options 3, 4 and 5
 
 # Combine plots with labels
-combined <- (op1_plot | op6_plot) +
+combined <- (op3_plot | op5_plot | op6_plot) +
   plot_annotation(tag_levels = "A")
 combined
 
 # Save as jpg
-ggsave("Figures/fig5_extant_plots.jpg", combined, width = 13, height = 6, dpi = 300)
-```
-
-```{r}
-# Figure S5: Only options 3, 4 and 5
-
-# Combine plots with labels
-combined <- (op3_plot | op4_plot | op5_plot) +
-  plot_annotation(tag_levels = "A")
-combined
-
-# Save as jpg
-ggsave("Figures/figS5_extant_plots.jpg", combined, width = 18, height = 6, dpi = 300)
+ggsave("Figures/figS9_extant_plots.jpg", combined, width = 18, height = 6, dpi = 300)
 ```
 
 
@@ -2768,7 +3190,7 @@ ggsave("Figures/figS5_extant_plots.jpg", combined, width = 18, height = 6, dpi =
 
 ```{r}
 # Load data
-df <- read.csv("Dataset_R_q123_08-25.csv")
+df <- read.csv("Dataset_R_q123_07-26.csv")
 #df_extinct <- df %>% filter(grepl("Extinct", Type)) # keep only extinct datasets
 # Keep only extinct
 extinct_datasets <- unique(df$Dataset[df$Type == "Extinct"])
@@ -2826,7 +3248,7 @@ pairwise.wilcox.test(x=unlist(op1_q3_fri),
                      paired=TRUE,
                      p.adjust.method="bonferroni")
 
-# Figure S5
+# Figure S8
 # Compute counts (MP vs ML MKv)
 n_lower_mkv <- sum(op1_q3_fri$op1_mp < op1_q3_fri$op1_ml_mkv)
 n_higher_mkv <- sum(op1_q3_fri$op1_mp > op1_q3_fri$op1_ml_mkv)
@@ -3488,11 +3910,155 @@ op6_plot=ggplot() +
 op6_plot
 ```
 
+### Q3.3.3 Size analyses (Figure S10)
+
+```{r}
+# Contribution of morphology between NGS and Sanger
+
+# Load data for extant taxa
+df <- read.csv("Dataset_R_q123_07-26.csv")
+
+# Option 1. PHEcost / TEcost
+op1_mp = (df$MP_MORPHonTE_Score) / (df$MP_TE_Score)
+op1_ml_mk = (df$ML_TNT_MORPHonTEnoASC_score) / (df$ML_TNT_TEnoASC_Score)
+op1_ml_mkv = (df$ML_TNT_MORPHonTEasc_score) / (df$ML_TNT_TEasc_Score)
+
+op1_q3 = data.frame(op1_mp, op1_ml_mk, op1_ml_mkv)
+# Add row ID
+op1_q3$row_id <- 1:nrow(op1_q3)
+# Add NGS x Sanger
+op1_q3$sequencing = df$Sequencing
+# Add Extant x Extinct
+op1_q3$taxa = df$Type
+# Add %Morphological characters
+op1_q3$percentageMorphCharacters = df$X.Morph.Total
+
+# Convert to long format
+df_long <- op1_q3 %>%
+  pivot_longer(
+    cols = c(op1_mp, op1_ml_mk, op1_ml_mkv),
+    names_to = "Method",
+    values_to = "Value"
+  ) %>%
+  mutate(
+    Method = factor(
+      Method,
+      levels = c("op1_mp", "op1_ml_mk", "op1_ml_mkv"),
+      labels = c("MP", "ML-Mk", "ML-MkV")
+    )
+  )
+
+# Plot
+figs9 = ggplot(df_long, aes(x = sequencing, y = Value, fill = sequencing)) +
+  geom_boxplot(width = 0.6, outlier.shape = NA, alpha = 0.6) +
+  geom_jitter(
+    width = 0.15,
+    size = 1.8,
+    alpha = 0.2,
+    color = "gray"
+  ) +
+  stat_compare_means(
+  comparisons = list(c("Sanger", "NGS")),
+  method = "wilcox.test",
+  paired = F,
+  label = "p.format",
+  label.y = max(df_long$Value, na.rm = TRUE) * 1.05, bracket.size = 0
+) +
+  facet_wrap(~Method, nrow = 1) +
+  scale_fill_manual(values = c(
+    "Sanger" = "#4E79A7",
+    "NGS" = "#E15759"
+  )) +
+  labs(
+    x = "",
+    y = "Morphological score / TE score\n"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    legend.position = "none",
+    strip.background = element_blank(),
+    strip.text = element_text(face = "plain")
+  )
+```
+
+```{r}
+# Contribution of morphology vs %Morphological characters
+
+# Convert to long format
+df_long <- op1_q3 %>%
+  pivot_longer(
+    cols = c(op1_mp, op1_ml_mk, op1_ml_mkv),
+    names_to = "Method",
+    values_to = "OP1"
+  ) %>%
+  mutate(
+    Method = factor(
+      Method,
+      levels = c("op1_mp", "op1_ml_mk", "op1_ml_mkv"),
+      labels = c("MP", "ML-Mk", "ML-MkV")
+    )
+  )
+
+# Plot
+figs9b <- ggplot(df_long,
+              aes(x = percentageMorphCharacters, y = OP1)) +
+  geom_point(
+    size = 2,
+    alpha = 0.7,
+    color = "steelblue"
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE,
+    color = "black",
+    linewidth = 0.8
+  ) +
+  facet_wrap(~Method, nrow = 1) +
+  labs(
+    x = "Proportion of morphological characters",
+    y = "Morphological score / TE score"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    strip.background = element_blank(),
+    strip.text = element_text(face = "plain")
+  )
+
+figs9b = figs9b +
+  stat_cor(
+    method = "spearman",
+    label.x.npc = "left",
+    label.y.npc = "top",
+    size = 4
+  )
+figs9b
+```
+
+```{r}
+# Figure S10
+fig <- figs9 /
+       figs9b +
+  plot_annotation(tag_levels = "a") &
+  theme(
+    plot.tag = element_text(size = 16, face = "plain"),
+    plot.tag.position = c(0.02, 0.98)
+  )
+
+ggsave(
+  "Figures/FigS10.jpg",
+  fig,
+  width = 10,
+  height = 8,
+  units = "in",
+  dpi = 300
+)
+```
+
 # Q4. How do bootstrap values of shared clades differ between MOL and TE trees? 
 
 ## Q4.1 Unique vs Shared 
 
-### Q4.2 With and without fossils (Table 1 and S7, Figure 7)
+### Q4.2 With and without fossils (Table 2 and S7, Figure 7)
 
 Before testing the differences of BS values in shared clades between MOL and TE trees, let's explore the differences of BS values between shared and unique clades.
 
@@ -3500,9 +4066,9 @@ First, we need to format the extant datasets.
 
 ```{r}
 # Load shared clades
-df_shared = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_09-25_shared.csv")
+df_shared = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_07-26_shared.csv")
 # Load unique clades
-df_unique = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_09-25_unique.csv")
+df_unique = read.csv ("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q4_07-26_unique.csv")
 
 # Rename the column Analysis to Dataset
 df_unique <- df_unique %>% 
@@ -3516,7 +4082,6 @@ df_unique <- df_unique %>%
 # Create a new column called Type (unique vs shared)
 df_unique <- df_unique %>%
   dplyr::mutate(Type = "unique")
-
 
 # Create a new dataframe from df_shared with the selected columns
 df_shared_stack <- df_shared %>%
@@ -3557,6 +4122,19 @@ df_uniqueVSshared <- df_uniqueVSshared %>%
   mutate(Sampling = "Without_fossils")
 
 #View(df_uniqueVSshared)
+```
+
+```{r}
+# Table 2
+summary_stats <- df_uniqueVSshared %>%
+  group_by(Analysis, Optimality, Type, Sampling) %>%
+  summarise(
+    n = n(),
+    mean_support = mean(Support, na.rm = TRUE),
+    sd_support = sd(Support, na.rm = TRUE),
+    .groups = "drop"
+  )
+summary_stats
 ```
 
 Now, we need to format the datasets including fossils.
@@ -3629,6 +4207,20 @@ df_uniqueVSshared_extinct$Dataset <- map[as.character(df_uniqueVSshared_extinct$
 #View(df_uniqueVSshared_extinct)
 ```
 
+```{r}
+# Table 2
+summary_stats <- df_uniqueVSshared_extinct %>%
+  group_by(Analysis, Optimality, Type, Sampling) %>%
+  summarise(
+    n = n(),
+    mean_support = mean(Support, na.rm = TRUE),
+    sd_support = sd(Support, na.rm = TRUE),
+    .groups = "drop"
+  )
+summary_stats
+```
+
+
 The dataframes are formatted. Now, we can combine them, perform exploratory data analyses, and plot them.
 
 ```{r}
@@ -3655,12 +4247,12 @@ q4_explore = df_combined %>%
   )
 #View(q4_explore)
 
-# Combine dataframes with and without fossils (57-22 datasets will be "deduplicated")
-df_extinct_57 <- rbind(
+# Combine dataframes with and without fossils (63-22 datasets will be "deduplicated")
+df_extinct_63 <- rbind(
   df_uniqueVSshared_extinct,
   df_uniqueVSshared[!(df_uniqueVSshared$Dataset %in% df_uniqueVSshared_extinct$Dataset), ]
 )
-df_extinct_57 <- df_extinct_57 %>%
+df_extinct_63 <- df_extinct_63 %>%
   mutate(Optimality = recode(Optimality,
     "ML_ASC"   = "ML MKv",
     "ML MKv"   = "ML MKv",
@@ -3668,9 +4260,9 @@ df_extinct_57 <- df_extinct_57 %>%
     "ML_noASC" = "ML MK",
     "ML MK"    = "ML MK"
   ))
-#View(df_extinct_57)
+#View(df_extinct_63)
 # Exploratory data analysis
-q4_explore = df_extinct_57 %>%
+q4_explore = df_extinct_63 %>%
   group_by(Analysis, Optimality, Type) %>%
   summarise(
     min_Support = min(Support, na.rm = TRUE),
@@ -3702,7 +4294,7 @@ pA <- df_combined %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Plot B: With_fossils
-pB <- df_extinct_57 %>%
+pB <- df_extinct_63 %>%
   ggplot(aes(x = Analysis, y = Support, fill = Type)) +
   geom_boxplot(position = position_dodge(width = 0.8)) +
   facet_wrap(~ Optimality) +
@@ -3733,7 +4325,7 @@ df_combined <- df_combined %>%
   mutate(Support_beta = (Support + 0.5) / 101) 
 
 # Fix: Squeeze Support into (0,1) for GLMM with Beta distribution
-df_extinct_57 <- df_extinct_57 %>%
+df_extinct_63 <- df_extinct_63 %>%
   mutate(Support_beta = (Support + 0.5) / 101) 
 
 # Split datasets
@@ -3910,16 +4502,16 @@ pairwise_without_df %>%
 ```{r}
 # Table S7
 print("Mean, sd, and range of BS with fossils")
-summary_with <- summarize_support(df_extinct_57)
+summary_with <- summarize_support(df_extinct_63)
 summary_with
 
 print("Non-parametric Wilcoxon tests: Unique vs Shared BS (with fossils)")
-results_with  <- run_nonparametric_tests(df_extinct_57)
+results_with  <- run_nonparametric_tests(df_extinct_63)
 results_with$pairwise 
 
 print("GLMM with Beta distribution (with fossils")
 # Run for With_fossils
-pairwise_with_df <- run_pairwise_df(df_extinct_57, combinations)
+pairwise_with_df <- run_pairwise_df(df_extinct_63, combinations)
 # View results: numeric and formatted p-values
 pairwise_with_df %>%
   select(Optimality, Analysis, Comparison, estimate, SE, df, p.value_fmt)
@@ -3927,7 +4519,7 @@ pairwise_with_df %>%
 
 As expected, bootstrap values of unique clades are significantly lower than those from shared clades.
 
-## Q4.2 MOL vs TE (Table 4)
+## Q4.2 MOL vs TE (Table 5)
 
 ### Q4.2.1 Extant
 
@@ -3935,7 +4527,7 @@ First, we need to load the data. Support values of shared clades were identified
 
 ```{r}
 # Load data (BS shared clades)
-df_q4 = read.csv("Dataset_R_q4_09-25_shared.csv")
+df_q4 = read.csv("Dataset_R_q4_07-26_shared.csv")
 
 # Set order of optimality criteria
 df_q4$Optimality <- factor(df_q4$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
@@ -4888,7 +5480,7 @@ nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MO
 
 ```
 
-### Q5.2.2 Logistic regressions (Table 5)
+### Q5.2.2 Logistic regressions (Table 6)
 
 ```{r}
 #######################

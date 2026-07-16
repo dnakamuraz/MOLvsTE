@@ -18,7 +18,8 @@ library(viridis)
 # READ TREES #
 ##############
 
-setwd("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Trees_extant")
+#setwd("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Trees_extant/")
+setwd("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Trees_extant/new_datasets/")
 
 # List all files in the directory
 files <- list.files()
@@ -156,7 +157,7 @@ for (prefix in prefixes) {
   # Filter files belonging to the current prefix
   prefix_files <- files[grep(paste0("^", prefix), files)]
   # Apply the appropriate function based on the filename pattern
-  if (any(grepl("_TE_ASC_IQTREE.treefile", prefix_files))) {
+  if (any(grepl("_TE_noASC_IQTREE.treefile", prefix_files))) {
     ml_te_noasc_best[[paste0("ml_te_noasc_best_", prefix)]] <- read.tree(prefix_files[grepl("_TE_noASC_IQTREE.treefile", prefix_files)])
   }
 }
@@ -218,9 +219,9 @@ SPR <- lapply(SPR, function(x) {
   # If the element is a single value
   if (length(x) == 1) {
     data.frame(
-      minRF = x,
-      maxRF = x,
-      meanRF = x
+      minSPR = x,
+      maxSPR = x,
+      meanSPR = x
     )
   } else {
     # Otherwise keep it as is
@@ -381,7 +382,7 @@ MLmol_MLteNoAsc_df$comparison = "MLmol_MLteNoAsc"
 # Add a new column with the dataset name
 MLmol_MLteNoAsc_df$dataset = names(ml_mol_best)
 MLmol_MLteNoAsc_df <- MLmol_MLteNoAsc_df[, c(ncol(MLmol_MLteNoAsc_df), 1:(ncol(MLmol_MLteNoAsc_df) - 1))]
-View(MLmol_MLteNoAsc_df)
+MLmol_MLteNoAsc_df
 #write.csv(MLmol_MLteNoAsc_df, "../MLmol_MLteNoAsc_df.csv")
 # No. polytomies: TE noASC
 ml_te_noasc_polytomies = vector("list", length(ml_te_noasc_best))

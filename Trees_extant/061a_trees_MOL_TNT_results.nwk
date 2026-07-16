@@ -1,0 +1,7 @@
+#NEXUS
+
+begin trees ; 
+tree tnt_1 = [&U] 
+(Holothuroidea ,(((((Apatopygidae ,((Arachnoidinae ,Clypeaster ),((Cassidulidae ,Echinolampadidae ),((Mellitidae ,(Dendrasteridae ,(Echinarachniidae ,(Scutellidae ,Taiwanasteridae )))),(Echinocyamus ,Laganidae ))))),(Urechinidae ,(Schizasteridae ,(Brissidae ,Echinocardium )))),((Arbacia ,Saleniidae ),(Stomopneustidae ,((Echinidae ,Parechinidae ),(Echinometridae ,(Strongylocentrotidae ,Toxopneustidae )))))),(((Aspidodiadematidae ,Pedinidae ),(Echinothuriinae ,Sperosomatinae )),(Micropygidae ,(Diadematidae ,Lissodiadematidae )))),(Histocidaridae ,(Stereocidarinae ,(Cidarinae ,Stylocidarinae )))));
+
+end ; 
