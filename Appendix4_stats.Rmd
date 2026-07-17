@@ -109,7 +109,7 @@ ggsave(
 )
 ```
 
-## Year x Size (Figure 9)
+## Year x Size (Figure 10)
 
 ```{r}
 # Load data
@@ -196,7 +196,7 @@ fig <- (p1 | p2) /
 
 # Save figure
 ggsave(
-  "Figures/Fig9_yearXsize.jpg",
+  "Figures/Fig10_yearXsize.jpg",
   fig,
   width = 8,
   height = 8,
@@ -4058,7 +4058,7 @@ ggsave(
 
 ## Q4.1 Unique vs Shared 
 
-### Q4.2 With and without fossils (Table 2 and S7, Figure 7)
+### Q4.2 With and without fossils (Table 2 and S7, Figure 8)
 
 Before testing the differences of BS values in shared clades between MOL and TE trees, let's explore the differences of BS values between shared and unique clades.
 
@@ -4570,19 +4570,39 @@ sum(df_MP$Support_Tree_1 > df_MP$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MP$Support_Tree_1 < df_MP$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
 # Histogram MP MOL
-hist(df_MP$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in MP MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
+p1 <- ggplot(df_MP, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in MP MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "A")
+
 # Histogram MP TE
-hist(df_MP$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in MP TE", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+p2 <- ggplot(df_MP, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in MP TE", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "B")
+
+# Combine into a single ggplot object
+s11_mp <- p1 + p2
+s11_mp
 ```
 
-Data exploration of MP analyses revealed 47.9% (1093/2279) of the clades whose bootstrap values were the same between MOL and TE analyses, 19.5% (445/2279) of the clades whose bootstrap values were higher in MOL than TE analyses, and 32.5% (741/2279) of the clades whose bootstrap values were higher in TE than MOL analyses. Moreover, the bootstrap in MOL clades was 89.2 ± 14.2, whereas the boostrap in TE clades was 91.1 ± 13.6.
 
 ```{r}
 # Shapiro-Wilk test for normality
@@ -4650,16 +4670,37 @@ sum(df_MLASC$Support_Tree_1 > df_MLASC$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MLASC$Support_Tree_1 < df_MLASC$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
-# Histogram MP MOL
-hist(df_MLASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
-# Histogram MP TE
-hist(df_MLASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MKv", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram ML MOL
+p1 <- ggplot(df_MLASC, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "C")
+
+# Histogram ML TE MKv
+p2 <- ggplot(df_MLASC, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML TE MKv", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "D")
+
+# Combine into a single ggplot object
+s11_ml_mkv <- p1 + p2
+s11_ml_mkv
 ```
 
 
@@ -4729,16 +4770,37 @@ sum(df_MLnoASC$Support_Tree_1 > df_MLnoASC$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MLnoASC$Support_Tree_1 < df_MLnoASC$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
-# Histogram MP MOL
-hist(df_MLnoASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
-# Histogram MP TE
-hist(df_MLnoASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MKv", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram ML MOL
+p1 <- ggplot(df_MLnoASC, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "E")
+
+# Histogram ML TE MK
+p2 <- ggplot(df_MLnoASC, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML TE MK", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "F")
+
+# Combine into a single ggplot object
+s11_ml_mk <- p1 + p2
+s11_ml_mk
 ```
 
 ```{r}
@@ -4800,7 +4862,7 @@ df_q4$ID <- paste0(
 )
 
 # Include the datasets of extant organisms, without duplications
-df_q4_extant = read.csv("Dataset_R_q4_09-25_shared.csv")
+df_q4_extant = read.csv("Dataset_R_q4_07-26_shared.csv")
 df_q4_extant$Optimality <- factor(df_q4_extant$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
 df_q4_extant$SupportDiff = df_q4_extant$Support_Tree_1 - df_q4_extant$Support_Tree_2
 df_q4 <- bind_rows(
@@ -4844,16 +4906,37 @@ sum(df_MP$Support_Tree_1 > df_MP$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MP$Support_Tree_1 < df_MP$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
 # Histogram MP MOL
-hist(df_MP$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in MP MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
+p1 <- ggplot(df_MP, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in MP MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "A")
+
 # Histogram MP TE
-hist(df_MP$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in MP TE", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+p2 <- ggplot(df_MP, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in MP TE", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "B")
+
+# Combine into a single ggplot object
+s11_mp_f <- p1 + p2
+s11_mp_f
 ```
 
 ```{r}
@@ -4922,16 +5005,37 @@ sum(df_MLASC$Support_Tree_1 > df_MLASC$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MLASC$Support_Tree_1 < df_MLASC$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
-# Histogram MP MOL
-hist(df_MLASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
-# Histogram MP TE
-hist(df_MLASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MKv", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram ML MOL
+p1 <- ggplot(df_MLASC, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "C")
+
+# Histogram ML TE MKv
+p2 <- ggplot(df_MLASC, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML TE MKv", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "D")
+
+# Combine into a single ggplot object
+s11_ml_mkv_f <- p1 + p2
+s11_ml_mkv_f
 ```
 
 ```{r}
@@ -5000,16 +5104,37 @@ sum(df_MLnoASC$Support_Tree_1 > df_MLnoASC$Support_Tree_2)
 print("No. shared clades with BS MOL < BS TE")
 sum(df_MLnoASC$Support_Tree_1 < df_MLnoASC$Support_Tree_2) 
 
-# Histograms
-par(mfrow = c(1, 2), mar = c(5, 5, 2, 1))  # adjust margins
-# Histogram MP MOL
-hist(df_MLnoASC$Support_Tree_1, breaks = 40, col = "lightblue", xlab = "BS in ML MOL", main="")
-# A
-mtext("A", side = 3, line = 0.5, adj = -0.1, font = 2)
-# Histogram MP TE
-hist(df_MLnoASC$Support_Tree_2, breaks = 40, col = "lightblue", xlab = "BS in ML TE MK", main="")
-# B
-mtext("B", side = 3, line = 0.5, adj = -0.1, font = 2)
+# Histogram ML MOL
+p1 <- ggplot(df_MLnoASC, aes(x = Support_Tree_1)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML MOL", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "E")
+
+# Histogram ML TE MK
+p2 <- ggplot(df_MLnoASC, aes(x = Support_Tree_2)) +
+  geom_histogram(
+    bins = 40,
+    fill = "lightblue",
+    color = "black"
+  ) +
+  labs(x = "BS in ML TE MK", y = "Frequency") +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.tag = element_text(face = "bold", size = 16)
+  ) +
+  labs(tag = "F")
+
+# Combine into a single ggplot object
+s11_ml_mk_f <- p1 + p2
+s11_ml_mk_f
 ```
 
 ```{r}
@@ -5044,7 +5169,7 @@ ml_noasc_beta <- glmmTMB(Support_beta ~ Approach + (1 | ID),
 summary(ml_noasc_beta)
 ```
 
-## Q4.3 Plot (Figure 6)
+### Q4.2.3 Plot (Figure S12)
 
 First, we will plot the Figure 5A-C (without fossils).
 
@@ -5119,7 +5244,7 @@ plot_grob <- ggplotGrob(legend)
 legend_grob <- gtable::gtable_filter(plot_grob, "guide-box")
 
 # Plot 2x2
-jpeg("Figures/Fig6ABC.jpg", width = 2000, height = 1600, res = 300)
+jpeg("Figures/FigS12ABC.jpg", width = 2000, height = 1600, res = 300)
 grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_asc + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_noasc + theme(plot.margin = margin(1,1,1,.01)),
@@ -5203,7 +5328,7 @@ plot_grob <- ggplotGrob(legend)
 legend_grob <- gtable::gtable_filter(plot_grob, "guide-box")
 
 # Plot 2x2
-jpeg("Figures/Fig6DEF.jpg", width = 2000, height = 1600, res = 300)
+jpeg("Figures/FigS12DEF.jpg", width = 2000, height = 1600, res = 300)
 grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_asc + theme(plot.margin = margin(1,1,1,.01)),
                          plot_ml_noasc + theme(plot.margin = margin(1,1,1,.01)),
@@ -5214,6 +5339,343 @@ grid.arrange(arrangeGrob(plot_mp + theme(plot.margin = margin(1,1,1,.01)),
 dev.off()
 ```
 
+##Q4.3 Distribution of BS (Figure S11)
+
+```{r}
+s11 <- s11_mp /
+       s11_ml_mkv /
+       s11_ml_mk +
+  plot_layout(ncol = 1)
+
+ggsave(
+  "Figures/FigS11.jpg",
+  s11,
+  width = 8,
+  height = 12,
+  dpi = 300
+)
+```
+
+## Q4.4 Delta BS
+
+### Q4.4.1 Delta BS vs %Morph Characters
+
+```{r}
+# Load data (BS shared clades)
+df_q4 = read.csv("Dataset_R_q4_07-26_shared.csv")
+
+# Set order of optimality criteria
+df_q4$Optimality <- factor(df_q4$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
+df_q4$SupportDiff = df_q4$Support_Tree_1 - df_q4$Support_Tree_2
+
+# Values for Dataset 1 to 63
+percentage_values <- c(
+  0.013684211,
+  0.055498458,
+  0.044244604,
+  0.010054845,
+  0.040086674,
+  0.029837251,
+  0.003562696,
+  0.007741348,
+  0.023512123,
+  0.071167883,
+  0.007282437,
+  0.017531845,
+  0.061922366,
+  0.109683341,
+  0.036553525,
+  0.044558259,
+  0.064782529,
+  0.007295159,
+  0.017535293,
+  0.018518519,
+  0.019484107,
+  0.015642458,
+  0.024666499,
+  0.061140648,
+  0.005056974,
+  0.020840692,
+  0.018851757,
+  0.015837821,
+  0.014669927,
+  0.028189008,
+  0.009686347,
+  0.046779502,
+  0.037445802,
+  0.019918612,
+  0.023357664,
+  0.021806167,
+  4.97146E-05,
+  0.044444444,
+  0.052168022,
+  0.024225249,
+  0.023332685,
+  0.030917874,
+  0.144177449,
+  0.003291020,
+  0.022148623,
+  0.000299521,
+  0.035170604,
+  0.032027879,
+  0.007404914,
+  0.010775862,
+  0.000303870,
+  0.040114613,
+  0.011265702,
+  0.039204652,
+  0.000594695,
+  0.000488948,
+  0.001320755,
+  0.000138570,
+  0.001701958,
+  0.000458127,
+  0.003507878,
+  0.000303716,
+  0.000555860
+)
+
+# Add the new column
+df_q4$PercentageMorphCharacters <- percentage_values[df_q4$Dataset]
+
+# Make positive values when TE BS is higher than MOL BS
+df_q4$SupportDiff <- -(df_q4$SupportDiff)
+```
+
+```{r}
+# Fit mixed-effects model
+m_q4 <- lmer(
+  SupportDiff ~ PercentageMorphCharacters + (1 | Dataset),
+  data = df_q4
+)
+# Model summary
+summary(m_q4)
+# Test fixed effect
+anova(m_q4)
+
+# Extract P-value
+pval <- anova(m_q4)$`Pr(>F)`[1]
+
+fig_q4 <- ggplot(
+  df_q4,
+  aes(x = PercentageMorphCharacters, y = SupportDiff)
+) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", color = "black", se = TRUE) +
+  annotate(
+    "text",
+    x = max(df_q4$PercentageMorphCharacters) * 0.95,  # move left
+    y = max(df_q4$SupportDiff, na.rm = TRUE),
+    hjust = 1,
+    vjust = 1.2,
+    label = sprintf("P = %.3g", pval),
+    size = 5
+  ) +
+  labs(
+    x = "% Morphological characters",
+    y = expression(Delta*" Bootstrap (TE - MOL)")
+  ) +
+  theme_classic(base_size = 14)
+fig_q4
+```
+
+```{r}
+# Compute mean SupportDiff per dataset
+df_q4_mean <- df_q4 %>%
+  group_by(Dataset) %>%
+  summarise(
+    MeanSupportDiff = mean(SupportDiff, na.rm = TRUE),
+    PercentageMorphCharacters = first(PercentageMorphCharacters),
+    .groups = "drop"
+  )
+
+# Spearman correlation
+cor_test <- cor.test(
+  df_q4_mean$MeanSupportDiff,
+  df_q4_mean$PercentageMorphCharacters,
+  method = "spearman",
+  exact = FALSE
+)
+
+# Print results
+cor_test
+
+# Plot
+fig_q4_mean <- ggplot(
+  df_q4_mean,
+  aes(x = PercentageMorphCharacters, y = MeanSupportDiff)
+) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, color = "black") +
+  annotate(
+    "text",
+    x = Inf, y = Inf,
+    hjust = 1.05, vjust = 1.5,
+    label = sprintf(
+      "Spearman's \u03C1 = %.2f\nP = %.3g",
+      unname(cor_test$estimate),
+      cor_test$p.value
+    ),
+    size = 5
+  ) +
+  labs(
+    x = "% Morphological characters",
+    y = "Mean Δ Bootstrap (TE − MOL)"
+  ) +
+  theme_classic(base_size = 14)
+
+fig_q4_mean
+```
+
+
+### Q4.4.2 Delta BS vs %Morph-only taxa
+
+```{r}
+# Load data (BS shared clades)
+df_q4 = read.csv("Dataset_R_q4_09-25_shared_extinct.csv")
+
+# Set order of optimality criteria
+df_q4$Optimality <- factor(df_q4$Optimality, levels = c("MP", "ML-ASC", "ML-noASC"))
+df_q4$SupportDiff = df_q4$Support_Tree_1 - df_q4$Support_Tree_2
+
+# Make positive values when TE BS is higher than MOL BS
+df_q4$SupportDiff <- -(df_q4$SupportDiff)
+
+# Values for Dataset 1 to 22
+morph_only_taxa <- c(
+  0.756756757,
+  0.011111111,
+  0.125000000,
+  0.135135135,
+  0.272727273,
+  0.412087912,
+  0.403225806,
+  0.477876106,
+  0.430769231,
+  0.113636364,
+  0.666666667,
+  0.936170213,
+  0.113636364,
+  0.340425532,
+  0.295081967,
+  0.892473118,
+  0.125000000,
+  0.070707071,
+  0.036363636,
+  0.578475336,
+  0.583333333,
+  0.120000000
+)
+
+# Create the new column
+df_q4$PercentageMorphOnlyTaxa <- morph_only_taxa[df_q4$Dataset]
+```
+
+```{r}
+# Fit mixed-effects model
+m_q4 <- lmer(
+  SupportDiff ~ PercentageMorphOnlyTaxa + (1 | Dataset),
+  data = df_q4
+)
+# Model summary
+summary(m_q4)
+# Test fixed effect
+anova(m_q4)
+
+# Extract P-value
+pval <- anova(m_q4)$`Pr(>F)`[1]
+
+fig_q4_f <- ggplot(
+  df_q4,
+  aes(x = PercentageMorphOnlyTaxa, y = SupportDiff)
+) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", color = "black", se = TRUE) +
+  annotate(
+    "text",
+    x = Inf, y = Inf,
+    hjust = 1.05, vjust = 1.5,
+    label = sprintf(
+      "P = %.3g",
+      pval
+    ),
+    size = 5
+  ) +
+  labs(
+    x = "% Morphology-only terminals",
+    y = "Δ Bootstrap (TE − MOL)"
+  ) +
+  theme_classic(base_size = 14)
+
+fig_q4_f
+```
+
+```{r}
+# Compute mean SupportDiff per dataset
+df_q4_mean <- df_q4 %>%
+  group_by(Dataset) %>%
+  summarise(
+    MeanSupportDiff = mean(SupportDiff, na.rm = TRUE),
+    PercentageMorphOnlyTaxa = first(PercentageMorphOnlyTaxa),
+    .groups = "drop"
+  )
+
+# Spearman correlation
+cor_test <- cor.test(
+  df_q4_mean$MeanSupportDiff,
+  df_q4_mean$PercentageMorphOnlyTaxa,
+  method = "spearman",
+  exact = FALSE
+)
+
+# Print results
+cor_test
+
+# Plot
+fig_q4_mean_f <- ggplot(
+  df_q4_mean,
+  aes(x = PercentageMorphOnlyTaxa, y = MeanSupportDiff)
+) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  geom_smooth(method = "lm", se = TRUE, color = "black") +
+  annotate(
+    "text",
+    x = Inf, y = Inf,
+    hjust = 1.05, vjust = 1.5,
+    label = sprintf(
+      "Spearman's \u03C1 = %.2f\nP = %.3g",
+      unname(cor_test$estimate),
+      cor_test$p.value
+    ),
+    size = 5
+  ) +
+  labs(
+    x = "% Morphology-only terminals",
+    y = "Mean Δ Bootstrap (TE − MOL)"
+  ) +
+  theme_classic(base_size = 14)
+
+fig_q4_mean_f
+```
+
+###Q4.4.3 Figure 7
+
+```{r}
+fig_q4_all <-
+  (fig_q4 | fig_q4_mean) /
+  (fig_q4_f | fig_q4_mean_f) +
+  plot_annotation(tag_levels = "a")
+
+ggsave(
+  "Figures/Fig7.jpg",
+  fig_q4_all,
+  width = 10,
+  height = 8,
+  dpi = 300
+)
+```
+
+
 # Q5. Can bootstrap from MOL clades retrodict the monophyly of TE groups?
 
 The datasets used in the Q5 was prepared with the package RNODE using the script 3.
@@ -5222,7 +5684,7 @@ The datasets used in the Q5 was prepared with the package RNODE using the script
 
 ```{r}
 # Load data
-df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_09-25.csv")
+df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_07-26.csv")
 # Only keep >50% BS
 df_q5 <- df_q5[df_q5$support_tree1 >= 50, ]
 
@@ -5313,7 +5775,7 @@ nrow(subset(MLnoASClogistic, support_tree1 == 100 & occurrence_tree2 == 0)) # MO
 
 ```
 
-### Q5.1.2 Logistic regressions (Table 5)
+### Q5.1.2 Logistic regressions (Table 6)
 
 ```{r}
 
@@ -5376,6 +5838,192 @@ ggplot(MLnoASClogistic, aes(x = support_tree1, y = occurrence_tree2)) +
   theme_minimal()
 ```
 
+###Q5.1.3 Interaction with size (Table S10, S11, S12, S13)
+
+```{r}
+# Load data
+df_q5 = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_07-26.csv")
+# Only keep >50% BS
+df_q5 <- df_q5[df_q5$support_tree1 >= 50, ]
+
+# Values for Dataset 1 to 63
+percentage_values <- c(
+  0.013684211,
+  0.055498458,
+  0.044244604,
+  0.010054845,
+  0.040086674,
+  0.029837251,
+  0.003562696,
+  0.007741348,
+  0.023512123,
+  0.071167883,
+  0.007282437,
+  0.017531845,
+  0.061922366,
+  0.109683341,
+  0.036553525,
+  0.044558259,
+  0.064782529,
+  0.007295159,
+  0.017535293,
+  0.018518519,
+  0.019484107,
+  0.015642458,
+  0.024666499,
+  0.061140648,
+  0.005056974,
+  0.020840692,
+  0.018851757,
+  0.015837821,
+  0.014669927,
+  0.028189008,
+  0.009686347,
+  0.046779502,
+  0.037445802,
+  0.019918612,
+  0.023357664,
+  0.021806167,
+  4.97146E-05,
+  0.044444444,
+  0.052168022,
+  0.024225249,
+  0.023332685,
+  0.030917874,
+  0.144177449,
+  0.003291020,
+  0.022148623,
+  0.000299521,
+  0.035170604,
+  0.032027879,
+  0.007404914,
+  0.010775862,
+  0.000303870,
+  0.040114613,
+  0.011265702,
+  0.039204652,
+  0.000594695,
+  0.000488948,
+  0.001320755,
+  0.000138570,
+  0.001701958,
+  0.000458127,
+  0.003507878,
+  0.000303716,
+  0.000555860
+)
+
+# Add the new column
+df_q5$PercentageMorphCharacters <- percentage_values[df_q5$Dataset]
+
+# Select MP 
+MPlogistic <- df_q5[df_q5$optimality == "MP", ]
+# Select ML ASC
+MLASClogistic <- df_q5[df_q5$optimality == "MLASC", ]
+# Select ML no ASC
+MLnoASClogistic <- df_q5[df_q5$optimality == "MLnoASC", ]
+```
+
+```{r}
+# Statistical interaction analyses with MP
+
+# Model 1: bootstrap only
+m1 <- glmer(
+  occurrence_tree2 ~ support_tree1 + (1 | Dataset),
+  data = MPlogistic,
+  family = binomial
+)
+
+# Model 2: additive effects
+m2 <- glmer(
+  occurrence_tree2 ~ support_tree1 + PercentageMorphCharacters + (1 | Dataset),
+  data = MPlogistic,
+  family = binomial
+)
+
+# Model 3: interaction
+m3 <- glmer(
+  occurrence_tree2 ~ support_tree1 * PercentageMorphCharacters + (1 | Dataset),
+  data = MPlogistic,
+  family = binomial
+)
+
+# Selection
+AIC(m1, m2, m3)
+anova(m1, m2, test = "Chisq")   # Does PercentageMorphCharacters improve the model?
+anova(m2, m3, test = "Chisq")   # Is the interaction significant?
+
+# Best model
+summary(m2)
+```
+
+```{r}
+# Statistical interaction analyses with ML MK
+
+# Model 1: bootstrap only
+m1 <- glmer(
+  occurrence_tree2 ~ support_tree1 + (1 | Dataset),
+  data = MLnoASClogistic,
+  family = binomial
+)
+
+# Model 2: additive effects
+m2 <- glmer(
+  occurrence_tree2 ~ support_tree1 + PercentageMorphCharacters + (1 | Dataset),
+  data = MLnoASClogistic,
+  family = binomial
+)
+
+# Model 3: interaction
+m3 <- glmer(
+  occurrence_tree2 ~ support_tree1 * PercentageMorphCharacters + (1 | Dataset),
+  data = MLnoASClogistic,
+  family = binomial
+)
+
+# Selection
+AIC(m1, m2, m3)
+anova(m1, m2, test = "Chisq")   # Does PercentageMorphCharacters improve the model?
+anova(m2, m3, test = "Chisq")   # Is the interaction significant?
+
+# Best model
+summary(m2)
+```
+
+```{r}
+# Statistical interaction analyses with ML MKv
+
+# Model 1: bootstrap only
+m1 <- glmer(
+  occurrence_tree2 ~ support_tree1 + (1 | Dataset),
+  data = MLASClogistic,
+  family = binomial
+)
+
+# Model 2: additive effects
+m2 <- glmer(
+  occurrence_tree2 ~ support_tree1 + PercentageMorphCharacters + (1 | Dataset),
+  data = MLASClogistic,
+  family = binomial
+)
+
+# Model 3: interaction
+m3 <- glmer(
+  occurrence_tree2 ~ support_tree1 * PercentageMorphCharacters + (1 | Dataset),
+  data = MLASClogistic,
+  family = binomial
+)
+
+# Selection
+AIC(m1, m2, m3)
+anova(m1, m2, test = "Chisq")   # Does PercentageMorphCharacters improve the model?
+anova(m2, m3, test = "Chisq")   # Is the interaction significant?
+
+# Best model
+summary(m2)
+```
+
+
 ## Q5.2 Extant + extinct
 
 ```{r}
@@ -5392,7 +6040,7 @@ map <- c(
 df_q5$Dataset <- map[as.character(df_q5$Dataset)]
 
 # Load data of extant and merge to dataset of fossils without duplicates
-df_q5_l = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_09-25.csv")
+df_q5_l = read.csv("/Users/labanfibios/Desktop/Doutorado/Project/B2_TEvsMOL/GitHub/Dataset_R_q5_07-26.csv")
 df_q5_l <- df_q5_l[df_q5_l$support_tree1 >= 50, ]
 df_q5 <- bind_rows(
   df_q5,
